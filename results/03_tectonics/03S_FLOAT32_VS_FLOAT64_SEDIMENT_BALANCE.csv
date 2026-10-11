@@ -1,0 +1,5 @@
+grid,horizon,label,native_float32_mass_balance_gap_pct,independent_float64_mass_balance_gap_pct,original_source_mass_input_changed,observational_mass_scientific_fields_byte_equal,native_sed_additions_rounded_to_no_change,native_total_sed_mass_sum_rounded_nochange_kg,source
+401,0.5,first step,0.729404348409,0.00000705574131621,false,true,2008119,9490185854589.117,03s GitHub Actions 38164926540
+401,1.0,late first transfer,33.6436194714,0.00000765960705091,false,true,104426531,747402122561446.8,03s GitHub Actions 38164926540
+401,1.5,late second transfer,33.8423276195,0.000000513106846982,false,true,170732357,1064115707879792.1,03s GitHub Actions 38164926540
+121,all stages,maximum over complete 15 Myr,2.29266549326,0.0000126948009798,false,true,4838530,262992358865075.78,03s GitHub Actions 38164926540
