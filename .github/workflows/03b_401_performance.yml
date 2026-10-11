@@ -1,12 +1,6 @@
 name: 03b | Isolate official TISC 401x401 runtime bottleneck
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/03b_401_performance.yml'
-      - 'scripts/prepare_401_performance_probe.py'
-      - 'scripts/qc_401_performance_probe.py'
   workflow_dispatch:
 
 permissions:

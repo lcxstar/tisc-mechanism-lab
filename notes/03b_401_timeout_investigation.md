@@ -68,3 +68,6 @@ full original 401 × 401 model has been reproduced.
   capable HPC node with a known resource budget, or first validate a
   faster solver with numerical equivalence to the original. Simply raising
   GitHub Actions timeout is not a validated fix.
+
+
+**Measured root-cause follow-up:** [full performance diagnosis](03b_401_performance_results.md) identifies active surface processes as the primary contributor to stalled 401-grid initial advancement, while keeping author input files byte-identical. Full-coupled 121 grid ends in 39.13 s but still logs nonfinite sediment outflow; mass-budget QC remains open.
