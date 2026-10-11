@@ -50,6 +50,14 @@ The explicit 03N `closed_lake_mass_reset_kg` diagnostic remained **zero** across
 
 Next, 03O is targeting the most imbalanced 1024-node chunks with read-only whole-grid suspension scans before and after **each** cell, to identify the first responsible flow-transfer and drainage types. A more granular evidence-backed cause is not yet established. Do not set a nominal correction factor or tune basin sedimentation to hide residuals.
 
+## 03O per-cell forensic result, updated
+
+The separately instrumented [03O 401-grid node check](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38162346883) **completed successfully**. This rerun of the coupled author 401 benchmark made a whole-grid in-flight suspended-mass inventory immediately before and immediately after individual cells in the worst 03N chunks. Source equations and inputs were not altered by this tracer.
+
+Two targeted windows produced **90 significant single-cell positive discrepancies (>10¹⁰ kg)**. Every flagged node is an ordinary **river ('R') with lake index 0**, rather than a lake/outlet boundary node. All previously checked closed-lake cleared mass values were zero. The largest tracked single-cell discrepancy was **8.1288×10¹⁰ kg** at time 1.0 Myr, call 24, sorted node 136214, (row=146,col=130), flowing to (147,131). Another focused cell at 0.5 Myr, sorted node 149193, (63,83), flows to (63,84), with discrepancy **2.2412×10¹⁰ kg**.
+
+This is an **identification of the problematic per-node stream-process category**, not yet proof of the precise defective formula. In particular, do not attribute the discrepancy to lake clearing. The follow-up targeted [03P erosion source/ledger/transport trace](https://github.com/lcxstar/tisc-mechanism-lab/actions) will compare exact requested `d_mass`, the changes to `ctx->total_bedrock_eros_mass` and `ctx->total_sed_mass` in `Erode()`, and the forwarded `drainage.masstr*dt_st` for these same nodes. A proposed correction must pass a changed-vs-baseline physical field and full mass-budget test.
+
 ## Scientific decision
 
 - Full 401 simulated tectonic evolution, original flexure and corresponding stage exports: **PASS**.
