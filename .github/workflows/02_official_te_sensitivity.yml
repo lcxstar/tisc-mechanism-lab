@@ -78,9 +78,9 @@ jobs:
               ttag="$(printf '%03d' "$te")"
               "$tisc_dir/bin/tisc" -Q2nd_example_load.xyp "-N$n" \
                 -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4 "-T$((te*1000))" \
-                > "$GITHUB_WORKSPACE/results/02_Te_sensitivity/TE_$ttagkm_N$ntag.log" 2>&1
+                > "$GITHUB_WORKSPACE/results/02_Te_sensitivity/TE_${ttag}km_N${ntag}.log" 2>&1
               echo "Te=$te km  N=$n"
-              grep "deflect. :" "$GITHUB_WORKSPACE/results/02_Te_sensitivity/TE_$ttagkm_N$ntag.log"
+              grep "deflect. :" "$GITHUB_WORKSPACE/results/02_Te_sensitivity/TE_${ttag}km_N${ntag}.log"
             done
           done
 
