@@ -1,3 +1,13 @@
+## 03t — Solved: apparent 33–34% missing sediment caused by float32 accumulation
+
+The author stores basinwide cumulative sediment `total_sed_mass` as a **32-bit float**. With millions of fine-grained open-lake deposits, many individual mass increments round to zero in that aggregate counter. The detailed 03q–03r node tracing and independently verified 03s `double` accounting demonstrate that the large reported loss was numerical bookkeeping, not missing material from those source/sink transactions.
+
+**Measured 401×401** at time 1.0 Myr: native 32-bit reported loss **33.643619%**, independent 64-bit residual **0.000007660%**. At time 1.5 Myr: **33.842328%** native versus **0.000000513%** corrected. In N121 full 15 Myr, the largest original gap is 2.292665% versus 0.000012695% (double). **All 7 scientific output files** tested remain byte-for-byte identical with observer instrumentation at N121 full 15 Myr and N401 first 2 Myr, so the numerical model has not been tuned to force closure.
+
+03t uses `scripts/profile_03s_double_ledger.py` and `scripts/patch_03t_correct_sediment_balance.py` to report scientifically meaningful double-precision `eros_nosd`, `sedim_inc`, `outp_seds`, and `sediment_balance`, preserving original native float structures and binary restart compatibility. N121 full corrected-output validation **PASS** (30 steps; all 7 fields SHA256-exact, maximum 0.000012695% balance error). Further N401 first2 and N401 full15 checks: [03t paired workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38165200144), [03t full 401 workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38165304319) — validate completion before claiming either passed.
+
+[Detailed source and numerical audit](notes/03t_verified_float64_sediment_mass_accounting.md). This correction is distinct from the earlier 03k experimental negative-slope physical domain guard and from still-open 121→401 sediment-volume grid convergence.
+
 ## Current milestone — 03k, restored full 401-grid flexure and traced the sediment NaN
 
 [03k scientific audit](notes/03k_nan_root_cause_and_401_flexure_results.md) | [full coupled 401 baseline GitHub run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38157980373) | [independent experimental slope-corrected 401 run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38158590091) | [experimental comparison](results/03_tectonics/03K_EXPERIMENTAL_GUARD_VALIDATION.csv)
