@@ -63,3 +63,20 @@ Earlier [N401 0–2 Myr full model pair 38167459994](https://github.com/lcxstar/
 - [03v 401 full 15 Myr paired endpoint](https://github.com/lcxstar/tisc-mechanism-lab/actions) (new workflow `03v_401_full15_precision.yml`). Do not call an in-progress run complete.
 
 **Scientific decision:** (1) main official reference process chain functional reproduction passed with documented source corrections; (2) the nontrivial long-time divergence across arithmetic precision is real, not mass ledger error; (3) a lake/river-network bifurcation appears by t3 in N121, with large divergence by t6; (4) some convergence under smaller dt is observed for variant difference, but spatial and fully physical convergence not yet established. No geological parameter fitting to Junggar until these are characterized.
+
+## 03w read-only bitwise state chronology — decisive new result
+
+[03w per-hydrological-substep tracer](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38179009871) instruments the same raw native float-state FNV hashes into BOTH source variants and retains `ctx->topo`, last Block thickness, cumulative flexure `w` and drainage node type/lake/downstream edge independently. **No input, output, or physical arithmetic change** is introduced by this hash. N121 paired trial ran all **60 erosion substeps through 3 Myr**, exit0 and mass gates PASS.
+
+| Internal state being compared, first mismatch | Elapsed simulated time |
+|---|---:|
+| Raw stored float topography `ctx->topo` | **0.55 Myr** (substep zero of main interval 0.5–1.0) |
+| Last Block thickness raw float storage | **0.55 Myr** |
+| Plate deflection grid `w` raw float storage | **2.05 Myr** |
+| Drainage type, lake ID or downstream destination raw state hash | **2.55 Myr** |
+| First rounded 0.1m terrain difference in exported N121 stage maps | 2.5 Myr |
+| First *stage output* observable river and lake topology difference | 3.0 Myr |
+
+**Interpretation:** the earliest detectably changed native numerical state is sediment/terrain by about 0.55 Myr, i.e. **much earlier** than the first visually noticeable 0.1m difference. Downstream flexural and hydrological trajectories diverge later, consistent with nonlinearly amplified feedbacks. The `hydro_crc` hash signals any difference among raw drainage type, lake IDs and downstream edges; the 03v `xyw`/`lak` member-set analyses are needed to distinguish a mere internal lake-index change from actual graph topology. This is not proof of a mathematical instability theorem or of which trajectory is physically correct. Timing is quantized by 0.05 Myr erosion substeps, and the model may diverge within a substep before the snapshot.
+
+N401 has independently shown the first **rounded printed** height difference at 1.5 Myr (one 0.1m changed cell), no changed drainage type/edge or lake member components through at least the first 1.5 Myr. N401 internal-state checksum trial has been launched but requires its own completed log before stating its exact first mismatch.
