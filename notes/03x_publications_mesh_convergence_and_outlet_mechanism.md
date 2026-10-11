@@ -58,3 +58,13 @@ The deepest `demo.hrz` surface is **not itself w**. Across 201→401, true flexu
 - The old benchmark artifacts are public Actions runs [38178558812](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178558812), [38178743124](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178743124), [38178515988](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178515988), [38178607601](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178607601).
 
 **Decision:** Do not launch 801 yet. Finer 201 vs 401 sediment volume becomes closer but not spatially stable, while near-flat routing branches may substantially affect later sediment depocentres. In addition to numerical verification, future Junggar runs must be calibrated against independent tectonic shortening, basin subsidence, stratigraphic depocentre and thermochronologic constraints.
+
+## Passed first native-float exact-height probe at N121, t3Myr
+
+[Exact float printed outlet workflow 38183004799](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38183004799) **N121 subjob PASS** after 0–3Myr paired physics runs; the six other outputs `demo.st`, `demo.hrz`, `demo.lak`, `demo.bas`, `demo.pfl`, `demo.xyzt` are **byte-identical** to the same baseline science products from [03v 38178515988](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178515988). Only `demo.xyw` writes terrain float32 using `%.9g` instead of `%.1f`, so recorded raw states retain float32 storage precision.
+
+At 3Myr: 6 distinct changed runoff classifications or connections (4 downstream link changes, 3 node-class changes, overlapping). **4/6 changed nodes have exactly the same bit-recoverable local float32 elevation** in both variants. Specifically the flat-region corner near (x=345.83km, y=−250,−245.83km) has identical stored `115.976288m` height in the two executions, yet outlet/river or lake/river status differs and directed routes can differ. Adjacent sea-border control near (350km, −250km) also has exactly 115.976288m but a changed outlet destination.
+
+Two changed nodes near (−141.67km, −50/−45.83km) have actual local elevation differences (~0.0173m and ~1.4405m). This demonstrates **both mechanisms exist** at stage 3: real upstream/nearby topographic changes AND hydrologic component/outlet selection on identical local height. It does **not** prove that a strict-equality operator is itself incorrect; surrounding cell heights, sorting and lake membership can differ despite identical focal-node height.
+
+N401 native exact-height probe was initiated in the same audited job; report only after checking its independent completion. Do not replace source `deriv==0` comparisons with an arbitrary threshold without a separately validated controlled experiment.
