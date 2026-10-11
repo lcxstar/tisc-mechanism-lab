@@ -59,7 +59,10 @@ jobs:
           export tisc_dir="$GITHUB_WORKSPACE/upstream/"
           export PATH="$tisc_dir/bin:$PATH"
           mkdir -p results/full_official_flex
-          # Official pinned C source calls fclose(NULL) after a missing HOME/.tiscdefaults;\n          # a preexisting file also prevents an unwanted first-run email attempt.\n          printf "Initialized benchmark runner; no first-run notification.\\n" > "$HOME/.tiscdefaults"\n          cp -a upstream/tisc/demo/3_flexure/. results/full_official_flex/
+          # Official pinned C source calls fclose(NULL) after a missing HOME/.tiscdefaults.
+          # A preexisting file prevents first-run email attempts and the cleanup segfault.
+          echo "Initialized TISC benchmark runner; no first-run notification" > "$HOME/.tiscdefaults"
+          cp -a upstream/tisc/demo/3_flexure/. results/full_official_flex/
           (cd results/full_official_flex && sha256sum flex.PRM flex1.UNIT flex2.UNIT flex3.UNIT > ORIGINAL_INPUTS.sha256)
           (
             cd results/full_official_flex
