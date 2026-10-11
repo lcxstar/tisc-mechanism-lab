@@ -63,3 +63,13 @@ Notable: at 3 Myr a tiny tie-margin **1e-8 gradient (m/m)** reduces the two prec
 
 **Decisive time dependence:** under N121, the F1–D1 precision-pair elevation RMS decreases from F0–D0 **0.02688→0.00320m** at t3, but at t15 it **increases from 48.0548→50.9012m**. Thus the chosen tie margin is NOT shown to stabilize geologic results over 15 Myr. The physical float case F0→F1 alone changes terrain up to 648.7m and sediment thickness up to 635.9m even with only 0.1401% change in integrated sediment output volume. **Reject promoting the tiny-tolerance patch as a global numerical fix.** We may keep it solely as a sensitivity perturbation for identifying discontinuous choices. The actual outlet type/plateau equality conditions and local lake membership deserve isolated tests rather than blind epsilon tuning.
 
+
+## Cross-project interpretation for actual Junggar source-to-sink studies (2026-10-12)
+
+Full documented diagnostic in [Junggar V10.2-B domain-export-and-grid review](https://github.com/lcxstar/junggar-tisc-model/blob/diagnostics/v102b-routing-export-grid-audit-20261012/docs/V102B_DOMAIN_EXPORT_AND_GRID_RELIABILITY_AUDIT_20261012.md).
+
+**Do NOT transpose the synthetic demo's t=2.5–3.0Myr internal elapsed-time hydrology bifurcation into Junggar geological ages 2.5–3.0Ma.** These refer to entirely different input models and timescales.
+
+Junggar's recent 300–0Ma version uses **121×113 grid at 10km** in 1,200×1,120km overall rectangle, not the demo's 401×401 at 1.25km. Its experimental V10.2-B retained in-basin sediment thickness is mean ~39.57m / max 510.2m, with proxy basin preserved volume ~5,416.97km³. Independent diagnostics from the real accepted 300–0Ma V10.2-B artifact show 327,208 direct-border sediment-loss records summing **4.303904308257639e18kg**, despite transport boundary labelled 0000; export shares E54.3%, N23.7%, W14.0%, S8.0%. Large external domain export does **not** mean the majority of sediment eroded inside or destined to Junggar was lost, as the computational rectangle encompasses other catchments.
+
+To assess if this hydrologic numerical effect explains genuine missing Junggar basin fill, trace **which upstream source zones connect to the Junggar basin mask**, distinguish border-lost non-Junggar catchments, and compare basin accommodation and palaeodivide stage constraints. **No** small gradient EPS change or generic 801-grid refinement should be marketed as automatically recovering Junggar sediment. Need true source-to-sink provenance bookkeeping and 10km vs 5km stage-controlled grid tests once geology is anchored.
