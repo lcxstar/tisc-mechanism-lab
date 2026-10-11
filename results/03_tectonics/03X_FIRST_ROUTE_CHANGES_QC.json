@@ -1,0 +1,78 @@
+{
+  "grid_qc": [
+    {
+      "n": 81,
+      "dx_km": 6.25,
+      "volume_compacted_km3": 86615.859375,
+      "volume_percent_different_from_401": 44.760422703625416,
+      "mean_sed_m": 338.99227251943296,
+      "max_sed_m": 1863.3999999999999,
+      "topo_RMS_vs401_m": 140.50102970862733,
+      "topo_max_abs_vs401_m": 974.5,
+      "sed_RMS_vs401_m": 174.5807388542781,
+      "sed_max_abs_vs401_m": 827.5,
+      "basal_RMS_vs401_m": 130.99695362668797,
+      "basal_max_abs_vs401_m": 298.79999999999995
+    },
+    {
+      "n": 121,
+      "dx_km": 4.166666666666667,
+      "volume_compacted_km3": 69105.56476271743,
+      "volume_percent_different_from_401": 15.49560136455943,
+      "mean_sed_m": 272.6419301960249,
+      "max_sed_m": 1665.4,
+      "topo_RMS_vs401_m": 133.80098830514305,
+      "topo_max_abs_vs401_m": 1103.3148799999997,
+      "sed_RMS_vs401_m": 91.00227746575315,
+      "sed_max_abs_vs401_m": 664.2279912960001,
+      "basal_RMS_vs401_m": 59.12650489094192,
+      "basal_max_abs_vs401_m": 167.69904000000008
+    },
+    {
+      "n": 201,
+      "dx_km": 2.5,
+      "volume_compacted_km3": 61107.429375,
+      "volume_percent_different_from_401": 2.128378919139906,
+      "mean_sed_m": 242.53037301056904,
+      "max_sed_m": 1518.2,
+      "topo_RMS_vs401_m": 122.63318058753643,
+      "topo_max_abs_vs401_m": 1167.5,
+      "sed_RMS_vs401_m": 48.7389680873787,
+      "sed_max_abs_vs401_m": 528,
+      "basal_RMS_vs401_m": 51.11693621289207,
+      "basal_max_abs_vs401_m": 133
+    },
+    {
+      "n": 401,
+      "dx_km": 1.25,
+      "volume_compacted_km3": 59833.936484375,
+      "volume_percent_different_from_401": 0,
+      "mean_sed_m": 238.52022624237415,
+      "max_sed_m": 1493.9,
+      "topo_RMS_vs401_m": 0,
+      "topo_max_abs_vs401_m": 0,
+      "sed_RMS_vs401_m": 0,
+      "sed_max_abs_vs401_m": 0,
+      "basal_RMS_vs401_m": 0,
+      "basal_max_abs_vs401_m": 0
+    }
+  ],
+  "changed_nodes_t3": {
+    "changed_nodes": 18,
+    "changed_edges": 15,
+    "changed_types": 5,
+    "same_printed_topo": 15,
+    "top2_printed_slope_equal": 10
+  },
+  "changed_t2p5": {
+    "changed_nodes": 0
+  },
+  "source_run": "38182906576",
+  "interpretation": [
+    "401 grid is a comparison, not an exact solution",
+    "Sediment is compaction-adjusted, classified by .hrz block density 2200kg/m3",
+    "Basal horizon is an elevation, not isolated flexural displacement w",
+    "0.1m printed height is insufficient to prove exact tie or no native float discrepancy",
+    "First altered route is not necessarily the first causal perturbation."
+  ]
+}
