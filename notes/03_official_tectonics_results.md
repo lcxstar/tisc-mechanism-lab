@@ -37,3 +37,7 @@ Successful run (control cases): https://github.com/lcxstar/tisc-mechanism-lab/ac
 ## Provenance
 
 Experiment code: scripts/prepare_official_tectonics.py, scripts/qc_official_tectonics.py, scripts/compare_official_tectonics.py. Input source was copied byte-for-byte for the literal 401 run and decoded in Latin-1 only when creating modified 81-node PRM or UNIT text; physical parameter edits are audited in INPUT_AUDIT.json. The pinned source contains two nonstandard whitespace bytes normalized solely for GCC compilation.
+
+## Important later audit, 11 October 2026
+
+The labels "PASS" and "four cases completed" above mean process/time/finite endpoint and kinematic checks only. A fresh re-inspection of all four original `RUN.log` files identified `outp_seds: -nan N` in **all four 81x81 runs**, also present in the full 121x121 run. Thus **sediment-export mass balance has NOT passed**, and no claim of reliable sediment conservation is warranted. See [03c hydrology isolation](03c_401_hydrology_isolation_results.md) and original GitHub artifact logs. 

@@ -21,7 +21,7 @@ result={"case":audit["case"],"original_input_hashes_match":audit["grid"]==401 an
     "has_time_end":"Time end:" in raw,
     "has_hrz":(p/"demo.hrz").exists(),"has_xyzt":(p/"demo.xyzt").exists(),
     "sediment_flux_nonfinite_logged":bool(re.search(r"(?i)outp_seds\s*:\s*[-+]?nan",raw)),
-    "scientific_mass_budget_pass":not bool(re.search(r"(?i)outp_seds\s*:\s*[-+]?nan",raw))}
+    "scientific_mass_budget_pass":None,  # No mass-balance closure has been independently audited}
 xy=p/"demo.xyzt"
 if xy.exists():
     try:

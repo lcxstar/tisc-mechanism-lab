@@ -1,0 +1,5 @@
+test,grid,hydro_model,erosed_model,isost_model,time_target_Myr,time_reached_Myr,wall_sec,exit_code,model_complete,category
+FULL_401,401,1,6,1,15,0,1800,124,false,unmodified_author_input
+HYDRO_ENABLED_EROS_OFF_401,401,1,0,0,0.5,0,120,124,false,diagnostic_only
+HYDRO_OFF_EROS_ENABLED_401,401,0,6,0,0.5,0.5,0.42,0,true,diagnostic_only
+BOTH_OFF_401,401,0,0,0,0.5,0.5,0.21,0,true,diagnostic_only
