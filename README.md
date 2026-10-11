@@ -1,3 +1,11 @@
+## Current milestone — 03j, first complete 401×401 surface-routing timestep
+
+[03j audited results](notes/03j_lake_discharge_optimization_results.md) | [81/121 eight-case validation](results/03_tectonics/03J_81_121_EQUIVALENCE.csv) | [401 benchmark](results/03_tectonics/03J_N401_FIRST_STEP.csv) | [GitHub Actions verified run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38157360909)
+
+After 03g merge optimization, 03j-A caches original-order lake evaporation sums with safe invalidation, and 03j-B skips expensive lake inflow scans only under a runtime-verified zero-evaporation/nonnegative-input invariant. **All eight small-grid original-vs-optimized output-file tests passed.** With original 401×401 input files, the optimized *surface-isolation* test (flexure temporarily disabled, -tf0.5) **finished all ten hydrology substeps and reached 0.5 Myr in 71.78 seconds, exit code 0**, skipping 1,605,950 unnecessary lake input scans. Two 81-grid nonzero-evaporation synthetic stress tests also matched physical output files exactly, including 51,388 lake-cache invalidations for the high-evaporation case.
+
+**Not the full original author reproduction:** 401-grid original 0–15 Myr coupled flexure run still awaits verification. The upstream sediment-export `outp_seds=-nan` persists and needs separate analysis. The original baseline and prior mechanism experiments remain preserved.
+
 # TISC Mechanism Lab
 
 Independent, **public and reproducible** numerical experiments for learning the actual behavior of the [TISC](https://github.com/danigeos/tisc) program before applying it to tectonic–sedimentary evolution of the Junggar Basin or the North Tianshan.
