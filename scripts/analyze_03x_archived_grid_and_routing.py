@@ -24,6 +24,8 @@ def run(n, variant="reference"):
     xx=np.unique(xy[:,0]); yy=np.unique(xy[:,1])
     assert len(xx)==N and len(yy)==N
     assert np.allclose(xy[:,1].reshape(N,N)[:,0],yy[::-1])
+    flexfile=np.loadtxt(root/"demo.xyzt",comments="#")
+    assert flexfile.shape==(N*N,5) and np.allclose(flexfile[:,:2],xy,atol=0.008,rtol=0)
     xyz=[]
     with (root/"demo.xyw").open() as f:
         for line in f:
@@ -32,7 +34,7 @@ def run(n, variant="reference"):
     assert np.allclose([[float(a[0]),float(a[1])] for a in xyz],xy,atol=0.008,rtol=0)
     def grid(t): return np.asarray(t).reshape(N,N)[::-1,:].copy()
     return dict(n=N,x=xx,y=yy,topo=grid([float(a[5]) for a in xyz]),
-                sed=grid(thickness),basal=grid(h[:,0]),
+                sed=grid(thickness),basal=grid(h[:,0]),flex=grid(flexfile[:,2]),
                 types=grid([a[4] for a in xyz]),
                 downstream=np.stack([grid([float(a[k]) for a in xyz]) for k in (6,7)],axis=2))
 def volume(d):return float(np.trapezoid(np.trapezoid(d["sed"],d["x"],axis=1),d["y"],axis=0)/1000.)
@@ -41,7 +43,7 @@ def metrics(data,truth):
     row=dict(n=n,dx_km=float(np.diff(data["x"]).mean()),volume_compacted_km3=volume(data),
              volume_percent_different_from_401=float(100*(volume(data)/volume(truth)-1)),
              mean_sed_m=float(data["sed"].mean()),max_sed_m=float(data["sed"].max()))
-    for key in ["topo","sed","basal"]:
+    for key in ["topo","sed","basal","flex"]:
         z=RegularGridInterpolator((truth["y"],truth["x"]),truth[key])(xy).reshape(n,n)
         delta=data[key]-z
         row[key+"_RMS_vs401_m"]=float(np.sqrt(np.mean(delta*delta)))
@@ -94,7 +96,7 @@ def main():
       t2p5=dict(changed_nodes=len(c25)),
       caveats=["401 grid is a comparison, not an exact solution",
         "Sediment is compaction-adjusted, classified by .hrz block density 2200kg/m3",
-        "Basal horizon is an elevation, not isolated flexural displacement w",
+        "Basal horizon is an elevation; actual flexural deflection w is exported in demo.xyzt third numeric column",
         "0.1m printed height is insufficient to prove exact tie or no native float discrepancy",
         "First altered route is not necessarily the first causal perturbation."])
     (OUT/"03X_QC_AND_INTERPRETATION.json").write_text(json.dumps(payload,indent=2))
