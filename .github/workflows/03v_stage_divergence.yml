@@ -85,7 +85,7 @@ jobs:
           set -euo pipefail
           test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
           mkdir -p qc_03v/source qc_03v/bin
-          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c qc_03v/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c qc_03v/source/NBSP_AUDIT.json
           python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c qc_03v/source
           python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c qc_03v/source
           python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c qc_03v/source
