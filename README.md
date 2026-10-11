@@ -1,3 +1,15 @@
+## 03x — Read-only lake outlet and same-scheme mesh audit (2026-10-12)
+
+**Verdict: synthetic official model reproduction succeeds with documented source corrections; 801 grid NOT yet justified.** Actual same-scheme 15 Myr basinwide compacted sediment volumes across N81/N121/N201/N401 are ~86,616 / 69,106 / 61,107 / 59,834 km³. Thus N201 differs by only 2.13% from N401 in integrated volume, but still has ~48.74m sediment thickness, ~122.63m surface elevation, and ~50.12m **actual w deflection** RMS difference after bilinear interpolation to N201 nodes. N401 is a comparison reference, NOT ground truth or an independently demonstrated converged solution.
+
+At t=3Myr original N401 paired local-float/double arithmetic variants differ in 15 river connections and 5 drainage classes across 18 nodes. 15/18 affected sites print same 0.1m-rounded height; the author's `Define_Drainage_Net` branches on exact zero slope and exact elevation equality. This is a candidate threshold mechanism, **not** proven causal. New output-only %.9g float32 outlet test probes exact stored elevations without changing physics. Archive author García-Castellanos et al. (2003) JGR Section [57]: double-resolution runs changed large-scale basin fill/incision rates by less than 10%, while capture/closure timing could differ by a few Myr. That was a case-specific resolution sensitivity check, not a universal benchmark guarantee.
+
+- [03x author-publications, mesh convergence, lake-routing mechanism audit](notes/03x_publications_mesh_convergence_and_outlet_mechanism.md)
+- [Reproducible 03x GitHub Action](.github/workflows/03x_grid_route_reanalysis.yml)
+- [Verified same-scheme 81–401 mesh QC including true flexure](results/03_tectonics/03X_SAME_SCHEME_GRID_81_121_201_401.csv)
+- [Output-only raw-float lake outlet probe](.github/workflows/03x_highprecision_rawfloat_outlets.yml)
+
+---
 ## 03v — Benchmark reproduced with corrections; numerical convergence under audit
 
 **Status:** The author's official `6_tectonics` synthetic tectonic/flexure/erosion/sedimentation example completes its **original 401×401 grid, 0–15 Myr** with *documented* computational optimizations (03g/03j), a separately labeled physical domain guard (03k) and the validated 64-bit mass ledger (03t). This is a **successful operational/mechanistic reproduction using a modified implementation**, **not** an unchanged-source bitwise or author-published field-perfect reproduction.
