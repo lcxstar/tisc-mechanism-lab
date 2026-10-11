@@ -11,7 +11,9 @@ CASES={
  "N121_FULL":{"grid":121,"overrides":"-qplotting_mode=0","purpose":"full physical model, 0–15 Myr, medium resolution"},
  "N401_ISO_OFF":{"grid":401,"overrides":"-tf0.5 -qisost_model=0 -qplotting_mode=0","purpose":"isolate 401 runtime without flexural solver, 0–0.5 Myr only"},
  "N401_SURFACE_OFF":{"grid":401,"overrides":"-tf0.5 -qhydro_model=0 -qerosed_model=0 -qplotting_mode=0","purpose":"isolate 401 runtime without surface processes, 0–0.5 Myr only"},
- "N401_BOTH_OFF":{"grid":401,"overrides":"-tf0.5 -qisost_model=0 -qhydro_model=0 -qerosed_model=0 -qplotting_mode=0","purpose":"input and time-loop sanity, neither flexure nor surface, 0–0.5 Myr only"}
+ "N401_BOTH_OFF":{"grid":401,"overrides":"-tf0.5 -qisost_model=0 -qhydro_model=0 -qerosed_model=0 -qplotting_mode=0","purpose":"input and time-loop sanity, neither flexure nor surface, 0–0.5 Myr only"},
+ "N401_HYDRO_ONLY":{"grid":401,"overrides":"-tf0.5 -qisost_model=0 -qerosed_model=0 -qplotting_mode=0","purpose":"first-step cost of hydrological surface routing, no sediment transport, no flexure"},
+ "N401_EROS_ONLY":{"grid":401,"overrides":"-tf0.5 -qisost_model=0 -qhydro_model=0 -qplotting_mode=0","purpose":"first-step cost of surface erosion transport with hydro disabled, no flexure"}
 }
 ROOT=Path(__file__).resolve().parents[1]
 SOURCES=("demo.PRM","demo1.UNIT","demo2.UNIT","demo.PRFL")
