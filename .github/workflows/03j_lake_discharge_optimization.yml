@@ -1,0 +1,204 @@
+name: 03j | Validate evaporation and inflow optimization
+
+on:
+  push:
+    branches: [v03j-lake-discharge-cache]
+    paths:
+      - '.github/workflows/03j_lake_discharge_optimization.yml'
+      - 'scripts/patch_03j_evap_cache.py'
+      - 'scripts/patch_03j_zero_evap_fastpath.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paired-numerical-validation:
+    name: '03j ${{ matrix.variant }} ${{ matrix.n }} ${{ matrix.mode }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [evap_cache, zero_evap_guard]
+        n: [N81, N121]
+        mode: [first_step, full_coupled]
+    steps:
+      - name: Checkout lab
+        uses: actions/checkout@v4
+      - name: Checkout pinned author TISC
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build 03g reference and 03j optimizations separately
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p validation_03j/source validation_03j/bin
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c validation_03j/source/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c validation_03j/source
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc validation_03j/bin/tisc_reference
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c validation_03j/source
+          if [[ '${{ matrix.variant }}' == 'zero_evap_guard' ]]; then
+            python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c validation_03j/source
+          fi
+          rm -f upstream/tao+tisc_commons/build/surf_proc.o
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc validation_03j/bin/tisc_optimized
+          sha256sum validation_03j/bin/tisc_reference validation_03j/bin/tisc_optimized > validation_03j/source/EXECUTABLE_SHA256.txt
+          echo 'CI non-interactive install' > "$HOME/.tiscdefaults"
+      - name: Prepare byte-identical reference and optimized inputs
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py ${{ matrix.n }} ${{ matrix.mode }}
+          mkdir -p validation_03j/${{ matrix.variant }}/${{ matrix.n }}
+          mv validation_03g/${{ matrix.n }}/${{ matrix.mode }} validation_03j/${{ matrix.variant }}/${{ matrix.n }}/${{ matrix.mode }}
+          git rev-parse HEAD > validation_03j/source/LAB_COMMIT.txt
+      - name: Run both versions with exact same physical inputs
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          ROOT="$GITHUB_WORKSPACE/validation_03j/${{ matrix.variant }}/${{ matrix.n }}/${{ matrix.mode }}"
+          if [[ '${{ matrix.mode }}' == 'first_step' ]]; then
+            FLAGS="-tf0.5 -qisost_model=0 -qplotting_mode=0"
+            SECONDS=180
+          else
+            FLAGS="-qplotting_mode=0"
+            SECONDS=900
+          fi
+          for version in reference optimized; do
+            (
+              cd "$ROOT/$version"
+              echo "tisc demo -V1 $FLAGS" > ACTUAL_COMMAND.txt
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s "$SECONDS" \
+                "$GITHUB_WORKSPACE/validation_03j/bin/tisc_$version" demo -V1 $FLAGS > RUN.log 2>&1
+              code=$?
+              set -e
+              echo "$code" > EXIT_CODE.txt
+              echo "03j ${{ matrix.variant }} ${{ matrix.n }} ${{ matrix.mode }} $version exit=$code"
+              grep -a 'TISC_03J_' RUN.log | tail -n 3 || true
+            )
+          done
+      - name: Demand byte-identical physical outputs and matching history
+        run: |
+          python3 scripts/validate_03g_outputs.py validation_03j/${{ matrix.variant }}/${{ matrix.n }}/${{ matrix.mode }}
+          python3 - <<'PY'
+          import json,re
+          from pathlib import Path
+          d=Path("validation_03j/${{ matrix.variant }}/${{ matrix.n }}/${{ matrix.mode }}")
+          qc=json.loads((d/"VALIDATION_QC.json").read_text())
+          log=(d/"optimized/RUN.log").read_text(errors="replace")
+          cache=list(re.finditer(r"TISC_03J_A hits=(\d+) misses=(\d+) invalidations=(\d+) grid=(\d+)",log))
+          fast=list(re.finditer(r"TISC_03J_B zero_evap_proven_skips=(\d+) original_predicate_fallbacks=(\d+) nonnegative_invariant_at_end=(\d+) grid=(\d+)",log))
+          qc["03j_variant"]="${{ matrix.variant }}"
+          qc["03j_cache_observations"]=len(cache)
+          qc["03j_cache_total_hits"]=sum(int(m[1]) for m in cache)
+          qc["03j_cache_total_misses"]=sum(int(m[2]) for m in cache)
+          qc["03j_cache_invalidation_calls"]=sum(int(m[3]) for m in cache)
+          qc["03j_B_proven_skips"]=sum(int(m[1]) for m in fast)
+          qc["03j_B_fallbacks"]=sum(int(m[2]) for m in fast)
+          qc["03j_B_reported_substeps"]=len(fast)
+          (d/"03J_VALIDATION_QC.json").write_text(json.dumps(qc,indent=2))
+          print(json.dumps({k:v for k,v in qc.items() if k.startswith("03j") or k in ("speedup_factor","numerical_equivalence_pass","raw_restart_binary_byte_equal","all_changed_output_names")}))
+          if not cache:raise SystemExit("Missing 03j-A cache metrics")
+          if "${{ matrix.variant }}"=="zero_evap_guard" and (not fast or qc["03j_B_proven_skips"]<=0):
+              raise SystemExit("03j-B optimization not exercised")
+          PY
+      - name: Preserve paired output, logs and exact source differences
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03J_${{ matrix.variant }}_${{ matrix.n }}_${{ matrix.mode }}'
+          path: |
+            validation_03j/source/
+            validation_03j/${{ matrix.variant }}/${{ matrix.n }}/${{ matrix.mode }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  401-first-step:
+    name: '03j 401 first isolated timestep, gated on 8 numerical checks'
+    needs: paired-numerical-validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build optimized source after paired gate
+        run: |
+          set -euo pipefail
+          mkdir -p validation_03j/source
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c validation_03j/source/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c validation_03j/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c validation_03j/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c validation_03j/source
+          make -C upstream/tisc/src tisc
+          echo CI > "$HOME/.tiscdefaults"
+          python3 scripts/prepare_03g_validation.py N401 first_step
+          mkdir -p validation_03j/401
+          mv validation_03g/N401/first_step validation_03j/401/first_step
+      - name: Compute 401-grid original physical input first timestep
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd validation_03j/401/first_step/optimized
+          echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+          set +e
+          /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s 330 \
+            tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+          code=$?
+          set -e
+          echo "$code" > EXIT_CODE.txt
+          echo "03j 401 result exit=$code"
+          grep -a 'TISC_03J_' RUN.log | tail -n 12 || true
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,re
+          p=Path(".")
+          text=(p/"RUN.log").read_text(errors="replace")
+          times=[float(t) for t in re.findall(r"T=\s*(\d+(?:\.\d+)?)\s*My",text)]
+          code=int((p/"EXIT_CODE.txt").read_text())
+          cache=list(re.finditer(r"TISC_03J_A hits=(\d+) misses=(\d+) invalidations=(\d+) grid=(\d+)",text))
+          fast=list(re.finditer(r"TISC_03J_B zero_evap_proven_skips=(\d+) original_predicate_fallbacks=(\d+) nonnegative_invariant_at_end=(\d+) grid=(\d+)",text))
+          qc={"grid":401,"code":code,"start_time_Myr":0,"last_logged_time_Myr":times[-1] if times else None,
+              "first_timestep_completed":code==0 and bool(times) and times[-1]>=0.5,
+              "hydrology_03j_A_completed_substeps":len(cache),
+              "hydrology_03j_B_completed_substeps":len(fast),
+              "03j_B_skipped_lake_input_queries":sum(int(m[1]) for m in fast),
+              "sediment_NaN_present":bool(re.search(r"outp_seds:\s*[+-]?nan",text,re.I)),
+              "upstream_401_input_byte_exact":True,
+              "simulation_variant":"03g+03jA+03jB, flexure off only for isolation",
+              "original_401_full_15_Myr_reproduced":False}
+          (p/"03J_401_QC.json").write_text(json.dumps(qc,indent=2))
+          print("03J_401_QC "+json.dumps(qc))
+          PY
+      - name: Preserve 401 source audits and first-step outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03J_401_FIRST_STEP
+          path: |
+            validation_03j/source/
+            validation_03j/401/
+          retention-days: 30
+          if-no-files-found: warn
