@@ -42,7 +42,7 @@ A successful run demonstrates input parsing, time scheduling and outputs, but do
 ### Source isolation
 
 - Pinned upstream TISC: `d18b7d270f4d671b80223e10dede329ad35cafdd`.
-- No source patches. No legacy Junggar `surf_proc.c` modifications or boundary schedules.
+- No algorithmic source patches. The pinned upstream `surf_proc.c` has exactly two U+00A0 spaces in boolean operators, which GCC refuses to compile. Workflow normalizes only these characters to ordinary spaces in its temporary checkout and saves `UPSTREAM_WHITESPACE_FIX.json` containing the original and resulting file hashes. No legacy Junggar `surf_proc.c` modifications or boundary schedules.
 - Native compile via `make -C upstream/tisc/src tisc`.
 - Official inputs are not edited; screenshots and comparative interpretations are our own.
 

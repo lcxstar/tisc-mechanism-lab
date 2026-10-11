@@ -4,7 +4,7 @@ Independent, **public and reproducible** numerical experiments for learning the 
 
 ## Current milestone — 01, official flexure baseline
 
-This laboratory starts with **unaltered, pinned upstream source code** and the author's published demo inputs. It does **not** copy the custom TISC patches or Junggar-specific geometry from `junggar-tisc-model`.
+This laboratory starts with **pinned upstream source code, with an explicitly audited two-character compile-only whitespace normalization** and the author's published demo inputs. It does **not** copy the custom TISC patches or Junggar-specific geometry from `junggar-tisc-model`.
 
 - **Upstream source**: `danigeos/tisc` at `d18b7d270f4d671b80223e10dede329ad35cafdd`.
 - **Author's first quantitative test**: `tisc -Q2nd_example_load.xyp -N11/-N51 ... -qmode_interp=4`. The upstream demo README reports approximately **675.1 m (11×11)** and **711.0 m (51×51)** at the central node. These are author-supplied references, not measurements.

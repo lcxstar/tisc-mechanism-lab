@@ -37,6 +37,7 @@ jobs:
           set -euo pipefail
           git -C upstream rev-parse HEAD
           test "$(git -C upstream rev-parse HEAD)" = "d18b7d270f4d671b80223e10dede329ad35cafdd"
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c results/UPSTREAM_WHITESPACE_FIX.json
           make -C upstream/tisc/src tisc
           test -x upstream/bin/tisc
           mkdir -p results
