@@ -1,0 +1,51 @@
+name: 03x | Same-scheme mesh convergence and lake-route threshold audit
+on:
+  push:
+    branches: [v03x-routing-and-convergence-audit]
+    paths:
+      - 'scripts/analyze_03x_archived_grid_and_routing.py'
+      - '.github/workflows/03x_grid_route_reanalysis.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  read-only-reanalysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numerical-only review dependencies
+        run: python -m pip install numpy scipy
+      - name: Download original model output artifacts without re-running physical solver
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p qc/{81,121,201,401,t2p5,t3}
+          gh run download 38178558812 --repo "$GITHUB_REPOSITORY" --name 'TISC03V_CONV_N81_DT0.5_EROS0.05_TF15' --dir qc/81
+          gh run download 38178558812 --repo "$GITHUB_REPOSITORY" --name 'TISC03V_CONV_N121_DT0.5_EROS0.05_TF15' --dir qc/121
+          gh run download 38178558812 --repo "$GITHUB_REPOSITORY" --name 'TISC03V_CONV_N201_DT0.5_EROS0.05_TF15' --dir qc/201
+          gh run download 38178743124 --repo "$GITHUB_REPOSITORY" --name 'TISC03V_STAGE_N401_TF15' --dir qc/401
+          gh run download 38178607601 --repo "$GITHUB_REPOSITORY" --name 'TISC03V_STAGE_N401_TF2.5' --dir qc/t2p5
+          gh run download 38178515988 --repo "$GITHUB_REPOSITORY" --name 'TISC03V_STAGE_N401_TF3' --dir qc/t3
+          for size in 81 121 201 401; do
+            test -s "qc/$size/experiment/reference/demo.hrz"
+          done
+          test -s qc/t3/experiment/optimized/demo.xyw
+          sha256sum qc/{81,121,201,401,t2p5,t3}/experiment/reference/demo.hrz > artifact_horizon_sha256.txt
+      - name: Compare common-space physical fields and first outlet bifurcation
+        run: python scripts/analyze_03x_archived_grid_and_routing.py
+      - name: Publish science QC, physical metrics and source checksums
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 03X_SAME_SCHEME_MESH_AND_ROUTING_ANALYSIS
+          path: |
+            results_03x/
+            artifact_horizon_sha256.txt
+          retention-days: 30
+          if-no-files-found: warn
