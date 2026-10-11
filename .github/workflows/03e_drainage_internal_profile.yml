@@ -1,0 +1,74 @@
+name: 03e | Locate bottleneck inside original drainage-network builder
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/03e_drainage_internal_profile.yml'
+      - 'scripts/profile_tisc_drainage.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drainage-internal:
+    name: 401x401 original input; drain-node scan and lake-cost trace
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Apply audited instrumentation to temporary upstream checkout
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostic_03e/source
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c \
+            diagnostic_03e/source/UPSTREAM_WHITESPACE_FIX.json
+          python3 scripts/profile_tisc_surface.py upstream/tisc/src/surf_proc.c \
+            diagnostic_03e/source
+          python3 scripts/profile_tisc_drainage.py upstream/tisc/src/surf_proc.c \
+            diagnostic_03e/source
+          make -C upstream/tisc/src tisc
+          echo "CI source and build initialized" > "$HOME/.tiscdefaults"
+      - name: Execute first 0.5 Myr only; isolate drainage, record node progress
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_401_performance_probe.py N401_ISO_OFF
+          mv diagnostic_03b/N401_ISO_OFF diagnostic_03e/N401_ISO_OFF
+          cp diagnostic_03e/source/*AUDIT.json diagnostic_03e/N401_ISO_OFF/
+          git -C upstream rev-parse HEAD > diagnostic_03e/N401_ISO_OFF/UPSTREAM_COMMIT.txt
+          git rev-parse HEAD > diagnostic_03e/N401_ISO_OFF/LAB_COMMIT.txt
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd diagnostic_03e/N401_ISO_OFF
+            echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s 120 \
+              tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "TISC exit=$rc (124 means diagnostic timeout)"
+            grep -a "TISC_PROFILE" RUN.log | tail -n 40 || true
+          )
+          python3 scripts/summarize_tisc_surface_profile.py diagnostic_03e/N401_ISO_OFF
+      - name: Preserve source diffs, tracing and raw inputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03E_DRAINAGE_INTERNAL_TRACE
+          path: diagnostic_03e/
+          if-no-files-found: warn
+          retention-days: 30
