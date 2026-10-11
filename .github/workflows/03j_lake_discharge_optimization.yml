@@ -125,7 +125,7 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
-  401-first-step:
+  full-grid-first-step:
     name: '03j 401 first isolated timestep, gated on 8 numerical checks'
     needs: paired-numerical-validation
     runs-on: ubuntu-latest
