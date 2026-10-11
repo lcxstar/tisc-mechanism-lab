@@ -1,0 +1,91 @@
+name: 03d | Profile original TISC surface stages at 401 nodes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/03d_surface_stage_profile.yml'
+      - 'scripts/profile_tisc_surface.py'
+      - 'scripts/summarize_tisc_surface_profile.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  profile-first-step:
+    name: Stage-by-stage wall clock trace, 121 vs 401
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout the lab
+        uses: actions/checkout@v4
+      - name: Checkout pinned official TISC
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Build tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Audit upstream and compile diagnostic timing build
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p diagnostic_03d/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c \
+            diagnostic_03d/source/UPSTREAM_WHITESPACE_FIX.json
+          python3 scripts/profile_tisc_surface.py upstream/tisc/src/surf_proc.c diagnostic_03d/source
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          echo "Initialize CI defaults; disable old first-use mail path" > "$HOME/.tiscdefaults"
+      - name: Run identical first-step physical settings on 121 and 401 grids
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          mkdir -p diagnostic_03d
+          for case in N121_FULL N401_ISO_OFF; do
+            python3 scripts/prepare_401_performance_probe.py "$case"
+            mv "diagnostic_03b/$case" "diagnostic_03d/$case"
+            cp diagnostic_03d/source/SOURCE_PROFILE_AUDIT.json "diagnostic_03d/$case/"
+            git -C upstream rev-parse HEAD > "diagnostic_03d/$case/UPSTREAM_COMMIT.txt"
+            git rev-parse HEAD > "diagnostic_03d/$case/LAB_COMMIT.txt"
+            python3 - "$case" <<'PY'
+          import json,sys
+          from pathlib import Path
+          p=Path("diagnostic_03d")/sys.argv[1]/"INPUT_AUDIT.json"
+          d=json.loads(p.read_text())
+          d["run_override_flags"]="-tf0.5 -qisost_model=0 -qplotting_mode=0"
+          d["purpose"]="Stage timing for 0-to-0.5 Myr at fixed original physics except explicitly disabled isostasy; not full history"
+          d["is_exact_author_full_history"]=False
+          p.write_text(json.dumps(d,indent=2))
+          PY
+            (
+              cd "diagnostic_03d/$case"
+              echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+              printf 'Case %s: profiling first time step\n' "$case"
+              if [[ "$case" == "N121_FULL" ]]; then max_sec=90; else max_sec=180; fi
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SEC.txt \
+                timeout -k 10s "$max_sec" tisc demo -V1 \
+                  -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+              rc=$?
+              set -e
+              echo "$rc" > EXIT_CODE.txt
+              echo "TISC return $rc for $case (124 means deliberate timeout)."
+              grep -a 'TISC_PROFILE' RUN.log | tail -n 18 || true
+            )
+            python3 scripts/summarize_tisc_surface_profile.py "diagnostic_03d/$case"
+          done
+      - name: Archive both timing traces, full logs, source diff and input hashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03D_SURFACE_STAGE_PROFILE
+          path: diagnostic_03d/
+          if-no-files-found: warn
+          retention-days: 30
