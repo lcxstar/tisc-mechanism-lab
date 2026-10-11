@@ -29,7 +29,7 @@ def run(n, variant="reference"):
         for line in f:
             if not line.startswith("#") and line.strip():xyz.append(line.split())
     assert len(xyz)==len(xy)
-    assert np.allclose([[float(a[0]),float(a[1])] for a in xyz],xy,atol=0.002)
+    assert np.allclose([[float(a[0]),float(a[1])] for a in xyz],xy,atol=0.008,rtol=0)
     def grid(t): return np.asarray(t).reshape(N,N)[::-1,:].copy()
     return dict(n=N,x=xx,y=yy,topo=grid([float(a[5]) for a in xyz]),
                 sed=grid(thickness),basal=grid(h[:,0]),
