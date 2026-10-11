@@ -1,0 +1,9 @@
+grid,experiment,quantity,first_detected_elapsed_Myr,resolution_Myr,comparison_method,confidence,action_run_id
+121,03w,binary_topography_state,0.54999999,0.05,paired_native_float_byte_hash,observed,38179009871
+121,03w,binary_top_sediment_Block_thickness,0.54999999,0.05,paired_native_float_byte_hash,observed,38179009871
+121,03w,binary_cumulative_plate_deflection_state,2.04999996,0.05,paired_native_float_byte_hash,observed,38179009871
+121,03w,binary_drainage_state,2.54999995,0.05,paired_native_float_byte_hash,observed,38179009871
+121,03v,printed_topography_0p1m,2.5,0.5,paired_xyw_export,observed,38178607601
+121,03v,observable_river_lake_graph_topology,3,0.5,paired_river_edges_and_lake_membership,observed,38178515988
+401,03v,printed_topography_0p1m,1.5,0.5,paired_xyw_export,observed,38178515988
+401,03v,observable_river_lake_graph_topology,>2.5,0.5,paired_river_edges_and_lake_membership,lower_bound_only,38178607601
