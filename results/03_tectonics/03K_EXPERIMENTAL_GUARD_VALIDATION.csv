@@ -1,0 +1,3 @@
+case,grid,physics,model_time_final_Myr,exit_code,outp_seds_nonfinite,negative_incision_slope_guard_hits,published_xyw_equal_to_03j_reference,published_st_equal,published_hrz_equal,published_bas_equal,published_lak_equal,qualification
+N121_original_coupled,121,original flexure with isolated negative slope guard,15,0,false,550,true,true,true,true,true,Source physics correction applied to mode6; full source not author byte identical
+N401_first_coupled,401,original flexure with isolated negative slope guard,0.5,0,false,10,true,true,true,true,true,Original 401 input exact; corrected first step; original 15Myr not yet done
