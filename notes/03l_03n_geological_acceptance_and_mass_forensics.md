@@ -58,6 +58,15 @@ Two targeted windows produced **90 significant single-cell positive discrepancie
 
 This is an **identification of the problematic per-node stream-process category**, not yet proof of the precise defective formula. In particular, do not attribute the discrepancy to lake clearing. The follow-up targeted [03P erosion source/ledger/transport trace](https://github.com/lcxstar/tisc-mechanism-lab/actions) will compare exact requested `d_mass`, the changes to `ctx->total_bedrock_eros_mass` and `ctx->total_sed_mass` in `Erode()`, and the forwarded `drainage.masstr*dt_st` for these same nodes. A proposed correction must pass a changed-vs-baseline physical field and full mass-budget test.
 
+## 03P further source-path identification
+
+The separately labeled [03P official 401 source–sediment trace](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38162722788) finished, exited 0. Both targeted source cells show **negative `d_mass`**, so the offending river operations are the **sedimentation branch, not calls into `Erode()`**:
+
+- At t=0.5 Myr, fluvial call 20, sorted cell 149193, (row63,col83), `d_mass=-1,184,502,784 kg`, inlet suspended sediment rate ~0.02183775 kg/s, and rate remaining after local sedimentation ~0.02108704 kg/s, routed toward cell (63,84).
+- At t=1.0 Myr, call 24, sorted cell 136214, (row146,col130), `d_mass=-15,543,129,088 kg`, inlet suspended rate ~0.18883418 kg/s, after local sedimentation ~0.17898327 kg/s, routed toward cell (147,131).
+
+No `TISC_03P_ERODE` log was emitted for either cell because `Erode()` is not invoked when `d_mass<0`. The physically relevant next checks therefore concern `Sediment()`, the updating of `drainage[row][col].masstr`, `transfer_mass`, and the `processed[downstream]` branch. **03P does not yet identify one executable line as the entire root cause.** Do not silently patch the algorithm before checking local mass equivalence and rerunning the full budget.
+
 ## Scientific decision
 
 - Full 401 simulated tectonic evolution, original flexure and corresponding stage exports: **PASS**.
