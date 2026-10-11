@@ -11,7 +11,7 @@ permissions:
   contents: read
 jobs:
   divergence:
-    name: "Convergence N${{ matrix.grid }} dt${{ matrix.dt }} e${{ matrix.dt_eros }} to ${{{ matrix.horizon }}} Myr"
+    name: "Convergence N${{ matrix.grid }} dt${{ matrix.dt }} e${{ matrix.dt_eros }} to ${{ matrix.horizon }} Myr"
     runs-on: ubuntu-latest
     timeout-minutes: 80
     strategy:
