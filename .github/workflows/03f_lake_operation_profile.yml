@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/03f_lake_operation_profile.yml'
+      - 'scripts/profile_tisc_lake_ops.py'
+      - 'scripts/summarize_tisc_lake_ops.py'
   workflow_dispatch:
 
 permissions:
