@@ -1,0 +1,95 @@
+name: 03k | Trace first nonfinite sediment mass without changing TISC equations
+
+on:
+  push:
+    branches: [v03k-full401-sediment-audit]
+    paths:
+      - '.github/workflows/03k_sediment_nan_audit.yml'
+      - 'scripts/profile_03k_sediment_nan.py'
+      - 'scripts/summarize_03k_sediment_nan.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sediment-nan:
+    name: 'Trace sediment NaN ${{ matrix.case }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - case: N121_FULL
+            grid: N121
+            mode: full_coupled
+            flags: '-qplotting_mode=0'
+            limit_s: 600
+          - case: N401_ISO
+            grid: N401
+            mode: first_step
+            flags: '-tf0.5 -qisost_model=0 -qplotting_mode=0'
+            limit_s: 460
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Prepare temporary 03j source plus pure instrumented sediment audit
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p sediment_03k/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c sediment_03k/source/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c sediment_03k/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c sediment_03k/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c sediment_03k/source
+          python3 scripts/profile_03k_sediment_nan.py upstream/tisc/src/surf_proc.c sediment_03k/source
+          make -C upstream/tisc/src tisc
+          sha256sum upstream/bin/tisc > sediment_03k/source/TRACED_EXECUTABLE_SHA256.txt
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare author parameters
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py '${{ matrix.grid }}' '${{ matrix.mode }}'
+          mkdir -p 'sediment_03k/${{ matrix.case }}'
+          cp -a 'validation_03g/${{ matrix.grid }}/${{ matrix.mode }}/optimized/.' 'sediment_03k/${{ matrix.case }}/'
+          git -C upstream rev-parse HEAD > sediment_03k/${{ matrix.case }}/AUTHOR_COMMIT.txt
+          git rev-parse HEAD > sediment_03k/${{ matrix.case }}/LAB_COMMIT.txt
+          echo '${{ matrix.case }} original author input; 121 changes grid geometry only' > sediment_03k/${{ matrix.case }}/INPUT_NOTE.txt
+      - name: Run water-sediment diagnostics and preserve first NaN
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          ROOT="$GITHUB_WORKSPACE/sediment_03k/${{ matrix.case }}"
+          (
+            cd "$ROOT"
+            echo 'tisc demo -V1 ${{ matrix.flags }}' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s ${{ matrix.limit_s }} \
+              tisc demo -V1 ${{ matrix.flags }} > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "03k sediment ${{ matrix.case }} exit=$rc"
+            grep -aE 'TISC_SED_DIAG|outp_seds:' RUN.log | head -n 45 || true
+          )
+          python3 scripts/summarize_03k_sediment_nan.py sediment_03k/${{ matrix.case }}
+      - name: Archive instrumentation diff, exact inputs, time history, first failing cell
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03K_SED_NAN_${{ matrix.case }}'
+          path: |
+            sediment_03k/source/
+            sediment_03k/${{ matrix.case }}/
+          retention-days: 30
+          if-no-files-found: warn
