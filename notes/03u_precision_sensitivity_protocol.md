@@ -49,3 +49,25 @@ Inspect actual C/Fortran solver interfaces (including FFT/DCT if linked). Distin
 6. Detailed outcome table: measured counts and lost increments by process, runtime, max/topographic RMS difference (m), sediment thickness RMS/max difference (m), volume difference (%), flexure RMS/max (m), drainage changed-cell fraction, total mass residual (%).
 
 **Decision not preordained:** retain 03t and do not promote physical arrays if rounding is geologically negligible; if measured losses are material, design and run localized source/state changes with independent validation. The 03k nonnegative-slope guard remains an earlier independent experimental physical change.
+
+## 03u-0 initial measured results — complete 81 and 121 grids
+
+Verified [03u-0 paired workflow 38167080120](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38167080120) completed 0–15 Myr N81 and N121. Both observer runs were physically byte-identical in all seven output files, with original flexure active.
+
+| process | 81 calls | 81 lost-additions | 121 calls | 121 lost-additions |
+|---|---:|---:|---:|---:|
+| sediment/topo | 46,487,330 | 1 | 168,730,372 | 10 |
+| sediment/top Block | 46,487,330 | 143 | 168,730,372 | 1,546 |
+| sediment/Dq load | 46,487,330 | 21 | 168,730,372 | 100 |
+| erosion/topo | 979,221 | 0 | 2,159,980 | 1 |
+| erosion/Block | 2,478,897 | 33,726 | 5,690,143 | 166,348 |
+| ordinary river sediment rate transfer | 1,747,909 | 0 | 3,952,528 | 1 |
+| lake sediment rate transfer | 124,419 | 0 | 243,537 | 0 |
+
+The 121 erosion Block dropped additions total ~0.09834 m **summed across all affected local erosion calls**, not one cell's height or model-wide thickness error. Sediment Block lost additions summed ~0.03819 m across 121 full run. Max per-operation `float` sediment/topography local error was ~0.00004232 m and erosion/block error ~0.00024414 m. These observations do **not** imply those sums are a final map bias (some increments compensate, successive updates and routing can change). Global 32-bit mass-ledger rounding in 03t remains orders of magnitude more significant in absolute source accounting.
+
+**Flexure source inventory, audited from pinned `tisc/src/tisc.c`, `Elastic_Deflection()`:** the `solver_type='l'` least-squares matrix `A` and RHS `b` are allocated as `double`, but the deflection grid `Dw`, cumulative deflection `w`, and applied load `Dq` are `float **`; the alternate `solver_type='m'` Mathlib arrays (`B,Z,mathlib_matrix,RSP`) are `float`. Which solver ran should be verified from configuration/runtime before blaming flexure discretization on 32-bit arithmetic. Do not replace `ModelContext` types or raw binary structs without an explicit ABI migration.
+
+## 03u-1A targeted physical test launched
+
+[03u1 local deposition intermediate branch](https://github.com/lcxstar/tisc-mechanism-lab/tree/v03u1-double-sediment-increment), [paired workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38167305117) tests only `float dh_sed` to `double dh_sed` inside `Sediment()`. This is a **physical numerical change**, not an all-double model. The two executables use identical inputs, and all seven original output files plus high-precision mass conservation are compared quantitatively, not forced to match byte-for-byte.
