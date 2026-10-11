@@ -1,0 +1,4 @@
+substep,record,processed_nodes,total_grid_nodes,elapsed_s,precheck_s,lake_input_s,lake_input_calls,lake_input_nodes,outlet_rain_s,outlet_evap_s,permeability_s,attempt_delete_calls,max_lake_size
+1,completed,160801,160801,67.577355,66.670392,45.861940,162194,26047545430,0.197528,0.665395,0.0,0,160595
+2,completed,160801,160801,67.762329,66.848958,46.024397,162194,26047545430,0.201882,0.667308,0.0,0,160595
+3,incomplete_checkpoint_at_timeout,122880,160801,50.982202,50.943985,34.724753,122674,19700831030,0.003314,0.003341,0.003405,0,160595
