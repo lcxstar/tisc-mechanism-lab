@@ -1,3 +1,21 @@
+## 03v — Benchmark reproduced with corrections; numerical convergence under audit
+
+**Status:** The author's official `6_tectonics` synthetic tectonic/flexure/erosion/sedimentation example completes its **original 401×401 grid, 0–15 Myr** with *documented* computational optimizations (03g/03j), a separately labeled physical domain guard (03k) and the validated 64-bit mass ledger (03t). This is a **successful operational/mechanistic reproduction using a modified implementation**, **not** an unchanged-source bitwise or author-published field-perfect reproduction.
+
+**New controlled precision finding:** only raising `Sediment()` local `dh_sed` from `float` to `double`, without making Block/topography/deflection grid state double, significantly changes long-time output. A read-only native state hash on 121 grid first differs in topography/Block at **0.55 Myr**, in plate deflection at **2.05 Myr**, and in drainage state at **2.55 Myr**. First printed 0.1m topography differences are visible at 2.5 Myr; lake/outlet graph differences are visible by 3 Myr, and prominent by 6–15 Myr. This is computational sensitivity, not proof double is more geologically correct.
+
+**Preliminary time refinement:** terrain RMS differences between the paired variants at full 15 Myr decline from **43.74→21.53→19.39 m** on 81 grid, and **48.05→26.46→24.94 m** on 121 grid, across `(dt,dt_eros)=(.5,.05)→(.5,.025)→(.25,.025)` Myr. A 201-grid test yielded **68.52 m** at author dt and **57.96 m** with half erosional dt. Thus increasing grid resolution does **not** automatically reduce numerical divergence; rigorous grid convergence remains unproven.
+
+- [Full documented 03v audit plan](notes/03v_reproduction_and_precision_convergence_audit.md)
+- [Audited first-divergence, topology and time-step findings](notes/03v_initial_results_and_reproduction_status.md)
+- [121-grid 0.5–15 Myr check CSV](results/03_tectonics/03V_121_DIVERGENCE_STAGES.csv)
+- [81/121 preliminary convergence CSV](results/03_tectonics/03V_TIME_SPACE_CONVERGENCE_EARLY.csv)
+- [Per-substep native-state hash CI](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38179009871)
+- [Grid/time factorial experiments](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178558812)
+- [Original 401-grid 15-Myr precision-endpoint comparison](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178743124)
+
+Until 401-grid long-time and across-grid tests complete, **do not calibrate Junggar sediment volumes or assert global solver convergence**.
+
 ## 03t — Solved: apparent 33–34% missing sediment caused by float32 accumulation
 
 The author stores basinwide cumulative sediment `total_sed_mass` as a **32-bit float**. With millions of fine-grained open-lake deposits, many individual mass increments round to zero in that aggregate counter. The detailed 03q–03r node tracing and independently verified 03s `double` accounting demonstrate that the large reported loss was numerical bookkeeping, not missing material from those source/sink transactions.
