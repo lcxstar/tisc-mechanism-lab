@@ -13,7 +13,7 @@ The author defines `float total_sed_mass`, `float total_bedrock_eros_mass` in `t
 - Previous controlled modifications: independently validated 03g+03j computational algorithm acceleration and the explicitly labeled 03k negative-slope fractional-power domain correction. No parameters tuned.
 - [03q mass substep tests](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38164401388), [03r lake transfer receiver](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38164687015).
 - [03s original float32 vs independent float64 ledger verification](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38164926540). Both 121 full-history and 401 first 2 Myr jobs PASS.
-- [03t full history N121 and 401 first-2-Myr corrected print tests](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38165200144). N121 PASS; verify 401 job status and QC.
+- [03t full history N121 and 401 first-2-Myr corrected print tests](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38165200144). N121 PASS; N401 0–2 Myr PASS (each 7 field outputs byte-exact), per GitHub workflow 38165200144.
 - [03t complete 401×401 15-Myr coupled full test](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38165304319). Treat any in-progress run as NOT yet scientifically accepted. The workflow requires completion and a maximum corrected-budget error less than 0.001%.
 
 ### Direct source-level localization
@@ -57,9 +57,16 @@ Thus adding observers had NO effect on these physical outputs. This does not tes
 ### Acceptance and limitations
 
 - 03t N121 full 0–15 Myr test **PASS**, max corrected sediment balance 0.000012695% (versus native 2.292665%).
-- 03t N401 0–2 Myr and full 0–15 Myr acceptance require actual completed outputs and QC; do not claim success before those statuses and artifacts confirm.
+- 03t N401 0–2 Myr **PASS**, max corrected sediment balance error 0.000007659607% (versus native 33.8423276195%), all seven compared forward physical output files byte-exact versus 03m unmodified scientific case. Full N401 0–15 Myr must still pass actual CI completion and 30 printed step records; do not claim full pass before that finishes.
 - The float64 source ledger closes to ~1e−7 relative error in tested cases. This establishes conservation of the **code's sediment source/sink/export transactions** to numerical precision.
 - A deeper physical audit should still compare total mass reconstructed from *stored sediment block thickness and densities* over the grid, because float32 block storage, compaction and rock-density conversions can introduce separate, smaller numerical discrepancies. Passing the ledger is not evidence that the full physical state has exact mass conservation in every reservoir.
 - The 121/401 final sediment-volume difference (~15.5%) remains a separate **grid-convergence problem**, not fixed by the accounting correction.
 
 **Decision:** The dominant 33–34% mass discrepancy is SOLVED as float32 bookkeeping loss. This is distinct from verifying geological sediment volumes or full 401 grid convergence, which remain separate scientific validation tasks.
+
+### 03t conclusive regression gates
+
+- [Official two-case corrected workflow 38165200144](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38165200144) both jobs green, zero process exit and sediment mass balance below the independently set **0.001%** threshold.
+- 121 corrected full 15 Myr: 30 accepted records; peak |balance| = **0.00001269480098%**; all seven physical output files SHA256-exact to 03k baseline.
+- 401 corrected first 2 Myr: four accepted records; peak |balance| = **0.00000765960705%**; all seven physical output files SHA256-exact to prior 03m fixed-physics benchmark.
+- The correction remains **accounting only**. It does not modify stratigraphic production and does not improve the separate 121-vs-401 volume-resolution consistency.
