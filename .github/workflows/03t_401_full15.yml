@@ -1,0 +1,109 @@
+name: 03t | Full official 401-grid 15-Myr corrected sediment balance
+
+on:
+  push:
+    branches: [v03t-correct-sediment-budget-qc]
+    paths:
+      - '.github/workflows/03t_401_full15.yml'
+      - 'scripts/patch_03t_correct_sediment_balance.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mass-ledger:
+    name: 'Corrected budget ${{ matrix.grid }} ${{ matrix.tf }} Myr'
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - grid: N401
+            tf: 15
+            mode: full_coupled
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build optimized 03k repaired source with diagnostics only
+        run: |
+          set -euo pipefail
+          mkdir -p ledger_03t/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c ledger_03t/source/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c ledger_03t/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c ledger_03t/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c ledger_03t/source
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c ledger_03t/source
+          python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c ledger_03t/source
+          python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c ledger_03t/source
+          make -C upstream/tisc/src tisc
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare exact author inputs
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py '${{ matrix.grid }}' '${{ matrix.mode }}'
+          mkdir -p 'ledger_03t/${{ matrix.grid }}_tf${{ matrix.tf }}'
+          cp -a 'validation_03g/${{ matrix.grid }}/${{ matrix.mode }}/optimized/.' 'ledger_03t/${{ matrix.grid }}_tf${{ matrix.tf }}/'
+          git -C upstream rev-parse HEAD > 'ledger_03t/${{ matrix.grid }}_tf${{ matrix.tf }}/UPSTREAM_COMMIT.txt'
+      - name: Run coupled geology, print loss and suspended stock at full accumulator precision
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd 'ledger_03t/${{ matrix.grid }}_tf${{ matrix.tf }}'
+            echo 'tisc demo -V1 -tf${{ matrix.tf }} -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s 6500 \
+              tisc demo -V1 -tf${{ matrix.tf }} -qplotting_mode=0 > RUN.log 2>&1
+            code=$?
+            set -e
+            echo "$code" > EXIT_CODE.txt
+            echo "03t ${{ matrix.grid }} code=$code"
+            grep -a 'TISC_03S_LEDGER' RUN.log | head -n 8 || true
+            grep -a 'TISC_03S_LEDGER' RUN.log | tail -n 4 || true
+          )
+      - name: Summarize precise native vs sidecar mass ledger
+        run: |
+          python3 - <<'PY'
+          import re,json,csv
+          from pathlib import Path
+          d=Path('ledger_03t/${{ matrix.grid }}_tf${{ matrix.tf }}')
+          raw=(d/'RUN.log').read_text(errors='replace')
+          p=r'TISC_03S_LEDGER timeMyr=([^\s]+) float_bed_kg=([^\s]+) float_sed_kg=([^\s]+) float_out_kg=([^\s]+) float_gap_kg=([^\s]+) float_gap_pct=([^\s]+) double_bed_kg=([^\s]+) double_sed_kg=([^\s]+) double_out_kg=([^\s]+) double_gap_kg=([^\s]+) double_gap_pct=([^\s]+) sed_round_to_zero_count=(\d+) sed_round_to_zero_kg=([^\s]+) sed_calls=(\d+)'
+          ks=['time','float_bed','float_sed','float_out','float_gap','float_gap_pct','double_bed','double_sed','double_out','double_gap','double_gap_pct','round0_count','round0_kg','sed_calls']
+          rows=[dict(zip(ks,[float(v) for v in m.groups()])) for m in re.finditer(p,raw)]
+          if not rows:raise SystemExit('No 03s instrument results')
+          with (d/'03S_DOUBLE_LEDGER_VALUES.csv').open('w',newline='') as f:
+            w=csv.DictWriter(f,fieldnames=ks);w.writeheader();w.writerows(rows)
+          qc={'records':len(rows),'native_gap_peak_percent':max(abs(x['float_gap_pct']) for x in rows),'double_gap_peak_percent':max(abs(x['double_gap_pct']) for x in rows),'round_to_zero_kg_peak':max(x['round0_kg'] for x in rows),'round_to_zero_count_peak':max(x['round0_count'] for x in rows),'first_records':rows[:5],'last_record':rows[-1],'physical_code_modified':False}
+          (d/'03S_TEST_QC.json').write_text(json.dumps(qc,indent=2))
+          print('03S_QC',json.dumps(qc))
+          pc=r'TISC_03T_CORRECTED_BALANCE timeMyr=([^\s]+) erosion_kg=([^\s]+) net_deposition_kg=([^\s]+) export_kg=([^\s]+) balance_gap_kg=([^\s]+) balance_pct=([^\s]+)'
+          fixed=[dict(timeMyr=float(m[1]),erosion=float(m[2]),deposition=float(m[3]),export=float(m[4]),gap=float(m[5]),pct=float(m[6])) for m in re.finditer(pc,raw)]
+          if len(fixed)!=len(rows):raise SystemExit('03t corrected print count mismatch 03s observational records')
+          if not all(abs(v['pct'])<.001 for v in fixed):raise SystemExit('03t corrected balance does not meet 0.001 percent conservation gate')
+          if int((d/'EXIT_CODE.txt').read_text())!=0:raise SystemExit('03t model process exit not 0')
+          if len(rows)!=30 or abs(rows[-1]['time']-14.5)>1e-5:raise SystemExit('401 full 15 Myr expected 30 main-step balance records through 14.5 Myr')
+          (d/'03T_CORRECTED_BALANCE_QC.json').write_text(json.dumps({'gate': 'abs balance <0.001%', 'passed':True,'print_time_series':fixed,'native_peak_pct':qc['native_gap_peak_percent']},indent=2))
+          print('03T_QC',json.dumps({'passed':True,'records':len(fixed),'max_abs_balance_pct':max(abs(v['pct']) for v in fixed),'native_max_abs_balance_pct':qc['native_gap_peak_percent']}))
+          PY
+      - name: Preserve precise corrected and native sediment budgets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03T_CORRECTED_BUDGET_${{ matrix.grid }}_TF${{ matrix.tf }}'
+          path: |
+            ledger_03t/source/
+            ledger_03t/${{ matrix.grid }}_tf${{ matrix.tf }}/
+          retention-days: 30
+          if-no-files-found: warn
