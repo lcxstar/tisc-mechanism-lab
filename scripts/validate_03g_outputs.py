@@ -37,7 +37,7 @@ def summarize_xyw(path,n):
             tok=line.split()
             if len(tok)<7: raise ValueError(f"Bad xyw row: {tok[:10]}")
             try:
-                q=float(tok[2]);sed=float(tok[3]);topo=float(tok[6])
+                q=float(tok[2]);sed=float(tok[3]);topo=float(tok[5])
             except ValueError as ex:
                 raise ValueError(f"Malformed numerical output row: {tok[:8]}") from ex
             if not all(math.isfinite(v) for v in (q,sed,topo)):
