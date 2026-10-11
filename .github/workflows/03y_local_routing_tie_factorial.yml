@@ -1,0 +1,152 @@
+name: 03y | Four-arm controlled near-flat routing sensitivity trial
+on:
+  push:
+    branches: [v03y-controlled-routing-tiebreak]
+    paths:
+      - '.github/workflows/03y_local_routing_tie_factorial.yml'
+      - 'scripts/patch_03y_routing_slope_tiebreak.py'
+      - 'scripts/analyze_03y_tie_sensitivity.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  routing-tie-factorial:
+    name: Four-arm N${{ matrix.grid }} time ${{ matrix.horizon }}Myr
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - grid: 121
+            horizon: 3
+            max_seconds_each: 900
+          - grid: 121
+            horizon: 15
+            max_seconds_each: 1000
+          - grid: 401
+            horizon: 3
+            max_seconds_each: 1500
+          - grid: 401
+            horizon: 6
+            max_seconds_each: 2100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Compiler and repo scientific pin
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p qc_03y/audit qc_03y/bin
+      - name: Build four isolated original physical implementations
+        run: |
+          set -euo pipefail
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c qc_03y/audit/NBSP_AUDIT.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c qc_03y/audit
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c qc_03y/audit
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c qc_03y/audit
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c qc_03y/audit
+          python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c qc_03y/audit
+          python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c qc_03y/audit
+          cp upstream/tisc/src/surf_proc.c qc_03y/audit/F0_BASE_SOURCE.c
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc qc_03y/bin/F0
+          python3 scripts/patch_03u1_double_sediment_increment.py upstream/tisc/src/surf_proc.c qc_03y/audit
+          rm -f upstream/tao+tisc_commons/build/surf_proc.o
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc qc_03y/bin/D0
+          cp qc_03y/audit/F0_BASE_SOURCE.c upstream/tisc/src/surf_proc.c
+          python3 scripts/patch_03y_routing_slope_tiebreak.py upstream/tisc/src/surf_proc.c qc_03y/audit 0.00000001
+          cp upstream/tisc/src/surf_proc.c qc_03y/audit/F1_ROUTING_SOURCE.c
+          rm -f upstream/tao+tisc_commons/build/surf_proc.o
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc qc_03y/bin/F1
+          python3 scripts/patch_03u1_double_sediment_increment.py upstream/tisc/src/surf_proc.c qc_03y/audit
+          rm -f upstream/tao+tisc_commons/build/surf_proc.o
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc qc_03y/bin/D1
+          sha256sum qc_03y/bin/* > qc_03y/audit/FOUR_EXE_SHA256.txt
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Preserve exact paired author tectonic, flexure and erosion input
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03v_precision_inputs.py qc_03y/seed --grid ${{ matrix.grid }} --dt .5 --dt-eros .05 --horizon ${{ matrix.horizon }}
+          mkdir -p qc_03y/experiment
+          for arm in F0 D0 F1 D1; do
+            mkdir -p "qc_03y/experiment/$arm"
+            cp qc_03y/seed/reference/demo.PRM qc_03y/seed/reference/demo*.UNIT qc_03y/seed/reference/demo.PRFL "qc_03y/experiment/$arm/"
+            cp qc_03y/seed/INPUT_AUDIT.json "qc_03y/experiment/$arm/INPUT_AUDIT.json"
+          done
+          sha256sum qc_03y/experiment/*/demo.PRM > qc_03y/audit/ALL_PRM_SHA256.txt
+      - name: Evolve all four numeric experiments independently to geological target
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          for arm in F0 D0 F1 D1; do
+            (
+              cd "qc_03y/experiment/$arm"
+              echo "tisc demo -V1 -tf${{ matrix.horizon }} -qplotting_mode=0" > ACTUAL_COMMAND.txt
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s ${{ matrix.max_seconds_each }} \
+                "$GITHUB_WORKSPACE/qc_03y/bin/$arm" demo -V1 -tf${{ matrix.horizon }} -qplotting_mode=0 > RUN.log 2>&1
+              exitcode=$?
+              set -e
+              echo "$exitcode" > EXIT_CODE.txt
+              echo "03Y_ARM N${{ matrix.grid }} t${{ matrix.horizon }} $arm exit=$exitcode"
+              grep -a TISC_03T_CORRECTED_BALANCE RUN.log | tail -n 1 || true
+            )
+          done
+      - name: Assert benchmark identical physics outputs for F0 D0 unmodified controls
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p acceptance
+          if [ "${{ matrix.grid }}" = 401 ]; then
+            if [ "${{ matrix.horizon }}" = 3 ]; then
+              run_id=38178515988; artifact=TISC03V_STAGE_N401_TF3
+            elif [ "${{ matrix.horizon }}" = 6 ]; then
+              run_id=38178515988; artifact=TISC03V_STAGE_N401_TF6
+            else
+              echo "No previously accepted N401 horizon matching exact requested period"
+              exit 0
+            fi
+          else
+            if [ "${{ matrix.horizon }}" = 3 ]; then
+              run_id=38178515988; artifact=TISC03V_STAGE_N121_TF3
+            else
+              run_id=38178558812; artifact=TISC03V_CONV_N121_DT0.5_EROS0.05_TF15
+            fi
+          fi
+          gh run download "$run_id" --repo "$GITHUB_REPOSITORY" --name "$artifact" --dir acceptance
+          for arm in F0 D0; do
+            other=reference
+            if [ "$arm" = D0 ]; then other=optimized; fi
+            for suffix in xyw st hrz lak bas pfl xyzt; do
+              cmp "acceptance/experiment/$other/demo.$suffix" "qc_03y/experiment/$arm/demo.$suffix"
+            done
+          done
+          echo "03Y_STRICT_BASELINE_EQUIVALENCE PASSED seven output files for both original solvers"
+      - name: Analyze physical sediment, flexure, depocentre, drainage and corrected mass-budget
+        run: |
+          python3 -m pip install -q numpy
+          python3 scripts/analyze_03y_tie_sensitivity.py qc_03y/experiment ${{ matrix.grid }} ${{ matrix.horizon }}
+      - name: Retain executed binaries source diffs scientific maps QC and all 4 physical fields
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 03Y_4WAY_N${{ matrix.grid }}_TF${{ matrix.horizon }}
+          path: |
+            qc_03y/audit/
+            qc_03y/experiment/
+          retention-days: 30
+          if-no-files-found: warn
