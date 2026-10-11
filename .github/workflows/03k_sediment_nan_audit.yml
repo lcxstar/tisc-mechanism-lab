@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/03k_sediment_nan_audit.yml'
       - 'scripts/profile_03k_sediment_nan.py'
+      - 'scripts/profile_03k_slope_pow.py'
       - 'scripts/summarize_03k_sediment_nan.py'
   workflow_dispatch:
 
@@ -52,6 +53,7 @@ jobs:
           python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c sediment_03k/source
           python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c sediment_03k/source
           python3 scripts/profile_03k_sediment_nan.py upstream/tisc/src/surf_proc.c sediment_03k/source
+          python3 scripts/profile_03k_slope_pow.py upstream/tisc/src/surf_proc.c sediment_03k/source
           make -C upstream/tisc/src tisc
           sha256sum upstream/bin/tisc > sediment_03k/source/TRACED_EXECUTABLE_SHA256.txt
           echo CI > "$HOME/.tiscdefaults"
@@ -80,7 +82,7 @@ jobs:
             set -e
             echo "$rc" > EXIT_CODE.txt
             echo "03k sediment ${{ matrix.case }} exit=$rc"
-            grep -aE 'TISC_SED_DIAG|outp_seds:' RUN.log | head -n 45 || true
+            grep -aE 'TISC_SED_DIAG|TISC_03K_SLOPE|outp_seds:' RUN.log | head -n 45 || true
           )
           python3 scripts/summarize_03k_sediment_nan.py sediment_03k/${{ matrix.case }}
       - name: Archive instrumentation diff, exact inputs, time history, first failing cell
