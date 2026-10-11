@@ -1,0 +1,5 @@
+model_time_Myr,max_surface_m,max_downward_flexure_m,max_sediment_thickness_m,sediment_volume_area_weighted_km3,upland_peak_x_km,flexure_peak_x_km,sediment_peak_x_km,sedimentary_blocks
+6,2207.2,1407.8,1158.3,31904.03,58.75,51.25,61.25,2
+10,1771.0,1860.2,1396.0,41766.21,125.0,115.0,141.25,2
+12,2523.2,2268.7,1767.5,49660.48,151.25,135.0,163.75,3
+15,2349.5,2011.1,1493.9,59833.62,146.25,138.75,161.25,3
