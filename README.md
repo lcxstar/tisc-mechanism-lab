@@ -2,9 +2,11 @@
 
 Independent, **public and reproducible** numerical experiments for learning the actual behavior of the [TISC](https://github.com/danigeos/tisc) program before applying it to tectonic–sedimentary evolution of the Junggar Basin or the North Tianshan.
 
-## Current milestone — 03f, lake merge bottleneck quantitatively isolated
+## Current milestone — 03i, Calculate_Discharge O(N²) lake-input and evaporation bottleneck
 
 **11 October 2026:** Official static flexure and Te experiments are validated. Four 81x81 tectonic control cases run to 15 Myr, but their sediment-export mass balance is not validated. The original coupled 401x401 case is still **NOT reproduced**.
+
+**03i latest measured result:** [Read the discharge internal audit](notes/03i_discharge_internal_results.md). With 03g's validated lake-merge acceleration, the author demo's 401×401 water-flow calculation finishes two surface substeps in a bounded 210-second probe, but the first 0.5 Myr timestep remains unfinished (T=0 Myr). A completed discharge pass costs ~67.6 s; 98.7% lies in per-node lake evaporation/influx prechecks. The `Lake_Input_Discharge` helper alone visits ~26.05 billion lake nodes per pass. These are **measured engineering bottlenecks** in unchanged source physics, not yet a full official 401 reproduction. [121 measurements](results/03_tectonics/03I_N121_DISCHARGE_SUBSTEPS.csv) and [401 measurements](results/03_tectonics/03I_N401_DISCHARGE_SUBSTEPS.csv) are permanently stored on this branch. The original baseline on `main` is preserved.
 
 **03f measured root cause:** [Lake-operation counts and per-function timings](notes/03f_lake_operation_results.md) show the 401-grid slowdown is overwhelmingly caused by linear duplicate searches in `Add_Node_To_Lake()` during massive node re-additions in `Unify_Lakes()`. Two independent 401 performance probes reached 144,416 and 156,704 of 160,801 nodes before their 140-second cutoffs; both remain incomplete. Permanent [numeric comparison](results/03_tectonics/LAKE_03F_SUMMARY.csv) and [401 node-progress samples](results/03_tectonics/LAKE_401_PROGRESS_03F.csv) are archived. A patched fast implementation must be numerically validated against the pinned upstream baseline before any full original case is called reproduced.
 
