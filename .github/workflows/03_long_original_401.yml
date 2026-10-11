@@ -1,0 +1,119 @@
+name: 03-long | Exact 401x401 official TISC extended runtime
+
+on:
+  workflow_dispatch:
+    inputs:
+      runtime_minutes:
+        description: "Original 401x401 TISC max runtime (GitHub-hosted job <= 6h)"
+        required: true
+        default: "120"
+        type: choice
+        options:
+          - "60"
+          - "120"
+          - "240"
+          - "330"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tisc-401-official-long
+  cancel-in-progress: false
+
+jobs:
+  reproduce-401:
+    name: Exact 401x401 0-15 Myr original
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Checkout experiment lab
+        uses: actions/checkout@v4
+      - name: Checkout pinned official TISC
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install original source build dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+          python3 -m pip install numpy matplotlib
+      - name: Compile same upstream numerical equations
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = "d18b7d270f4d671b80223e10dede329ad35cafdd"
+          mkdir -p audit_401
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c audit_401/UPSTREAM_WHITESPACE_AUDIT.json
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          echo "Initialize temporary CI defaults without first-use mail" > "$HOME/.tiscdefaults"
+      - name: Copy exact author inputs and record SHA256
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_official_tectonics.py original_401
+          git -C upstream rev-parse HEAD > work_03/original_401/UPSTREAM_COMMIT.txt
+          git rev-parse HEAD > work_03/original_401/LAB_COMMIT.txt
+          (cd work_03/original_401 && sha256sum -c INPUT_SHA256.txt)
+      - name: Run exact original full history with extended timeout and progress monitoring
+        run: |
+          set -uo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd work_03/original_401
+          max_minutes="${{ inputs.runtime_minutes }}"
+          if [[ ! "$max_minutes" =~ ^(60|120|240|330)$ ]]; then
+            echo "Invalid runtime_minutes"; exit 2
+          fi
+          max_seconds=$((max_minutes * 60))
+          printf 'command: tisc demo -V1\nmax_seconds: %s\n' "$max_seconds" > EXECUTION_PLAN.txt
+          echo "Maximum TISC time: $max_minutes minutes"
+          set +e
+          /usr/bin/time -v -o RUNTIME_STATS.txt timeout -k 30s "$max_seconds" \
+            tisc demo -V1 > RUN.log 2>&1 &
+          jobpid=$!
+          while kill -0 "$jobpid" 2>/dev/null; do
+            sleep 120
+            if kill -0 "$jobpid" 2>/dev/null; then
+              echo "HEARTBEAT $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              grep -aE '(^T= |n_iters=|sea_level:|Time end:)' RUN.log | tail -n 6 || true
+              echo "Log size (bytes): $(wc -c < RUN.log)"
+              ps -eo pid,etime,%cpu,%mem,rss,comm | grep -E 'tisc|timeout' | tail -n 5 || true
+            fi
+          done
+          wait "$jobpid"
+          rc=$?
+          set -e
+          echo "$rc" > EXIT_CODE.txt
+          echo "TISC process exit $rc (124 means deliberate time cutoff)"
+          tail -n 35 RUN.log || true
+      - name: Audit input identity, actual last step and finite sediment flux
+        if: always()
+        run: |
+          python3 scripts/qc_original_401_long.py work_03/original_401
+      - name: Archive all original outputs, partial outputs and logs even if incomplete
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03_401_ORIGINAL_LONG_${{ inputs.runtime_minutes }}MIN
+          path: |
+            work_03/original_401/
+            audit_401/UPSTREAM_WHITESPACE_AUDIT.json
+          retention-days: 30
+          if-no-files-found: warn
+          compression-level: 6
+      - name: Final gate - incomplete or nonfinite means NOT reproduced
+        if: always()
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("work_03/original_401/ORIGINAL_401_QC.json")
+          assert p.exists(), "No completed audit JSON found."
+          r=json.loads(p.read_text())
+          assert r["full_0_15_Myr_completed"], "401x401 original did not reach 15 Myr. See logs/artifact."
+          assert r["scientific_sediment_balance_valid"], "Sediment export contains nonfinite values. Not physically validated."
+          print("All original steps completed, input hashes identical, sediment flux finite. Residual check still needed.")
+          PY
