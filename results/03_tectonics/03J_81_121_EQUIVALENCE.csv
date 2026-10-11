@@ -1,0 +1,9 @@
+variant,grid,mode,03g_reference_wall_s,03j_optimized_wall_s,speedup,forward_output_byte_exact,cache_hits,cache_misses,cache_invalidations,zero_evap_predicate_skips,sediment_export_NaN,notes
+evap_cache,81,first_step,2.42,1.97,1.228,true,68540,10,0,0,false,0-0.5 Myr isostasy off
+zero_evap_guard,81,first_step,2.42,0.91,2.659,true,68540,10,0,65360,false,0-0.5 Myr isostasy off
+evap_cache,121,first_step,11.37,9.20,1.236,true,150810,10,0,0,false,0-0.5 Myr isostasy off
+zero_evap_guard,121,first_step,9.63,3.57,2.697,true,150810,10,0,146030,false,0-0.5 Myr isostasy off
+evap_cache,81,full_coupled,8.82,8.26,1.068,true,500326,7127,0,0,true,0-15 Myr with original flexure
+zero_evap_guard,81,full_coupled,8.79,6.21,1.415,true,500326,7127,0,465807,true,0-15 Myr with original flexure
+evap_cache,121,full_coupled,35.93,32.73,1.098,true,1146490,15494,0,0,true,0-15 Myr with original flexure
+zero_evap_guard,121,full_coupled,35.74,22.98,1.555,true,1146490,15494,0,1097034,true,0-15 Myr with original flexure
