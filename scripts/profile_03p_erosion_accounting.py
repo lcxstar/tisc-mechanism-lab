@@ -47,8 +47,8 @@ def main(source,out):
    "\t\t\t\t\t tisc03o_call,isort,row,col,(double)d_mass,\n"
    "\t\t\t\t\t (double)ctx->total_bedrock_eros_mass-tisc03p_bed_pre,\n"
    "\t\t\t\t\t (double)ctx->total_sed_mass-tisc03p_sed_pre,\n"
-   "\t\t\t\t\t (double)ctx->total_bedrock_eros_mass-tisc03p_bed_pre-tisc03p_sed_pre+(double)ctx->total_sed_mass,\n"
-   "\t\t\t\t\t (double)ctx->total_bedrock_eros_mass-tisc03p_bed_pre-tisc03p_sed_pre+(double)ctx->total_sed_mass-(double)d_mass);\n"
+   "\t\t\t\t\t (double)ctx->total_bedrock_eros_mass-tisc03p_bed_pre+tisc03p_sed_pre-(double)ctx->total_sed_mass,\n"
+   "\t\t\t\t\t (double)ctx->total_bedrock_eros_mass-tisc03p_bed_pre+tisc03p_sed_pre-(double)ctx->total_sed_mass-(double)d_mass);\n"
    "\t\t\t\t\tfflush(stderr);\n"
    "\t\t\t\t}\n",
    "Erode source mass")
