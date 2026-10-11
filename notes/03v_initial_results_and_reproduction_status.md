@@ -80,3 +80,29 @@ Earlier [N401 0–2 Myr full model pair 38167459994](https://github.com/lcxstar/
 **Interpretation:** the earliest detectably changed native numerical state is sediment/terrain by about 0.55 Myr, i.e. **much earlier** than the first visually noticeable 0.1m difference. Downstream flexural and hydrological trajectories diverge later, consistent with nonlinearly amplified feedbacks. The `hydro_crc` hash signals any difference among raw drainage type, lake IDs and downstream edges; the 03v `xyw`/`lak` member-set analyses are needed to distinguish a mere internal lake-index change from actual graph topology. This is not proof of a mathematical instability theorem or of which trajectory is physically correct. Timing is quantized by 0.05 Myr erosion substeps, and the model may diverge within a substep before the snapshot.
 
 N401 has independently shown the first **rounded printed** height difference at 1.5 Myr (one 0.1m changed cell), no changed drainage type/edge or lake member components through at least the first 1.5 Myr. N401 internal-state checksum trial has been launched but requires its own completed log before stating its exact first mismatch.
+
+## 03v 201-grid full-history result — refinement is NONMONOTONIC
+
+All three paired original 201×201 model runs completed full 15 Myr and both corrected 64-bit sediment ledgers passed numerical mass conservation:
+
+| 201 grid dt / dt_eros Myr | float vs local-double terrain RMS (m) | Changed downstream edge cells |
+|---|---:|---:|
+| 0.5 / 0.05 | 68.5167 | 21,106 |
+| 0.5 / 0.025 | 57.9591 | 18,973 |
+| 0.25 / 0.025 | **61.7021** | **20,596** |
+
+This demonstrates that the improvement on 81/121 grids does **not** monotonically extend to the finer 201 grid: halving dt_eros initially improves 32/64 agreement, but also halving the main dt then increases the difference again. At unchanged original time step, 81→121→201 resolution makes precision-difference RMS increase **43.74→48.05→68.52m**, rather than decrease toward zero. Therefore **a consistent spatial/temporal precision-variant convergence trajectory is NOT established**. This does not yet mathematically rule out grid convergence in the limit and it is not equivalent to the physical solution's convergence to a numerical reference grid.
+
+[Updated independently measured 81/121/201 factorial results](../results/03_tectonics/03V_TIME_SPACE_CONVERGENCE_EARLY.csv).
+
+## First demonstrable lake outlet/topology switch — geolocated within synthetic model
+
+At the 121-grid t=3 Myr output, the first changed drainage-type nodes are **synthetic coordinates** (350,−241.67) km (E→R), (345.83,−245.83) km (L→R), (345.83,−250) km (E→R), all on or close to the southeast boundary. These locations are not real Junggar longitude/latitude. Both variants print terrain `116.0m` around this exact neighborhood, yet differ in lake/outlet classification, reinforcing the hypothesis that **sub-0.1m topographic differences on almost-flat terrain cross discrete hydrologic routing criteria**. Also at the west edge near (−141.67,−45.83) km the actual downstream link changes.
+
+The real lake-member union symmetric difference at t3 is 3 cells with two outlet-coordinate changes; by t6 member union difference 1265 cells. A local lake numerical threshold is observed, but **causality must still be tested** using internal high-precision local slopes/water elevations and a controlled fixed-routing or threshold-sensitivity experiment.
+
+## New N401 checkpoint result
+
+With original full 401×401 author geology and original dt/erosional dt settings, matched precision variants remain **drainage-graph and lake-component identical through at least 2.5 Myr**. At t=1.5 one printed terrain cell changes by 0.1m and at t=2.5 two printed cells change by at most 0.1m; 29 lakes were present in both t2 runs, 33 in both t2.5 runs. Unlike N121, the high-resolution full-grid hydrologic bifurcation has *not* occurred by 2.5 Myr. This is one important example why the observed first-bifurcation time may depend on grid spacing.
+
+[401 t2.5 exact paired-threshold Actions](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178607601).
