@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  401-phase:
+  phase-401:
     name: '401x401 original tectonics + flexure through ${{ matrix.horizon }} Myr'
     runs-on: ubuntu-latest
     timeout-minutes: 36
