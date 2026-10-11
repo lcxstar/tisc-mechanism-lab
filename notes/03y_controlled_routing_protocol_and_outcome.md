@@ -49,3 +49,17 @@ Notable: at 3 Myr a tiny tie-margin **1e-8 gradient (m/m)** reduces the two prec
 
 **Science decision:** This is a successful sensitivity experiment, **not** verified numerical stabilization. A lower discrepancy between two arbitrarily selected finite precision variants can coexist with dramatic changes in hillslopes/sediment placement. Do NOT adopt tie-margin as a production fix. Await N121 15Myr, N401 3/6Myr; additional micro-DEM tests are still required to demonstrate physically faithful tie handling.
 
+
+## N121 15 Myr full-history acceptance — tie tolerance FAILS long-time stability as a general fix
+
+[GitHub Actions job 114601948263](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38183870409) SUCCESS and original F0/D0 7/7 science output exact identity checks PASS. All four runs completed 15 Myr, corrected mass error <0.001%.
+
+| Pair | Elevation RMS (m) | Sediment thickness RMS (m) | True flexure-w RMS (m) | Changed directed links | Compacted sediment total volume difference |
+|---|---:|---:|---:|---:|---:|
+| F0 vs D0 original precision | 48.055 | 27.190 | 2.481 | 7291 | 0.1976% |
+| F1 vs D1 tolerance precision | 50.901 | 26.908 | 2.382 | 7171 | -0.1031% |
+| F0 vs F1 physical tie change | 52.020 | 30.068 | 3.800 | 7460 | 0.1401% |
+| D0 vs D1 physical tie change | 51.644 | 29.384 | 2.744 | 7361 | -0.1604% |
+
+**Decisive time dependence:** under N121, the F1–D1 precision-pair elevation RMS decreases from F0–D0 **0.02688→0.00320m** at t3, but at t15 it **increases from 48.0548→50.9012m**. Thus the chosen tie margin is NOT shown to stabilize geologic results over 15 Myr. The physical float case F0→F1 alone changes terrain up to 648.7m and sediment thickness up to 635.9m even with only 0.1401% change in integrated sediment output volume. **Reject promoting the tiny-tolerance patch as a global numerical fix.** We may keep it solely as a sensitivity perturbation for identifying discontinuous choices. The actual outlet type/plateau equality conditions and local lake membership deserve isolated tests rather than blind epsilon tuning.
+
