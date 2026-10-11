@@ -1,0 +1,126 @@
+name: 03 | Official TISC 6_tectonics reproduction and kinematic controls
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/03_official_tectonics.yml'
+      - 'scripts/prepare_official_tectonics.py'
+      - 'scripts/qc_official_tectonics.py'
+      - 'scripts/compare_official_tectonics.py'
+      - 'docs/03_official_tectonics.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  TISC_COMMIT: d18b7d270f4d671b80223e10dede329ad35cafdd
+  OMP_NUM_THREADS: '2'
+
+jobs:
+  tectonic-cases:
+    name: Run ${{ matrix.case }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        case: [original_401, baseline_81, ride0_81, slow2_81, no2_81]
+    steps:
+      - name: Checkout independent experiment lab
+        uses: actions/checkout@v4
+      - name: Checkout exact original TISC
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiled TISC dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran
+          python3 -m pip install numpy matplotlib
+      - name: Compile official TISC (audited compile-only whitespace normalization)
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = "$TISC_COMMIT"
+          mkdir -p work_03/${{ matrix.case }}
+          python3 scripts/normalize_upstream_nbsp.py \
+             upstream/tisc/src/surf_proc.c work_03/${{ matrix.case }}/UPSTREAM_WHITESPACE_FIX.json
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          echo "Initialized runner; avoid legacy first-use notification" > "$HOME/.tiscdefaults"
+      - name: Prepare unchanged author case or controlled diagnostic
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_official_tectonics.py "${{ matrix.case }}"
+          git -C upstream rev-parse HEAD > work_03/${{ matrix.case }}/UPSTREAM_SHA.txt
+          git rev-parse HEAD > work_03/${{ matrix.case }}/LAB_SHA.txt
+          (cd work_03/${{ matrix.case }} && sha256sum -c INPUT_SHA256.txt)
+      - name: TISC tectonics calculation 0 to 15 Myr
+        run: |
+          set -uo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd work_03/${{ matrix.case }}
+          set +e
+          if [[ "${{ matrix.case }}" == "original_401" ]]; then
+            timeout 1800 tisc demo -V1 > RUN.log 2>&1
+          else
+            timeout 900 tisc demo -V1 > RUN.log 2>&1
+          fi
+          RC=$?
+          set -e
+          echo "$RC" > EXIT_CODE.txt
+          tail -n 35 RUN.log || true
+          echo "TISC exit code=$RC"
+      - name: Extract stage, Blocks, deflection and QC
+        if: always()
+        run: |
+          set -euo pipefail
+          python3 scripts/qc_official_tectonics.py work_03/${{ matrix.case }}
+      - name: Remove temporary restart and plotting output
+        if: always()
+        run: |
+          find work_03/${{ matrix.case }} -maxdepth 1 -type f \
+             \( -name '*.all' -o -name '*.ps' -o -name '*.svg' \
+                 -o -name '*.jpg' -o -name '*.aux*' -o -name '*.tisc.tmp' \
+                 -o -name 'core*' \) -delete
+      - name: Archive raw inputs, outputs and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03_CASE_${{ matrix.case }}
+          path: work_03/${{ matrix.case }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  compare:
+    name: Collect cases and compare identical 81x81 grids
+    needs: [tectonic-cases]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all run artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: TISC03_CASE_*
+          path: analysis/03_tectonics/cases
+          merge-multiple: false
+      - name: Export controlled comparison CSV and JSON
+        run: |
+          set -euo pipefail
+          python3 -m pip install numpy matplotlib
+          python3 scripts/compare_official_tectonics.py
+      - name: Archive complete comparison summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03_COMPARISON_SUMMARY
+          path: analysis/03_tectonics/summary/
+          retention-days: 30
+          if-no-files-found: warn
