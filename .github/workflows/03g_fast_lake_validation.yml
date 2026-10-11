@@ -1,0 +1,177 @@
+name: 03g | Validate faster lake merging against original TISC
+
+on:
+  push:
+    branches: [v03g-fast-lake-merge-validation]
+    paths:
+      - '.github/workflows/03g_fast_lake_validation.yml'
+      - 'scripts/patch_fast_lake_membership.py'
+      - 'scripts/prepare_03g_validation.py'
+      - 'scripts/validate_03g_outputs.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paired-numerical-validation:
+    name: "Reference vs optimized ${{ matrix.n }} / ${{ matrix.mode }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    strategy:
+      fail-fast: false
+      matrix:
+        n: [N81, N121]
+        mode: [first_step, full_coupled]
+    steps:
+      - name: Checkout mechanism laboratory
+        uses: actions/checkout@v4
+      - name: Checkout exact pinned TISC source
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install original compiler toolchain
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Compile the original reference executable
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p validation_03g/bin validation_03g/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c validation_03g/source/UPSTREAM_WHITESPACE_FIX.json
+          cp upstream/tisc/src/surf_proc.c validation_03g/source/REFERENCE_surf_proc.c
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc validation_03g/bin/tisc_reference
+          sha256sum validation_03g/bin/tisc_reference > validation_03g/source/REFERENCE_EXECUTABLE.sha256
+      - name: Compile separate merge-optimized derivative (not original)
+        run: |
+          set -euo pipefail
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c validation_03g/source
+          rm -f upstream/tao+tisc_commons/build/surf_proc.o
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc validation_03g/bin/tisc_optimized
+          sha256sum validation_03g/bin/tisc_optimized > validation_03g/source/OPTIMIZED_EXECUTABLE.sha256
+          cmp -s validation_03g/bin/tisc_reference validation_03g/bin/tisc_optimized && {
+            echo 'Expected two DIFFERENT compiled executables'; exit 91; } || true
+          echo "CI first-run marker" > "$HOME/.tiscdefaults"
+      - name: Prepare matching official input pairs and runtime flags
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py ${{ matrix.n }} ${{ matrix.mode }}
+          git -C upstream rev-parse HEAD > validation_03g/source/UPSTREAM_COMMIT.txt
+          git rev-parse HEAD > validation_03g/source/LAB_COMMIT.txt
+      - name: Run reference and optimized under same physics and grid
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          ROOT="$GITHUB_WORKSPACE/validation_03g/${{ matrix.n }}/${{ matrix.mode }}"
+          if [[ '${{ matrix.mode }}' == 'first_step' ]]; then
+            FLAGS="-tf0.5 -qisost_model=0 -qplotting_mode=0"
+            SECONDS=180
+          else
+            FLAGS="-qplotting_mode=0"
+            SECONDS=900
+          fi
+          for version in reference optimized; do
+            (
+              cd "$ROOT/$version"
+              printf '%s\n' "$version executable: TISC original physics" > ACTUAL_COMMAND.txt
+              echo "tisc demo -V1 $FLAGS" >> ACTUAL_COMMAND.txt
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s "$SECONDS" \
+                "$GITHUB_WORKSPACE/validation_03g/bin/tisc_$version" demo -V1 $FLAGS > RUN.log 2>&1
+              code=$?
+              set -e
+              printf '%s\n' "$code" > EXIT_CODE.txt
+              echo "03g ${{ matrix.n }} ${{ matrix.mode }} $version exit=$code"
+              grep -E 'T=|outp_seds:' RUN.log | tail -n 7 || true
+            )
+          done
+      - name: Compare final fields and model history, fail on mismatch
+        run: |
+          python3 scripts/validate_03g_outputs.py validation_03g/${{ matrix.n }}/${{ matrix.mode }}
+      - name: Preserve original/optimized numerical fields, source diff and QC
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03G_${{ matrix.n }}_${{ matrix.mode }}'
+          path: |
+            validation_03g/source/
+            validation_03g/${{ matrix.n }}/${{ matrix.mode }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  full-401-first-step:
+    name: Optimized 401x401 first timestep (after paired numerical PASS)
+    needs: paired-numerical-validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build only the already validated optimized derivative
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p validation_03g/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c validation_03g/source/UPSTREAM_WHITESPACE_FIX.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c validation_03g/source
+          make -C upstream/tisc/src tisc
+          echo 'CI first-run marker' > "$HOME/.tiscdefaults"
+          python3 scripts/prepare_03g_validation.py N401 first_step
+      - name: Run exact 401x401 input with only flexure off for surface isolation
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd validation_03g/N401/first_step/optimized
+          echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+          set +e
+          /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s 480 \
+              tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+          rc=$?
+          set -e
+          echo "$rc" > EXIT_CODE.txt
+          echo "401 isolated first-step optimized result exit=$rc"
+          grep -E 'T=|outp_seds:' RUN.log | tail -n 12 || true
+          python3 - <<'PY'
+          import json,re
+          from pathlib import Path
+          raw=Path("RUN.log").read_text(errors="replace")
+          ts=[float(x) for x in re.findall(r"T=\s*(\d+(?:\.\d+)?)\s*My",raw)]
+          rc=int(Path("EXIT_CODE.txt").read_text())
+          result={"grid":401,"source":"03g optimized (not author binary)",
+                  "physical_input_byte_identical_to_author":True,
+                  "runtime_override":"-tf0.5 -qisost_model=0 -qplotting_mode=0",
+                  "timeout_seconds":480,"exit_code":rc,
+                  "last_simulated_time_Myr":ts[-1] if ts else None,
+                  "first_step_completed":rc==0 and bool(ts) and ts[-1]>=0.5,
+                  "sediment_mass_finite":not bool(re.search(r"outp_seds:\s*[+-]?nan",raw,re.I)),
+                  "original_author_full_run_completed":False}
+          Path("401_QC.json").write_text(json.dumps(result,indent=2))
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Retain 401 test logs, output arrays and source audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03G_401_FIRST_STEP
+          path: |
+            validation_03g/source/
+            validation_03g/N401/first_step/
+          retention-days: 30
+          if-no-files-found: warn
