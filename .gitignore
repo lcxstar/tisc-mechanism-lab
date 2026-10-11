@@ -1,0 +1,7 @@
+# User-generated runs and upstream checkouts are not committed
+upstream/
+results/
+*.log
+__pycache__/
+*.pyc
+.DS_Store

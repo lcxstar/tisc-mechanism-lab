@@ -1,0 +1,78 @@
+name: 01 | Official TISC flexure verification
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/01_official_flexure.yml'
+      - 'scripts/qc_official_flexure.py'
+      - 'docs/01_flexure_reproduction.md'
+      - 'README.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce:
+    name: Compile original TISC and reproduce official flexure
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout pinned upstream source, unchanged
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler and QC dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran
+          python3 -m pip install numpy matplotlib
+      - name: Compile the official TISC, NO local patches
+        run: |
+          set -euo pipefail
+          git -C upstream rev-parse HEAD
+          test "$(git -C upstream rev-parse HEAD)" = "d18b7d270f4d671b80223e10dede329ad35cafdd"
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          mkdir -p results
+          git -C upstream rev-parse HEAD > results/UPSTREAM_COMMIT.txt
+          git rev-parse HEAD > results/LAB_COMMIT.txt
+      - name: Reproduce author's direct -Q static deflection references
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd upstream/tisc/demo
+          "$tisc_dir/bin/tisc" -Q2nd_example_load.xyp -N11 -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4 > "$GITHUB_WORKSPACE/results/Q_mode_N11.log" 2>&1
+          "$tisc_dir/bin/tisc" -Q2nd_example_load.xyp -N51 -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4 > "$GITHUB_WORKSPACE/results/Q_mode_N51.log" 2>&1
+          tail -n 5 "$GITHUB_WORKSPACE/results/Q_mode_N11.log"
+          tail -n 5 "$GITHUB_WORKSPACE/results/Q_mode_N51.log"
+      - name: Run author's full 3_flexure project with unchanged inputs
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          mkdir -p results/full_official_flex
+          cp -a upstream/tisc/demo/3_flexure/. results/full_official_flex/
+          (cd results/full_official_flex && sha256sum flex.PRM flex1.UNIT flex2.UNIT flex3.UNIT > ORIGINAL_INPUTS.sha256)
+          (
+            cd results/full_official_flex
+            "$tisc_dir/bin/tisc" flex -V2 > FULL_RUN.log 2>&1
+          )
+          tail -n 25 results/full_official_flex/FULL_RUN.log
+      - name: Check author reference values and inspect final flex arrays
+        run: |
+          python3 scripts/qc_official_flexure.py --root results
+      - name: Save exact original input files, logs, output and numerical QC
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OFFICIAL_TISC_01_FLEXURE
+          path: results/
+          retention-days: 30
+          if-no-files-found: warn
