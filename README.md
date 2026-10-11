@@ -1,3 +1,11 @@
+## 03y controlled lake/outlet numerical sensitivity
+
+**Experimental, do not promote to production.** [03y experiment protocol and measured results](notes/03y_controlled_routing_protocol_and_outcome.md) introduces a **1e-8 m/m steepest-downhill replacement tie margin in only two source comparisons**, without altering geology, lakes' strict flat/saddle classification or original 03t physics. Four physical binaries (F0/D0 without tie margin vs F1/D1 with tie margin) are compared to test whether this tiny rule reduces floating-point trajectory sensitivity. N121 at 3Myr appears less sensitive (float-vs-local-double topography RMS 0.02688→0.00320m, 4→0 different downstream edges), BUT N121 at **15Myr** becomes **MORE** sensitive by that metric (48.0548→50.9012m), even as average sediment thickness RMS 27.19→26.91m. Changing the tie condition by itself alters baseline physical topography up to 304m at t3 and 648.7m by t15. Hence an arbitrary global `epsilon` is NOT validated as a numeric fix; preserve and diagnose the outlet threshold in isolated DEM cases. The 401 t3/t6 arms are independently running in [03y Actions](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38183870409) and must be read before claims.
+
+- [121 t3 original-source strict comparison CSV](results/03_tectonics/03Y_121_3Myr_controlled_routing_sensitivity.csv)
+- [121 t15 original-source strict comparison CSV](results/03_tectonics/03Y_121_15Myr_controlled_routing_sensitivity.csv)
+
+---
 ## 03x — Read-only lake outlet and same-scheme mesh audit (2026-10-12)
 
 **Verdict: synthetic official model reproduction succeeds with documented source corrections; 801 grid NOT yet justified.** Actual same-scheme 15 Myr basinwide compacted sediment volumes across N81/N121/N201/N401 are ~86,616 / 69,106 / 61,107 / 59,834 km³. Thus N201 differs by only 2.13% from N401 in integrated volume, but still has ~48.74m sediment thickness, ~122.63m surface elevation, and ~50.12m **actual w deflection** RMS difference after bilinear interpolation to N201 nodes. N401 is a comparison reference, NOT ground truth or an independently demonstrated converged solution.
