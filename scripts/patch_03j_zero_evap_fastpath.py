@@ -60,7 +60,7 @@ def main(path,out):
         "\t\t\t\tif (!tisc_03jb_definitely_no_delete && Lake_Input_Discharge(cfg, il)<lake_evap && Lake[il].n>1) {",
         "conservative-predicate")
     p=once(p,
-        "\t\t\t\tdrainage[row][col].C_Cl = final_C_Cl;\n\t}\n",
+        "\t\t\tdrainage[row][col].C_Cl = final_C_Cl;\n\t}\n",
         "\t\t\t\tdrainage[row][col].C_Cl = final_C_Cl;\n"
         "\t\t\t/* Check every possible flow write destination before next node.\n"
         "\t\t\t * Once violated, original path is permanently restored. */\n"
