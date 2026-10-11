@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   localized-double:
-    name: '03u0 ${{ matrix.grid }} ${{ matrix.horizon }}Myr, original flexure, paired'
+    name: '03u1 ${{ matrix.grid }} ${{ matrix.horizon }}Myr, local double vs float reference'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     strategy:
@@ -87,13 +87,13 @@ jobs:
               code=$?
               set -e
               echo "$code" > EXIT_CODE.txt
-              echo "03u0 ${{ matrix.grid }} $variant exit=$code"
+              echo "03u1 ${{ matrix.grid }} $variant exit=$code"
               grep -a 'TISC_03T_CORRECTED_BALANCE' RUN.log | tail -n 3 || true
             )
           done
       - name: Quantify all physical numeric differences, do not falsely require byte equality
         run: |
-          python3 scripts/summarize_03u0_precision.py qc_03u1/${{ matrix.grid }} ${{ matrix.horizon }}
+          python3 scripts/summarize_03u1_physics.py qc_03u1/${{ matrix.grid }} ${{ matrix.horizon }}
       - name: Preserve paired physical outputs, local double source diff and QC
         if: always()
         uses: actions/upload-artifact@v4
