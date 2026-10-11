@@ -1,0 +1,110 @@
+name: 02 | Official TISC Te sensitivity (5/20/40 km)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/02_official_te_sensitivity.yml'
+      - 'scripts/qc_official_te_sensitivity.py'
+      - 'docs/02_te_sensitivity.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  te-only:
+    name: Reproduce official reference then vary only Te
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      OMP_NUM_THREADS: '2'
+    steps:
+      - name: Checkout laboratory
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned official TISC
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+
+      - name: Install compilers and visualization dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran
+          python3 -m pip install numpy matplotlib
+
+      - name: Build original numerical solver with GCC portability whitespace fix
+        run: |
+          set -euo pipefail
+          mkdir -p results/02_Te_sensitivity
+          test "$(git -C upstream rev-parse HEAD)" = "d18b7d270f4d671b80223e10dede329ad35cafdd"
+          python3 scripts/normalize_upstream_nbsp.py \
+            upstream/tisc/src/surf_proc.c results/02_Te_sensitivity/UPSTREAM_WHITESPACE_FIX.json
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          git rev-parse HEAD > results/02_Te_sensitivity/LAB_COMMIT.txt
+          git -C upstream rev-parse HEAD > results/02_Te_sensitivity/UPSTREAM_COMMIT.txt
+          sha256sum upstream/tisc/demo/2nd_example_load.xyp > results/02_Te_sensitivity/ORIGINAL_LOAD_SHA256.txt
+          echo "TISC CI runner initialized. Do not attempt first-use email." > "$HOME/.tiscdefaults"
+
+      - name: First replicate official author references with default Te
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd upstream/tisc/demo
+          for n in 11 51; do
+            ntag="$(printf '%03d' "$n")"
+            "$tisc_dir/bin/tisc" -Q2nd_example_load.xyp "-N$n" \
+              -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4 \
+              > "$GITHUB_WORKSPACE/results/02_Te_sensitivity/AUTHOR_DEFAULT_N$ntag.log" 2>&1
+            echo "Official baseline N=$n"
+            grep "deflect. :" "$GITHUB_WORKSPACE/results/02_Te_sensitivity/AUTHOR_DEFAULT_N$ntag.log"
+          done
+
+      - name: Then vary only Te and repeat at two resolutions
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd upstream/tisc/demo
+          for n in 51 101; do
+            for te in 5 20 40; do
+              ntag="$(printf '%03d' "$n")"
+              ttag="$(printf '%03d' "$te")"
+              "$tisc_dir/bin/tisc" -Q2nd_example_load.xyp "-N$n" \
+                -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4 "-T$((te*1000))" \
+                > "$GITHUB_WORKSPACE/results/02_Te_sensitivity/TE_$ttagkm_N$ntag.log" 2>&1
+              echo "Te=$te km  N=$n"
+              grep "deflect. :" "$GITHUB_WORKSPACE/results/02_Te_sensitivity/TE_$ttagkm_N$ntag.log"
+            done
+          done
+
+      - name: Validate numeric isolation of Te and generate figures
+        run: |
+          set -euo pipefail
+          python3 scripts/qc_official_te_sensitivity.py
+
+      - name: Gate reference and identical load checks
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path("results/02_Te_sensitivity/TE_SWEEP_QC.json").read_text())
+          assert x["numerical_pass"], x
+          assert all(x["same_pressure_at_each_N"].values())
+          print("PASS: official benchmarks + six Te cases with identical load pressure.")
+          PY
+
+      - name: Upload original solver logs and reproducible figures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OFFICIAL_TISC_02_TE_SWEEP
+          path: results/02_Te_sensitivity/
+          retention-days: 30
+          if-no-files-found: warn
