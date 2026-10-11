@@ -1,0 +1,70 @@
+name: 03h | Profile optimized 401-grid first-step surface stages
+
+on:
+  push:
+    branches: [v03g-fast-lake-merge-validation]
+    paths:
+      - '.github/workflows/03h_optimized_401_stage_profile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  optimized-stage-profile:
+    name: 401-stage trace after O(1) lake merge fix
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install build dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Apply optimized and timing patches to temporary source
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostic_03h/source
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c diagnostic_03h/source/NBSP_AUDIT.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c diagnostic_03h/source
+          python3 scripts/profile_tisc_surface.py upstream/tisc/src/surf_proc.c diagnostic_03h/source
+          python3 scripts/profile_tisc_drainage.py upstream/tisc/src/surf_proc.c diagnostic_03h/source
+          make -C upstream/tisc/src tisc
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Run original 401-grid inputs with optimized source and stage trace
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_401_performance_probe.py N401_ISO_OFF
+          mkdir -p diagnostic_03h
+          mv diagnostic_03b/N401_ISO_OFF diagnostic_03h/N401_ISO_OFF
+          cp diagnostic_03h/source/*AUDIT.json diagnostic_03h/N401_ISO_OFF/
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd diagnostic_03h/N401_ISO_OFF
+            echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s 150 \
+              tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "Optimized 401 step exit=$rc"
+            grep -a 'TISC_PROFILE' RUN.log | tail -n 25 || true
+          )
+          python3 scripts/summarize_tisc_surface_profile.py diagnostic_03h/N401_ISO_OFF
+      - name: Upload stage-annotated benchmark logs and audited source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03H_OPTIMIZED_401_PROFILE
+          path: diagnostic_03h/
+          retention-days: 30
+          if-no-files-found: warn
