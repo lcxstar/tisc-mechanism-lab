@@ -1,0 +1,96 @@
+name: 03o | Forensic first unbalanced sediment transport cells
+
+on:
+  push:
+    branches: [v03m-mass-conservation-ledger]
+    paths:
+      - '.github/workflows/03o_first_imbalance_cells.yml'
+      - 'scripts/profile_03o_first_unbalanced_cells.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused-mass:
+    name: '401 coupled first 1.5 Myr, per-cell before-after stock checks'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build observationally instrumented original 401 physics
+        run: |
+          set -euo pipefail
+          mkdir -p forensic_03o/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c forensic_03o/source/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c forensic_03o/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c forensic_03o/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c forensic_03o/source
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c forensic_03o/source
+          python3 scripts/profile_03n_mass_routing.py upstream/tisc/src/surf_proc.c forensic_03o/source
+          python3 scripts/profile_03o_first_unbalanced_cells.py upstream/tisc/src/surf_proc.c forensic_03o/source
+          make -C upstream/tisc/src tisc
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Create exact official 401 inputs, restore flexure
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py N401 full_coupled
+          mkdir -p forensic_03o/N401_t1p5
+          cp -a validation_03g/N401/full_coupled/optimized/. forensic_03o/N401_t1p5/
+          cmp upstream/tisc/demo/6_tectonics/demo.PRM forensic_03o/N401_t1p5/demo.PRM
+          cmp upstream/tisc/demo/6_tectonics/demo1.UNIT forensic_03o/N401_t1p5/demo1.UNIT
+          cmp upstream/tisc/demo/6_tectonics/demo2.UNIT forensic_03o/N401_t1p5/demo2.UNIT
+      - name: Run first-mass-loss boundary node forensics
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd forensic_03o/N401_t1p5
+            echo 'tisc demo -V1 -tf1.5 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s 1350 \
+              tisc demo -V1 -tf1.5 -qplotting_mode=0 > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "03o run rc=$rc"
+            grep -a 'TISC_03O_CELL' RUN.log | head -n 25 || true
+          )
+          python3 - <<'PY'
+          import json,re
+          from pathlib import Path
+          d=Path("forensic_03o/N401_t1p5")
+          raw=(d/"RUN.log").read_text(errors="replace")
+          rx=r'TISC_03O_CELL t=([^\s]+) call=(\d+) node=(\d+) row=(\d+) col=(\d+) dest_row=([^\s]+) dest_col=([^\s]+) type=(.) lake=(\d+) delta_kg=([^\s]+) masstr_after_kgps=([^\s]+) closed_reset_kg=([^\s]+)'
+          records=[dict(t=float(m[1]),call=int(m[2]),node=int(m[3]),row=int(m[4]),col=int(m[5]),
+            dest_row=int(m[6]),dest_col=int(m[7]),type=m[8],lake=int(m[9]),delta_kg=float(m[10]),
+            masstr_after_kgps=float(m[11]),closed_reset_kg=float(m[12])) for m in re.finditer(rx,raw)]
+          rc=int((d/"EXIT_CODE.txt").read_text())
+          report={"exit_code":rc,"n_significant_first_events":len(records),
+            "events":records,"max_abs_single_cell_mass_change_kg":max((abs(x["delta_kg"]) for x in records),default=None),
+            "author_grid":401,"physical_source_changed":False}
+          (d/"03O_CELL_MASS_FORensics.json").write_text(json.dumps(report,indent=2))
+          print("03O FORENSIC SUMMARY",json.dumps({k:v for k,v in report.items() if k!="events"}))
+          print("03O FIRST EVENTS",json.dumps(records[:12]))
+          if rc!=0:raise SystemExit("03o simulation did not complete")
+          PY
+      - name: Archive exact source patch, actual model outputs and first-cell audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03O_FIRST_UNBALANCED_CELLS
+          path: |
+            forensic_03o/source/
+            forensic_03o/N401_t1p5/
+          retention-days: 30
+          if-no-files-found: warn
