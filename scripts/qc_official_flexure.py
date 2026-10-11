@@ -16,12 +16,12 @@ from pathlib import Path
 import numpy as np
 
 def candidate_rows(path: Path):
-    """TISC -Q prints gridded x, y, displacement in plain text, possibly
+    """TISC -Q prints gridded x, y, displacement, pressure in plain text, possibly
     surrounded by runtime diagnostic messages. Keep ONLY numeric triples."""
     triples=[]
     for line in path.read_text(errors="replace").splitlines():
         toks=line.strip().split()
-        if len(toks) != 3:
+        if len(toks) != 4:
             continue
         try:
             xyz=tuple(float(q) for q in toks)
@@ -50,7 +50,7 @@ def project_check(case: Path):
     xy=case/"flex.xyzt"
     result={"has_xyzt":xy.exists(),"has_hrz":(case/"flex.hrz").exists(),
             "source_folder":str(case),"numerical_pass":False}
-    if not xy.exists():
+    if not xy.exists() or not (case/"flex.hrz").exists():
         return result
     try:
         data=np.loadtxt(xy,comments="#")
@@ -60,8 +60,9 @@ def project_check(case: Path):
         result.update({
             "n_grid_nodes":len(data),
             "xyzt_columns":int(data.shape[1]),
-            "center_first_record_w_m":float(data[np.argmin(data[:,0]**2+data[:,1]**2),2]),
-            "center_last_record_w_m":float(data[np.argmin(data[:,0]**2+data[:,1]**2),-2]),
+            "center_final_deflection_w_m":float(data[np.argmin(data[:,0]**2+data[:,1]**2),2]),
+            "grid_max_final_deflection_w_m":float(data[:,2].max()),
+            "grid_min_final_deflection_w_m":float(data[:,2].min()),
             "numerical_pass":True,
         })
         import matplotlib
@@ -71,8 +72,7 @@ def project_check(case: Path):
         transect=data[np.isclose(data[:,1],center_y)]
         transect=transect[np.argsort(transect[:,0])]
         fig,ax=plt.subplots(figsize=(9,4.5),constrained_layout=True)
-        ax.plot(transect[:,0],transect[:,2],label="First output: deflection")
-        ax.plot(transect[:,0],transect[:,-2],label="Last output: deflection")
+        ax.plot(transect[:,0],transect[:,2],label="0–9 Myr final deflection")
         ax.set(xlabel="Official model x (km)",ylabel="Deflection w (m)",title="Official flex project — Y centerline")
         ax.grid(alpha=.25);ax.legend()
         fig.savefig(case/"OFFICIAL_FLEXURE_TRANSECT.png",dpi=160);plt.close(fig)

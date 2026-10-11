@@ -37,3 +37,5 @@ TISC is by Daniel García-Castellanos and contributors. The original upstream li
 Suggested scientific references: García-Castellanos (2002), *Basin Research* 14, 89–104, DOI [10.1046/j.1365-2117.2002.00174.x](https://doi.org/10.1046/j.1365-2117.2002.00174.x); García-Castellanos & Jiménez-Munt (2015), *PLOS ONE*, DOI [10.1371/journal.pone.0132252](https://doi.org/10.1371/journal.pone.0132252).
 
 See [experiment notes](docs/01_flexure_reproduction.md) and [source code verification](scripts/qc_official_flexure.py).
+
+**Lab portability findings:** pinned upstream `surf_proc.c` contains two nonbreaking spaces requiring compile-only normalization; the unmodified upstream program also dereferences a null file pointer on its first-run notification path. We avoid that path by creating `$HOME/.tiscdefaults` on the temporary CI runner. Both are reported in the experiment notes, and neither changes flexural physics.

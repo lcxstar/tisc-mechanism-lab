@@ -49,3 +49,11 @@ A successful run demonstrates input parsing, time scheduling and outputs, but do
 ### Next after a validated baseline
 
 Run Te=5, 20 and 40 km for **one identical prescribed load** with a known-fixed grid and produce the three deflection profiles. Only then progress to the author's `6_tectonics` example to investigate `ride=1`, discrete block motion and structural loading.
+
+### Discovered upstream first-run cleanup fault (October 11, 2026)
+
+First full demo run completed all numerical times and produced `flex.xyzt` and `flex.hrz`, but returned exit code 139 **after** `Time end`. Inspection of pinned `tisc/src/tisc.c` showed the cause. When `$HOME/.tiscdefaults` does not exist, the code creates it and tries to send an old first-use notification via `mail`, then calls `fclose(file)` on the `NULL` pointer from the unsuccessful `fopen`. This is a cleanup error, not failure of the flexure calculation.
+
+To avoid both the segfault and unintended attempt to contact the upstream author, the workflow pre-creates `$HOME/.tiscdefaults` in the ephemeral runner. No physics source line is changed. Importantly, the code still contains the original bug, which should be reported upstream rather than silently edited for a teaching baseline.
+
+The direct `-Q` outputs contain **four**, not three, numeric columns (x, y, displacement and pressure), so the numerical QC was corrected to recognize the author's actual format. The first successful observed center displacements, extracted from the failed-full-demo run's saved logs, were **675.1 m and 711.0 m**, exactly matching the author's reference.
