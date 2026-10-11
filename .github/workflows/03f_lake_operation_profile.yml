@@ -1,0 +1,82 @@
+name: 03f | Lake allocation, insertion and merge cost in official TISC
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/03f_lake_operation_profile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  profile-lake-operations:
+    name: "Lake-operation profile: ${{ matrix.case }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    strategy:
+      fail-fast: false
+      matrix:
+        case: [N121_FULL, N401_ISO_OFF]
+    steps:
+      - name: Checkout independent mechanism lab
+        uses: actions/checkout@v4
+      - name: Checkout author's pinned source
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compilation tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build audited diagnostic TISC executable (physics unchanged)
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p diagnostic_03f/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c diagnostic_03f/source/UPSTREAM_WHITESPACE_FIX.json
+          python3 scripts/profile_tisc_surface.py upstream/tisc/src/surf_proc.c diagnostic_03f/source
+          python3 scripts/profile_tisc_drainage.py upstream/tisc/src/surf_proc.c diagnostic_03f/source
+          python3 scripts/profile_tisc_lake_ops.py upstream/tisc/src/surf_proc.c diagnostic_03f/source
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          echo 'CI defaults initialized; avoid upstream first-use mail' > "$HOME/.tiscdefaults"
+      - name: Run first time step and measure lake costs
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_401_performance_probe.py '${{ matrix.case }}'
+          mv 'diagnostic_03b/${{ matrix.case }}' 'diagnostic_03f/${{ matrix.case }}'
+          cp diagnostic_03f/source/*AUDIT.json 'diagnostic_03f/${{ matrix.case }}/'
+          git -C upstream rev-parse HEAD > 'diagnostic_03f/${{ matrix.case }}/UPSTREAM_COMMIT.txt'
+          git rev-parse HEAD > 'diagnostic_03f/${{ matrix.case }}/LAB_COMMIT.txt'
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd 'diagnostic_03f/${{ matrix.case }}'
+            echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            if [[ '${{ matrix.case }}' == 'N121_FULL' ]]; then seconds=80; else seconds=140; fi
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s "$seconds" \
+               tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "TISC return code $rc (124 is expected for bounded 401 test)"
+            grep -a 'TISC_LAKE_STATS' RUN.log | tail -n 5 || true
+          )
+          python3 scripts/summarize_tisc_surface_profile.py 'diagnostic_03f/${{ matrix.case }}'
+          python3 scripts/summarize_tisc_lake_ops.py 'diagnostic_03f/${{ matrix.case }}'
+      - name: Archive trace, original input checksums and exact source diffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03F_LAKE_OPS_${{ matrix.case }}'
+          path: |
+            diagnostic_03f/source/
+            diagnostic_03f/${{ matrix.case }}/
+          retention-days: 30
+          if-no-files-found: warn
