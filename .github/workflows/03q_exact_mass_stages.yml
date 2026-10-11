@@ -2,9 +2,9 @@ name: 03q | Exact mass snapshots across sedimentation and routing
 
 on:
   push:
-    branches: [v03m-mass-conservation-ledger]
+    branches: [v03q-river-mass-closure]
     paths:
-      - '.github/workflows/03p_first_river_erosion_mass.yml'
+      - '.github/workflows/03q_exact_mass_stages.yml'
       - 'scripts/profile_03q_mass_stages.py'
   workflow_dispatch:
 
