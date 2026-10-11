@@ -37,17 +37,17 @@ def prepare(case):
     changes={}
     if case!="original_401":
         f=folder/"demo.PRM"
-        before=f.read_text()
+        before=f.read_text(encoding="latin-1")
         after=replace_param(replace_param(before,"Nx",401,81),"Ny",401,81)
-        f.write_text(after)
+        f.write_text(after,encoding="latin-1")
         changes["demo.PRM"]="grid only: 401x401 -> 81x81"
         if case=="ride0_81":
             f=folder/"demo2.UNIT"
-            f.write_text(replace_param(f.read_text(),"ride",1,0))
+            f.write_text(replace_param(f.read_text(encoding="latin-1"),"ride",1,0),encoding="latin-1")
             changes["demo2.UNIT"]="ride 1 -> ride 0"
         elif case=="slow2_81":
             f=folder/"demo2.UNIT"
-            f.write_text(replace_param(f.read_text(),"vel_x",10,5))
+            f.write_text(replace_param(f.read_text(encoding="latin-1"),"vel_x",10,5),encoding="latin-1")
             changes["demo2.UNIT"]="second fault vel_x 10 -> 5 km/Myr"
         elif case=="no2_81":
             (folder/"demo2.UNIT").unlink()
@@ -67,7 +67,7 @@ def prepare(case):
         assert (folder/"demo1.UNIT").read_bytes()==(src/"demo1.UNIT").read_bytes()
         assert (folder/"demo2.UNIT").read_bytes()==(src/"demo2.UNIT").read_bytes()
     for p in folder.iterdir():
-        if p.name.endswith(".UNIT") and not p.read_text().strip():raise ValueError("empty UNIT")
+        if p.name.endswith(".UNIT") and not p.read_text(encoding="latin-1").strip():raise ValueError("empty UNIT")
     (folder/"INPUT_AUDIT.json").write_text(json.dumps(audit,indent=2,ensure_ascii=False))
     with (folder/"INPUT_SHA256.txt").open("w") as f:
         for p in sorted(folder.glob("demo*")):
