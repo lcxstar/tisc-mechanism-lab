@@ -106,3 +106,20 @@ The real lake-member union symmetric difference at t3 is 3 cells with two outlet
 With original full 401×401 author geology and original dt/erosional dt settings, matched precision variants remain **drainage-graph and lake-component identical through at least 2.5 Myr**. At t=1.5 one printed terrain cell changes by 0.1m and at t=2.5 two printed cells change by at most 0.1m; 29 lakes were present in both t2 runs, 33 in both t2.5 runs. Unlike N121, the high-resolution full-grid hydrologic bifurcation has *not* occurred by 2.5 Myr. This is one important example why the observed first-bifurcation time may depend on grid spacing.
 
 [401 t2.5 exact paired-threshold Actions](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178607601).
+
+## Updated original-author N401 first lake/river threshold — independently confirmed
+
+[03v original 401-stage run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178515988) now confirms an analogous transition in the **actual original Nx=Ny=401 grid**, not only 121 resampling:
+
+| elapsed time (Myr) | native printed elevation changed cells | max elevation difference (m) | downstream edges changed | node type changed | exact lake-component membership |
+|---:|---:|---:|---:|---:|---|
+| 0.5 | 0 | 0 | 0 | 0 | identical |
+| 1.0 | 0 | 0 | 0 | 0 | identical |
+| 1.5 | 1 | 0.1 | 0 | 0 | identical |
+| 2.0 | 3 | 0.1 | 0 | 0 | identical |
+| 2.5 | 2 | 0.1 | 0 | 0 | identical |
+| **3.0** | **1005** | **3.0** | **15** | **5** | **changed**, despite **138 lakes in each run** |
+
+Thus at both 121 and 401 grid spacing, **the first OBSERVED exported lake or drainage-graph bifurcation lies strictly after 2.5Myr and by 3.0Myr**. N401 has microscopic/rounded terrain differences by 1.5 Myr, and lake-graph bifurcation is delayed relative to that. N401 shows no evidence of a count change at t3 — lake **membership/outlets must be analyzed, not raw total count**. [Permanent 401-stage comparison CSV](../results/03_tectonics/03V_401_DIVERGENCE_STAGES.csv).
+
+This supports threshold amplification, but not that such hydrologic change *alone* causes all later terrain differences. For a causality test, isolate lake/outlet tie-breaking, inspect sub-0.1m slopes and perform frozen drainage connectivity/regularized routing in a separate experimental branch. Full 401×401 15 Myr precision-endpoint trial is also launched and must be confirmed by actual runtime QC before treating its numerical differences as established.
