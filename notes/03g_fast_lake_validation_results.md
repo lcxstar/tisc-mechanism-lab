@@ -33,9 +33,7 @@ Both the author and optimized *fully coupled* 15-Myr histories print `outp_seds:
 
 ## 401-grid escalation
 
-The 401² first-step benchmark is automatically gated behind all four 81/121 numerical PASS results. Original PRM/UNIT/PRFL files are SHA256-identical to upstream; the run uses `-tf0.5 -qisost_model=0 -qplotting_mode=0` to isolate surface processes. Even a successful 401 first-step result would **not** establish the full original 0–15 Myr coupled history.
-
-The next milestone after the 401 first-step benchmark is to isolate any remaining superlinear surface process if this test times out, then test the complete original 401² 0–15 Myr coupled case with the separately tagged performance derivative and verify that the scientific sediment-budget issue is addressed independently.
+**Actual 401 outcome (03g / 03h):** The optimized 401² 0–0.5 Myr diagnostic still timed out (exit 124 after 480 s, model remained at 0.0 Myr). Independent 03h timing found the original lake-node scan is now completed in 4.452 s, but `Calculate_Discharge()` costs 77.831 s on its first substep and still blocks on its second substep at a 150-s cutoff. **No complete author 401 reproduction.** Full evidence and next profiling design are saved in [03h results](03h_optimized_401_profile_results.md).
 
 ## Links
 
