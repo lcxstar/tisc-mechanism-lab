@@ -26,7 +26,7 @@ jobs:
             horizon: 3
             max_time: 900
           - grid: 401
-            horizon: 2.5
+            horizon: 3
             max_time: 1300
     steps:
       - uses: actions/checkout@v4
