@@ -1,0 +1,111 @@
+name: 03b | Isolate official TISC 401x401 runtime bottleneck
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/03b_401_performance.yml'
+      - 'scripts/prepare_401_performance_probe.py'
+      - 'scripts/qc_401_performance_probe.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  OMP_NUM_THREADS: '2'
+
+jobs:
+  test-mechanism-cost:
+    name: Performance probe ${{ matrix.case }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    strategy:
+      fail-fast: false
+      matrix:
+        case: [N121_FULL, N401_ISO_OFF, N401_SURFACE_OFF, N401_BOTH_OFF]
+    steps:
+      - name: Checkout reproducible lab
+        uses: actions/checkout@v4
+      - name: Checkout same pinned official TISC
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compilation, Python QC and GNU time
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+          python3 -m pip install numpy
+      - name: Compile unchanged physical equations
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostic_03b/${{ matrix.case }}
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c \
+              diagnostic_03b/${{ matrix.case }}/UPSTREAM_WHITESPACE_FIX.json
+          make -C upstream/tisc/src tisc
+          echo "Initialized benchmark runner; no first-use mail" > "$HOME/.tiscdefaults"
+      - name: Preserve exact original files and describe command override
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_401_performance_probe.py ${{ matrix.case }}
+          git -C upstream rev-parse HEAD > diagnostic_03b/${{ matrix.case }}/UPSTREAM_COMMIT.txt
+          git rev-parse HEAD > diagnostic_03b/${{ matrix.case }}/LAB_COMMIT.txt
+      - name: Run predeclared physical-process isolation with strict cutoff
+        run: |
+          set -uo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd diagnostic_03b/${{ matrix.case }}
+          FLAGS=""
+          MAXSECONDS=240
+          case ${{ matrix.case }} in
+            N121_FULL) FLAGS="-qplotting_mode=0"; MAXSECONDS=900;;
+            N401_ISO_OFF) FLAGS="-tf0.5 -qisost_model=0 -qplotting_mode=0"; MAXSECONDS=240;;
+            N401_SURFACE_OFF) FLAGS="-tf0.5 -qhydro_model=0 -qerosed_model=0 -qplotting_mode=0"; MAXSECONDS=240;;
+            N401_BOTH_OFF) FLAGS="-tf0.5 -qisost_model=0 -qhydro_model=0 -qerosed_model=0 -qplotting_mode=0"; MAXSECONDS=240;;
+            *) exit 88;;
+          esac
+          printf 'tisc demo -V1 %s\n' "$FLAGS" > ACTUAL_COMMAND.txt
+          set +e
+          /usr/bin/time -f '%e' -o RUNTIME_SEC.txt \
+             timeout "$MAXSECONDS" tisc demo -V1 $FLAGS > RUN.log 2>&1
+          RC=$?
+          set -e
+          echo "$RC" > EXIT_CODE.txt
+          tail -n 32 RUN.log || true
+          echo "Returned code $RC, where 124 means deliberate time limit."
+      - name: Extract real stage progression and provenance
+        if: always()
+        run: |
+          set -euo pipefail
+          python3 scripts/qc_401_performance_probe.py diagnostic_03b/${{ matrix.case }}
+      - name: Gate one complete physics history at medium resolution
+        if: matrix.case == 'N121_FULL'
+        run: |
+          python3 - <<'PY'
+          import json
+          p="diagnostic_03b/N121_FULL/PERFORMANCE_QC.json"
+          q=json.load(open(p))
+          assert q["numeric_pass"],q
+          print("Medium-grid full-physics official project passes; not full 401 reproduction.")
+          PY
+      - name: Store stdout, process speed, source identity and QC
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03B_PERF_${{ matrix.case }}
+          path: |
+            diagnostic_03b/${{ matrix.case }}/ACTUAL_COMMAND.txt
+            diagnostic_03b/${{ matrix.case }}/INPUT_AUDIT.json
+            diagnostic_03b/${{ matrix.case }}/UPSTREAM_COMMIT.txt
+            diagnostic_03b/${{ matrix.case }}/LAB_COMMIT.txt
+            diagnostic_03b/${{ matrix.case }}/RUN.log
+            diagnostic_03b/${{ matrix.case }}/RUNTIME_SEC.txt
+            diagnostic_03b/${{ matrix.case }}/EXIT_CODE.txt
+            diagnostic_03b/${{ matrix.case }}/PERFORMANCE_QC.json
+            diagnostic_03b/${{ matrix.case }}/UPSTREAM_WHITESPACE_FIX.json
+          if-no-files-found: warn
+          retention-days: 30
