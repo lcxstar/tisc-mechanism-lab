@@ -1,0 +1,82 @@
+name: 03c | Official 401-grid hydrology vs erosion isolation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/03c_surface_module_isolation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  split-surface:
+    name: ${{ matrix.case }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        case: [N401_HYDRO_ONLY, N401_EROS_ONLY]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install original TISC compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+          python3 -m pip install numpy
+      - name: Compile same pinned upstream
+        run: |
+          set -euo pipefail
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c \
+             "whitespace_${{ matrix.case }}.json"
+          make -C upstream/tisc/src tisc
+          echo "CI first use preinitialized" > "$HOME/.tiscdefaults"
+      - name: Copy byte-identical official inputs, audited
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_401_performance_probe.py "${{ matrix.case }}"
+      - name: Run first step with only one surface process active
+        run: |
+          set -uo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd diagnostic_03b/${{ matrix.case }}
+          if [[ "${{ matrix.case }}" == "N401_HYDRO_ONLY" ]]; then
+            FLAGS="-tf0.5 -qisost_model=0 -qerosed_model=0 -qplotting_mode=0"
+          else
+            FLAGS="-tf0.5 -qisost_model=0 -qhydro_model=0 -qplotting_mode=0"
+          fi
+          printf 'tisc demo -V1 %s\n' "$FLAGS" > ACTUAL_COMMAND.txt
+          set +e
+          /usr/bin/time -f '%e' -o RUNTIME_SEC.txt timeout 120 \
+            tisc demo -V1 $FLAGS > RUN.log 2>&1
+          RC=$?
+          set -e
+          echo "$RC" > EXIT_CODE.txt
+          echo "RC=$RC (124 is expected if expensive first step)."
+          tail -n 30 RUN.log
+      - name: Parse elapsed time and actual advancement
+        if: always()
+        run: |
+          python3 scripts/qc_401_performance_probe.py diagnostic_03b/${{ matrix.case }}
+      - name: Save all data for reproduction or diagnosis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03C_${{ matrix.case }}
+          path: |
+            diagnostic_03b/${{ matrix.case }}/RUN.log
+            diagnostic_03b/${{ matrix.case }}/ACTUAL_COMMAND.txt
+            diagnostic_03b/${{ matrix.case }}/INPUT_AUDIT.json
+            diagnostic_03b/${{ matrix.case }}/PERFORMANCE_QC.json
+            diagnostic_03b/${{ matrix.case }}/EXIT_CODE.txt
+            diagnostic_03b/${{ matrix.case }}/RUNTIME_SEC.txt
+          retention-days: 30
+          if-no-files-found: warn
