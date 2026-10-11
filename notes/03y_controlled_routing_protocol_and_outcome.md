@@ -34,3 +34,18 @@ We modify ONLY **two** comparisons that *replace an already-selected downhill ne
 ### Further required mechanism experiments
 
 If the tie-margin experiment does not stabilize the pathways, the next hypothesis is **lake saddle and exact plateau identification** (strict equality and order effects in `Define_Drainage_Net`). This requires independent isolated lake-outlet cases on a small deliberately constructed DEM and a second, separate source branch. Do not combine a large change to lake-fill, exact lake equalities and routing in the first trial. Follow with same-scheme 201/401 long-horizon basin-scale thickness/deflection checks prior to deciding on 801.
+
+## First REAL 03y results, N121, 0–3Myr — completed with baseline equivalence gate PASS
+
+[Four-arm workflow execution 38183870409](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38183870409), N121 3Myr job id 114601948431, completed with GitHub Actions **success**, `F0` and `D0` 7 original physical files **byte-identical** to earlier 03v accepted original, all four runs reached 3 Myr and high-precision independent sediment mass-event ledger errors were **below 0.001%**.
+
+| Difference pair | Terrain RMS (m) | Max local terrain abs (m) | Sediment thickness RMS (m) | Max local thickness abs (m) | Changed river downstream | Basin compacted sediment volume percent |
+|---|---:|---:|---:|---:|---:|---:|
+| Accepted float vs local double `F0-D0` | 0.02688 | 2.1 | 0.02688 | 2.1 | 4 | -0.000049% |
+| Tie-margin float vs local double `F1-D1` | 0.00320 | 0.1 | 0.00351 | 0.1 | 0 | -0.000025% |
+| **Physical change** baseline float `F0` vs tie-margin float `F1` | **7.446** | **304.0** | **5.857** | **116.4** | **678** | **-0.1544%** |
+
+Notable: at 3 Myr a tiny tie-margin **1e-8 gradient (m/m)** reduces the two precision-variant differences in `F1-D1`, including 0 mismatched current downstream links, but **changes the underlying physical trajectory substantially**: float baseline `F0-F1` local elevation max **304m**, sediment thickness max **116.4m**, **678** changed directed river links, **259** changed drainage classes. The position of the maximum sediment thickness moves ~**200.22 km**, even though the **integrated volume changes by only −0.1544%** and centroid moves by ~0.30km. Locations of maxima may be inherently unstable or tied and must not be interpreted in isolation.
+
+**Science decision:** This is a successful sensitivity experiment, **not** verified numerical stabilization. A lower discrepancy between two arbitrarily selected finite precision variants can coexist with dramatic changes in hillslopes/sediment placement. Do NOT adopt tie-margin as a production fix. Await N121 15Myr, N401 3/6Myr; additional micro-DEM tests are still required to demonstrate physically faithful tie handling.
+
