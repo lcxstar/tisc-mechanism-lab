@@ -1,0 +1,2 @@
+case,grid,time_window_Myr,original_input_byte_exact,flexure_enabled,exit_code,wall_seconds,completed_hydro_substeps,hydro_substeps_required,skipped_lake_input_sums,sediment_export_NaN,author_full_15Myr_reproduced
+03j_401_optimized_isolated_first_step,401,0-0.5,true,false,0,71.78,10,10,1605950,true,false
