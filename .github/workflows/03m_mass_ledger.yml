@@ -1,0 +1,86 @@
+name: 03m | Diagnose 401 early sediment-budget gap at internal precision
+
+on:
+  push:
+    branches: [v03m-mass-conservation-ledger]
+    paths:
+      - '.github/workflows/03m_mass_ledger.yml'
+      - 'scripts/profile_03m_mass_ledger.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mass-ledger:
+    name: 'Diagnose internal sediment balance at ${{ matrix.grid }} ${{ matrix.tf }} Myr'
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - grid: N121
+            tf: 15
+            mode: full_coupled
+          - grid: N401
+            tf: 2
+            mode: full_coupled
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build optimized 03k repaired source with diagnostics only
+        run: |
+          set -euo pipefail
+          mkdir -p ledger_03m/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c ledger_03m/source/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c ledger_03m/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c ledger_03m/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c ledger_03m/source
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c ledger_03m/source
+          python3 scripts/profile_03m_mass_ledger.py upstream/tisc/src/surf_proc.c ledger_03m/source
+          make -C upstream/tisc/src tisc
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare exact author inputs
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py '${{ matrix.grid }}' '${{ matrix.mode }}'
+          mkdir -p 'ledger_03m/${{ matrix.grid }}_tf${{ matrix.tf }}'
+          cp -a 'validation_03g/${{ matrix.grid }}/${{ matrix.mode }}/optimized/.' 'ledger_03m/${{ matrix.grid }}_tf${{ matrix.tf }}/'
+          git -C upstream rev-parse HEAD > 'ledger_03m/${{ matrix.grid }}_tf${{ matrix.tf }}/UPSTREAM_COMMIT.txt'
+      - name: Run coupled geology, print loss and suspended stock at full accumulator precision
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd 'ledger_03m/${{ matrix.grid }}_tf${{ matrix.tf }}'
+            echo 'tisc demo -V1 -tf${{ matrix.tf }} -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s 1200 \
+              tisc demo -V1 -tf${{ matrix.tf }} -qplotting_mode=0 > RUN.log 2>&1
+            code=$?
+            set -e
+            echo "$code" > EXIT_CODE.txt
+            echo "03m ${{ matrix.grid }} code=$code"
+            grep -a 'TISC_03M_LEDGER' RUN.log | head -n 8 || true
+            grep -a 'TISC_03M_LEDGER' RUN.log | tail -n 4 || true
+          )
+      - name: Preserve precise mass-balance ledger and original physics outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03M_MASS_LEDGER_${{ matrix.grid }}_TF${{ matrix.tf }}'
+          path: |
+            ledger_03m/source/
+            ledger_03m/${{ matrix.grid }}_tf${{ matrix.tf }}/
+          retention-days: 30
+          if-no-files-found: warn
