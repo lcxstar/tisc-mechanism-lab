@@ -73,26 +73,27 @@ def main(path):
     if profile_file.exists():
         try:
             a=np.loadtxt(profile_file,comments="#")
-            if a.ndim!=2 or a.shape[0]!=n*n or a.shape[1]<4 or a.shape[1]%2:
+            if a.ndim!=2 or a.shape[0]!=n*n or a.shape[1]!=5:
                 raise ValueError(f"Unexpected xyzt shape={a.shape}")
             if not np.isfinite(a).all():raise ValueError("nonfinite displacement")
-            f=a[:,-2]
+            f=a[:,2]
             summary.update({"output_finite":True,"xyzt_columns":int(a.shape[1]),
               "final_downward_w_max_m":float(f.max()),
               "final_downward_w_min_m":float(f.min()),
               "final_downward_w_mean_m":float(f.mean()),
-              "final_center_w_m":float(f[n*n//2])})
+              "final_center_w_m":float(f[n*n//2]),
+              "mean_final_topography_from_xyzt_m":float(a[:,4].mean())})
             grid=a.reshape(n,n,a.shape[1])
             mid=n//2
             with (path/"CENTERLINE_DEFLECTION.csv").open("w",newline="") as h:
                 wr=csv.writer(h);wr.writerow(["x_km","y_km","final_deflection_w_m"])
-                for val in grid[mid,:,:][:,[0,1,-2]]:wr.writerow(val)
+                for val in grid[mid,:,:][:,[0,1,2]]:wr.writerow(val)
             fig,axs=plt.subplots(1,2,figsize=(13,5.2),constrained_layout=True)
-            im=axs[0].imshow(grid[:,:,-2],cmap="RdBu_r",origin="upper",
+            im=axs[0].imshow(grid[:,:,2],cmap="RdBu_r",origin="upper",
                   extent=[-150,350,-250,250])
             fig.colorbar(im,ax=axs[0],shrink=.75,label="w (m)")
             axs[0].set(title="Final TISC elastic deflection",xlabel="X (km)",ylabel="Y (km)")
-            axs[1].plot(grid[mid,:,0],grid[mid,:,-2])
+            axs[1].plot(grid[mid,:,0],grid[mid,:,2])
             axs[1].set(title="Final deflection at Y=0",xlabel="X (km)",ylabel="w (m)")
             axs[1].grid(alpha=.25)
             fig.suptitle("Official 6_tectonics | "+audit["case"])
