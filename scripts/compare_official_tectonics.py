@@ -59,7 +59,7 @@ def main():
         ax.grid(alpha=.25);ax.legend()
         fig.savefig(DEST/"FIG03_TECTONICS_VARIANT_DEFLECTION.png",dpi=180);plt.close(fig)
     detail["all_five_pass"]=all(q.get("numeric_pass",False) for q in output)
-    detail["all_four_controls_pass"]=all(q.get("numeric_pass",False) for q in output if q.get("case")!="original_401") and len(output)==5
+    detail["all_four_controls_pass"]=all(next((q.get("numeric_pass",False) for q in output if q.get("case")==key),False) for key in ("baseline_81","ride0_81","slow2_81","no2_81"))
     (DEST/"EXPERIMENT_03_SUMMARY.json").write_text(json.dumps(detail,indent=2,allow_nan=False))
     print(json.dumps(detail,indent=2,allow_nan=False))
 

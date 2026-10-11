@@ -43,3 +43,7 @@ See [experiment notes](docs/01_flexure_reproduction.md) and [source code verific
 ## Experiment 02 — sensitivity of static flexure to effective elastic thickness
 
 **Status: PASS**, [successful run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38139533984). The official 675.1 m and 711.0 m references reproduce exactly. With only Te varied (5/20/40 km), the 51x51 center displacements are **634.4/695.4/480.2 m**, respectively, illustrating a non-monotonic response at a chosen point for this square load. [Read the numerical analysis](docs/02_te_sensitivity_results.md) and [raw permanent summary CSV](results/02_te_sensitivity/TE_SWEEP_NUMERICS.csv). Both 51x51 and 101x101 grid results passed identical pressure-field QC.
+
+### 401x401 full coupled demo — runtime diagnostic (2026-10-11)
+
+The **literal original 401x401, 0–15 Myr** case did **not** complete on GitHub's runner. Three attempts each reached only `T=0.0000 Myr` before the explicit 1800-second limit (exit 124). It is not a validated reproduction. The four completed 81x81 controls remain reproducible, and are now the default matrix in workflow 03; automatic 30-minute original runs were removed. An independent, explicitly modified-process diagnostic workflow 03b tests the actual bottleneck and a 121x121 intermediate-resolution full-physics case. [Investigation and caveats](notes/03b_401_timeout_investigation.md).

@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        case: [original_401, baseline_81, ride0_81, slow2_81, no2_81]
+        case: [baseline_81, ride0_81, slow2_81, no2_81]
     steps:
       - name: Checkout independent experiment lab
         uses: actions/checkout@v4
