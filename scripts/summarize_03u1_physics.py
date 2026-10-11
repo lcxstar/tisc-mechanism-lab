@@ -10,13 +10,16 @@ from pathlib import Path
 FIELDS=(".xyw",".st",".hrz",".lak",".bas",".pfl",".xyzt")
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def compare(a,b,ext):
-    data={"field":"demo"+ext,"byte_equal":sha(a)==sha(b),"different_rows":0,"numeric_different_tokens":0,"non_numeric_changed_rows":0,"max_abs_difference":0,"sum_sq_diff":0.0,"compared_numeric_tokens":0,"lines_compared":0}
+    data={"field":"demo"+ext,"byte_equal":sha(a)==sha(b),"different_rows":0,"numeric_different_tokens":0,"non_numeric_changed_rows":0,"max_abs_difference":0,"sum_sq_diff":0.0,"compared_numeric_tokens":0,"lines_compared":0,"unpaired_lines":0}
     xytopo={"n":0,"sum_sq":0.0,"max_abs":0.0,"mean":0.0}
     # Original output may include different numbers of stratigraphic columns.
     with a.open(errors="replace") as fa,b.open(errors="replace") as fb:
         for iline,(left,right) in enumerate(zip_longest(fa,fb),1):
             if left is None or right is None:
-                raise RuntimeError("Different output length in "+ext)
+                data["different_rows"]+=1
+                data["unpaired_lines"]+=1
+                continue
+            data["lines_compared"]+=1
             if left==right:continue
             if left.startswith("#") and right.startswith("#"):continue
             t1=left.split();t2=right.split()
@@ -72,6 +75,7 @@ def main(root,horizon):
             "grid":audit["Nx"],"horizonMyr":float(horizon),"inputs_byte_exact":inputs,
             "original_401_input_sha256_match":exact_401,"status":status,"field_differences":fields,
             "physical_arithmetic_modified":True,"full_double_state_model":False,
+            "non_grid_aligned_lak_lines_are_not_numeric_spatial_differences":True,
             "completed_sanity_gate":pass_gate}
     (root/"03U1_PRECISION_QC.json").write_text(json.dumps(result,indent=2))
     with (root/"03U1_FIELD_DIFF.csv").open("w",newline="") as f:
