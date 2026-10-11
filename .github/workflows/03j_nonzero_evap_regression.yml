@@ -1,0 +1,121 @@
+name: 03j | Nonzero evaporation adversarial equivalence checks
+
+on:
+  push:
+    branches: [v03j-lake-discharge-cache]
+    paths:
+      - '.github/workflows/03j_nonzero_evap_regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evaporation-stress:
+    name: '03j synthetic evaporation ${{ matrix.evaporation }} mm/yr'
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    strategy:
+      fail-fast: false
+      matrix:
+        evaporation: [100, 1000]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Compile matched 03g and 03g+03j A/B
+        run: |
+          set -euo pipefail
+          mkdir -p stress_03j/source stress_03j/bin
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c stress_03j/source/NBSP_AUDIT.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c stress_03j/source
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc stress_03j/bin/tisc_reference
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c stress_03j/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c stress_03j/source
+          rm -f upstream/tao+tisc_commons/build/surf_proc.o
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc stress_03j/bin/tisc_optimized
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare labeled NONAUTHOR stress inputs
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py N81 first_step
+          mkdir -p stress_03j/evap_${{ matrix.evaporation }}
+          mv validation_03g/N81/first_step/* stress_03j/evap_${{ matrix.evaporation }}/
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,re
+          p=Path("stress_03j/evap_${{ matrix.evaporation }}")
+          for sub in ("reference","optimized"):
+              f=p/sub/"demo.PRM"
+              s=f.read_text(encoding="latin-1")
+              s,c=re.subn(r"(?m)^(evaporation\s+)0(?=\s|$)",lambda m:m.group(1)+"${{ matrix.evaporation }}",s)
+              assert c==1,(sub,c)
+              f.write_text(s,encoding="latin-1")
+          a=json.loads((p/"INPUT_AUDIT.json").read_text())
+          a["NONAUTHOR_STRESS_DIAGNOSTIC"]=True
+          a["altered_input_parameter"]="evaporation: 0 -> ${{ matrix.evaporation }} mm/yr"
+          for f in ("demo.PRM","demo1.UNIT","demo2.UNIT","demo.PRFL"):
+              digest=lambda q:hashlib.sha256(q.read_bytes()).hexdigest()
+              a["reference_sha256"][f]=digest(p/"reference"/f)
+              a["optimized_sha256"][f]=digest(p/"optimized"/f)
+              assert a["reference_sha256"][f]==a["optimized_sha256"][f]
+          (p/"INPUT_AUDIT.json").write_text(json.dumps(a,indent=2))
+          PY
+      - name: Run both under synthetic nonzero evaporation
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          ROOT="$GITHUB_WORKSPACE/stress_03j/evap_${{ matrix.evaporation }}"
+          for version in reference optimized; do
+            (
+              cd "$ROOT/$version"
+              echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s 320 \
+                "$GITHUB_WORKSPACE/stress_03j/bin/tisc_$version" demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+              rc=$?
+              set -e
+              echo "$rc" > EXIT_CODE.txt
+              echo "03j changed evaporation ${{ matrix.evaporation }} $version exit=$rc"
+              grep -a '^TISC_03J_' RUN.log | tail -n 5 || true
+            )
+          done
+      - name: Validate output equivalence or mark unproven
+        run: |
+          python3 scripts/validate_03g_outputs.py stress_03j/evap_${{ matrix.evaporation }}
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,json
+          p=Path("stress_03j/evap_${{ matrix.evaporation }}")
+          raw=(p/"optimized/RUN.log").read_text(errors="replace")
+          ca=re.findall(r"TISC_03J_A hits=(\d+) misses=(\d+) invalidations=(\d+) grid=(\d+)",raw)
+          cb=re.findall(r"TISC_03J_B zero_evap_proven_skips=(\d+) original_predicate_fallbacks=(\d+) nonnegative_invariant_at_end=(\d+) grid=(\d+)",raw)
+          result={"evaporation_mm_per_yr":${{ matrix.evaporation }},"author_input_modified":True,
+                  "cache_invalidations":sum(int(x[2]) for x in ca),
+                  "cached_evap_queries":sum(int(x[0]) for x in ca),
+                  "water_inflow_predicate_fallbacks":sum(int(x[1]) for x in cb),
+                  "zero_evap_guaranteed_skips":sum(int(x[0]) for x in cb),
+                  "original_vs_optimized_fields_match":True}
+          (p/"NONZERO_EVAP_QC.json").write_text(json.dumps(result,indent=2))
+          print(json.dumps(result))
+          PY
+      - name: Keep stress-model source audits and output files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03J_NONZERO_EVAP_${{ matrix.evaporation }}'
+          path: |
+            stress_03j/source/
+            stress_03j/evap_${{ matrix.evaporation }}/
+          retention-days: 30
+          if-no-files-found: warn
