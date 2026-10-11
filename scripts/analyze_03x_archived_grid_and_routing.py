@@ -16,7 +16,7 @@ def run(n, variant="reference"):
         dens=[float(v) for v in hdr.split("Dens:")[1].split("water")[0].split()]
         raw=np.loadtxt(f)
     N=int(np.sqrt(len(raw)))
-    assert N*N==len(raw) and raw.shape[1]==len(dens)+1
+    assert N*N==len(raw) and raw.shape[1]==len(dens)+2
     h=raw[:,2:]
     sediment=np.diff(h,axis=1)[:,np.isclose(dens[1:],2200)]
     thickness=np.maximum(0,sediment).sum(axis=1)
