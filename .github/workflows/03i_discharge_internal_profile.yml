@@ -1,0 +1,87 @@
+name: 03i | Profile inside Calculate_Discharge at 121 and 401
+
+on:
+  push:
+    branches: [v03i-discharge-profile]
+    paths:
+      - '.github/workflows/03i_discharge_internal_profile.yml'
+      - 'scripts/profile_tisc_discharge.py'
+      - 'scripts/summarize_tisc_discharge.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discharge-internals:
+    name: '03i discharge bottleneck ${{ matrix.case }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 11
+    strategy:
+      fail-fast: false
+      matrix:
+        case: [N121_FULL, N401_ISO_OFF]
+    steps:
+      - name: Checkout 03i performance validation branch
+        uses: actions/checkout@v4
+      - name: Checkout exact original TISC
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install build requirements
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build 03g validated derivative with 03d 03e 03i nested timing
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p diagnostic_03i/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c diagnostic_03i/source/NBSP_AUDIT.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c diagnostic_03i/source
+          python3 scripts/profile_tisc_surface.py upstream/tisc/src/surf_proc.c diagnostic_03i/source
+          python3 scripts/profile_tisc_drainage.py upstream/tisc/src/surf_proc.c diagnostic_03i/source
+          python3 scripts/profile_tisc_discharge.py upstream/tisc/src/surf_proc.c diagnostic_03i/source
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Run pinned author's example with identical tectonics and hydro properties
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_401_performance_probe.py '${{ matrix.case }}'
+          mkdir -p 'diagnostic_03i'
+          mv 'diagnostic_03b/${{ matrix.case }}' 'diagnostic_03i/${{ matrix.case }}'
+          cp diagnostic_03i/source/*AUDIT.json 'diagnostic_03i/${{ matrix.case }}/' || true
+          git -C upstream rev-parse HEAD > 'diagnostic_03i/${{ matrix.case }}/UPSTREAM_COMMIT.txt'
+          git rev-parse HEAD > 'diagnostic_03i/${{ matrix.case }}/LAB_COMMIT.txt'
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd 'diagnostic_03i/${{ matrix.case }}'
+            echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            if [[ '${{ matrix.case }}' == 'N121_FULL' ]]; then seconds=100; else seconds=210; fi
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s "$seconds" \
+              tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "03i ${{ matrix.case }} return=$rc"
+            grep -a '^TISC_DISCHARGE' RUN.log | tail -n 7 || true
+            grep -a '^TISC_PROFILE' RUN.log | tail -n 8 || true
+          )
+          python3 scripts/summarize_tisc_surface_profile.py 'diagnostic_03i/${{ matrix.case }}'
+          python3 scripts/summarize_tisc_discharge.py 'diagnostic_03i/${{ matrix.case }}'
+      - name: Upload full log progress matrices JSON and source diffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03I_DISCHARGE_${{ matrix.case }}'
+          path: |
+            diagnostic_03i/source/
+            diagnostic_03i/${{ matrix.case }}/
+          retention-days: 30
+          if-no-files-found: warn
