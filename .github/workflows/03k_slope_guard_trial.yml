@@ -1,0 +1,154 @@
+name: 03k | Experimental negative-slope erosion correction, paired tests
+
+on:
+  push:
+    branches: [v03k-slope-guard-experiment]
+    paths:
+      - '.github/workflows/03k_slope_guard_trial.yml'
+      - 'scripts/patch_03k_nonnegative_incision_slope.py'
+      - 'scripts/summarize_03k_experiment.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  slope-guard-gate:
+    name: 'Scientific slope-guard test ${{ matrix.case }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 21
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - case: N121_original_coupled
+            n: N121
+            mode: full_coupled
+            flags: '-qplotting_mode=0'
+            horizon: '15'
+            timeout_s: 600
+          - case: N401_first_coupled
+            n: N401
+            mode: first_step
+            flags: '-tf0.5 -qplotting_mode=0'
+            horizon: '0.5'
+            timeout_s: 900
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Compile documented experimental scientific fix in temporary source
+        run: |
+          set -euo pipefail
+          mkdir -p fix_03k/source
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c fix_03k/source/NBSP_AUDIT.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c fix_03k/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c fix_03k/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c fix_03k/source
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c fix_03k/source
+          make -C upstream/tisc/src tisc
+          sha256sum upstream/bin/tisc > fix_03k/source/EXPERIMENTAL_EXECUTABLE.sha256
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare original author input except downsampling only when 121
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py '${{ matrix.n }}' '${{ matrix.mode }}'
+          mkdir -p 'fix_03k/${{ matrix.case }}'
+          cp -a validation_03g/${{ matrix.n }}/${{ matrix.mode }}/optimized/. 'fix_03k/${{ matrix.case }}/'
+          git -C upstream rev-parse HEAD > 'fix_03k/${{ matrix.case }}/AUTHOR_COMMIT.txt'
+          git rev-parse HEAD > 'fix_03k/${{ matrix.case }}/LAB_COMMIT.txt'
+      - name: Run erosion repair and check sediment flux is finite
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd 'fix_03k/${{ matrix.case }}'
+            echo 'tisc demo -V1 ${{ matrix.flags }}' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s '${{ matrix.timeout_s }}' \
+              tisc demo -V1 ${{ matrix.flags }} > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "03k physical correction ${{ matrix.case }} exit=$rc"
+            grep -aE 'TISC_03K_GUARD|outp_seds:|^T=' RUN.log | tail -n 14 || true
+          )
+          python3 scripts/summarize_03k_experiment.py 'fix_03k/${{ matrix.case }}' '${{ matrix.horizon }}'
+      - name: Upload actual physical results, full logs, regression report and source patch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03K_SLOPE_GUARD_${{ matrix.case }}'
+          path: |
+            fix_03k/source/
+            fix_03k/${{ matrix.case }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  scientific-fix-full-401:
+    name: 'Scientific correction 401 0–15 Myr, original flexure'
+    needs: slope-guard-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build candidate with physical slope-domain guard
+        run: |
+          set -euo pipefail
+          mkdir -p fix_03k/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c fix_03k/source/NBSP_AUDIT.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c fix_03k/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c fix_03k/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c fix_03k/source
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c fix_03k/source
+          make -C upstream/tisc/src tisc
+          echo CI > "$HOME/.tiscdefaults"
+          python3 scripts/prepare_03g_validation.py N401 full_coupled
+          mkdir -p fix_03k/N401_full
+          cp -a validation_03g/N401/full_coupled/optimized/. fix_03k/N401_full/
+      - name: Run entire author 401 input with original flexure and experimental slope guard
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd fix_03k/N401_full
+            echo 'tisc demo -V1 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s 6000 \
+              tisc demo -V1 -qplotting_mode=0 > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "03k fixed 401 full exit=$rc"
+            grep -aE 'TISC_03K_GUARD|outp_seds:|^T=' RUN.log | tail -n 25 || true
+          )
+          python3 scripts/summarize_03k_experiment.py fix_03k/N401_full 15
+      - name: Upload 401 full corrected scientific experiment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC03K_401_FULL_EXPERIMENTAL_PHYSICS_FIX
+          path: |
+            fix_03k/source/
+            fix_03k/N401_full/
+          retention-days: 30
+          if-no-files-found: warn
