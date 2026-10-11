@@ -1,0 +1,5 @@
+case,original_fault_block_id,first_fault_age_Myr,first_fault_shift_x_km,second_fault_block_id,second_fault_age_Myr,second_fault_shift_x_km
+baseline_81,1,0,125.0,0,6,62.5
+ride0_81,1,0,100.0,0,6,62.5
+slow2_81,1,0,93.8,0,6,31.2
+no2_81,0,0,100.0,,,
