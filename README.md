@@ -1,3 +1,9 @@
+## Current milestone — 03k, restored full 401-grid flexure and traced the sediment NaN
+
+[03k scientific audit](notes/03k_nan_root_cause_and_401_flexure_results.md) | [full coupled 401 baseline GitHub run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38157980373) | [independent experimental slope-corrected 401 run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38158590091) | [experimental comparison](results/03_tectonics/03K_EXPERIMENTAL_GUARD_VALIDATION.csv)
+
+Confirmed with instrumented original formula: the first `outp_seds=-nan` is caused by negative outlet slopes passed into `pow(slope,1.05)` for `erosed_model=6`. First observed faulty nodes are (19,120) on N121 and (400,151) on the original N401. A separate, explicitly labeled *physical correction* handles negative incision slopes with zero incision contribution; unlike 03g/03j, this changes a physical formula only for an invalid input domain. The corrected **121 grid 0–15 Myr** and **401 grid 0–0.5 Myr with original flexure enabled** both finished with zero sediment NaNs. Five published physical output files for both trials are byte-exact against the previous uncorrected 03j version. Mass-budget closure still needs full-precision validation. Full 401 **0–15 Myr runs have been started in separately retained original-formula and slope-corrected CI workflows**, but should not be called reproduced until their model exit, last T=15 timestamp, and outputs are verified.
+
 ## Current milestone — 03j, first complete 401×401 surface-routing timestep
 
 [03j audited results](notes/03j_lake_discharge_optimization_results.md) | [81/121 eight-case validation](results/03_tectonics/03J_81_121_EQUIVALENCE.csv) | [401 benchmark](results/03_tectonics/03J_N401_FIRST_STEP.csv) | [GitHub Actions verified run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38157360909)
