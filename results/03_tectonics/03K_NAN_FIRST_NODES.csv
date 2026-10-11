@@ -1,0 +1,3 @@
+grid,mode,first_bad_substep,first_bad_row,first_bad_col,boundary,drainage_type,dr_row,dr_col,slope_dimensionless,exponent,discharge_m3_s,sediment_transfer_before_kg_s,first_nan_mass,notes
+121,full_0_15Myr,0,19,120,true,E,-9999,-9999,-1.83105475227e-9,1.04999995232,211.852081299,0,-nan,NaN propagated immediately into east-boundary sediment export
+401,first_0_0.5Myr_iso_off,0,400,151,true,E,-9999,-9999,-6.10351547081e-9,1.04999995232,4.27552843094,0,-nan,NaN propagated immediately into south-boundary sediment export
