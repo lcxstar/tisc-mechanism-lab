@@ -2,7 +2,11 @@
 
 Independent, **public and reproducible** numerical experiments for learning the actual behavior of the [TISC](https://github.com/danigeos/tisc) program before applying it to tectonic–sedimentary evolution of the Junggar Basin or the North Tianshan.
 
-## Current milestone — 01, official flexure baseline
+## Current milestone — 03e, pinned official TISC surface-process diagnosis
+
+**11 October 2026:** Official static flexure and Te experiments are validated. Four 81x81 tectonic control cases run to 15 Myr, but their sediment-export mass balance is not validated. The original coupled 401x401 case is still **NOT reproduced**.
+
+**Measured bottleneck:** [03d stage timing](notes/03d_surface_profile_results.md) shows the first 401-grid surface step blocks in `Define_Drainage_Net()` rather than the post-discharge reorder or fluvial transport. [03e nested timing](notes/03e_drainage_internal_results.md) confirms the growing cost is inside the ascending lake/drainage node sweep (136,224 of 160,801 nodes reached by 113.8 s; 120-s diagnostic timeout). Potential repeated lake allocation, list searches and merges are source-level candidates, not yet proven by per-function timings. Permanent [node progress CSV](results/03_tectonics/DRAINAGE_401_PROGRESS_03E.csv) and audit-backed scripts/workflows are archived here.
 
 This laboratory starts with **pinned upstream source code, with an explicitly audited two-character compile-only whitespace normalization** and the author's published demo inputs. It does **not** copy the custom TISC patches or Junggar-specific geometry from `junggar-tisc-model`.
 
