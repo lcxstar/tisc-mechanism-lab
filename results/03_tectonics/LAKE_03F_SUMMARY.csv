@@ -1,0 +1,4 @@
+experiment,run_id,grid,completed_scans,processed_nodes_last,grid_nodes,exit_code,add_calls,add_duplicates,add_total_seconds,add_linear_search_seconds,add_realloc_seconds,merge_calls,merge_inclusive_seconds,merged_node_copies,new_lake_calls,new_lake_seconds,max_lake_nodes,notes
+03f,38149385843,121,10,14641,14641,0,1776916,0,2.260184,2.070742,0.061660,270,2.044510,1630736,340,0.000039,14603,first_0.5_Myr_completed
+03f,38149226002,401,0,144416,160801,124,8957749,0,137.404451,136.039505,0.457922,126,134.480645,8813333,143,0.000021,144399,140s_timeout_first_probe
+03f,38149385843,401,0,156704,160801,124,10327263,0,132.730656,131.630049,0.407664,135,130.053296,10170559,143,0.000015,156696,140s_timeout_repeat
