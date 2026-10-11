@@ -33,7 +33,7 @@ def candidate_rows(path: Path):
 
 def reference_check(log: Path, size: int, target: float):
     rows=candidate_rows(log)
-    centers=[v for x,y,v in rows if abs(x)<1e-4 and abs(y)<1e-4]
+    centers=[row[2] for row in rows if abs(row[0])<1e-4 and abs(row[1])<1e-4]
     value=centers[-1] if centers else None
     return {
         "grid": f"{size}x{size}",
