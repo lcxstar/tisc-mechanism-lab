@@ -12,9 +12,11 @@
 - [81/121 preliminary convergence CSV](results/03_tectonics/03V_TIME_SPACE_CONVERGENCE_EARLY.csv)
 - [Per-substep native-state hash CI](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38179009871)
 - [Grid/time factorial experiments](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178558812)
-- [Original 401-grid 15-Myr precision-endpoint comparison](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178743124)
+- [Original 401-grid 15-Myr precision-endpoint comparison (PASS, precision sensitivity remains)](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178743124)
+- [**FINAL 401/15Myr and 14-job precision-convergence findings**](notes/03v_FINAL_401_full15_results_and_14run_convergence.md)
+- [**Final 14-condition numerical QC CSV**](results/03_tectonics/03V_FINAL_GRID_TIMESTEP_14_GROUPS.csv)
 
-Until 401-grid long-time and across-grid tests complete, **do not calibrate Junggar sediment volumes or assert global solver convergence**.
+All planned **14/14** grid/time and 401 full-15 Myr paired benchmarks have now finished. **Scientific convergence is NOT established**: at 401/15 Myr, local-double `Sediment()` versus original `float` temporary produces 48.028m terrain RMS difference, 722.8m maximum local terrain difference, ~490m maximum local output sediment-thickness difference, and 82,656 different downstream links despite both corrected mass ledgers satisfying <0.001%. Prior to Junggar model calibration, isolate lake/outlet numerical discontinuities and verify same-scheme physical grid convergence.
 
 ## 03t — Solved: apparent 33–34% missing sediment caused by float32 accumulation
 
