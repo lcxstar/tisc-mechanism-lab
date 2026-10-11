@@ -26,6 +26,20 @@ The **deepest .hrz layer is the basal interface elevation** and does not isolate
 
 **Finding:** aggregated sediment volume shows an apparent approach to the 401 value as grid is refined, but 201 vs 401 still has 48.74m RMS sediment thickness discrepancy and 122.63m RMS final topography discrepancy. No assertion of numerical convergence with only four grid settings, or that 401 is correct. Test 801 ONLY if further physical and outlet checks warrant and hardware permits.
 
+
+## Explicit deflection convergence check (instead of using deepest .hrz elevation)
+
+The independent `demo.xyzt` scientific export contains the plate deflection `w` as its third column. This was directly re-extracted from the paired accepted artifacts; same-scheme deflection RMS relative to bilinearly interpolated 401 benchmark:
+
+| original benchmark Nx | RMS of true plate deflection `w` vs 401 |
+|---:|---:|
+| 81 | **119.74 m** |
+| 121 | **54.89 m** |
+| 201 | **50.12 m** |
+| 401 | comparison reference |
+
+The deepest `demo.hrz` surface is **not itself w**. Across 201→401, true flexure still differs spatially by ~50m RMS at 15 Myr. New reproducible `03x` CI now reads `demo.xyzt` separately and records both basal-horizon and true-flexure errors; output values should be verified from the completed current CI job.
+
 ## First changed river/lake routing node diagnostics
 
 - Comparison of 401 exact same-dt 03u1 local-double vs 03t original (only temporary `Sediment() dh_sed` precision changed). Stage **t=2.5Myr** has **zero** changed raw `demo.xyw` downstream links or node types.
