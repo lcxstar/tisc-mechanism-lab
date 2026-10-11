@@ -2,9 +2,11 @@
 
 Independent, **public and reproducible** numerical experiments for learning the actual behavior of the [TISC](https://github.com/danigeos/tisc) program before applying it to tectonic–sedimentary evolution of the Junggar Basin or the North Tianshan.
 
-## Current milestone — 03e, pinned official TISC surface-process diagnosis
+## Current milestone — 03f, lake merge bottleneck quantitatively isolated
 
 **11 October 2026:** Official static flexure and Te experiments are validated. Four 81x81 tectonic control cases run to 15 Myr, but their sediment-export mass balance is not validated. The original coupled 401x401 case is still **NOT reproduced**.
+
+**03f measured root cause:** [Lake-operation counts and per-function timings](notes/03f_lake_operation_results.md) show the 401-grid slowdown is overwhelmingly caused by linear duplicate searches in `Add_Node_To_Lake()` during massive node re-additions in `Unify_Lakes()`. Two independent 401 performance probes reached 144,416 and 156,704 of 160,801 nodes before their 140-second cutoffs; both remain incomplete. Permanent [numeric comparison](results/03_tectonics/LAKE_03F_SUMMARY.csv) and [401 node-progress samples](results/03_tectonics/LAKE_401_PROGRESS_03F.csv) are archived. A patched fast implementation must be numerically validated against the pinned upstream baseline before any full original case is called reproduced.
 
 **Measured bottleneck:** [03d stage timing](notes/03d_surface_profile_results.md) shows the first 401-grid surface step blocks in `Define_Drainage_Net()` rather than the post-discharge reorder or fluvial transport. [03e nested timing](notes/03e_drainage_internal_results.md) confirms the growing cost is inside the ascending lake/drainage node sweep (136,224 of 160,801 nodes reached by 113.8 s; 120-s diagnostic timeout). Potential repeated lake allocation, list searches and merges are source-level candidates, not yet proven by per-function timings. Permanent [node progress CSV](results/03_tectonics/DRAINAGE_401_PROGRESS_03E.csv) and audit-backed scripts/workflows are archived here.
 
