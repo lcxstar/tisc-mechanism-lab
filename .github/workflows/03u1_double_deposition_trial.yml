@@ -1,0 +1,106 @@
+name: 03u1 | Controlled float-to-double deposition increment
+
+on:
+  push:
+    branches: [v03u1-double-sediment-increment]
+    paths:
+      - '.github/workflows/03u1_double_deposition_trial.yml'
+      - 'scripts/patch_03u1_double_sediment_increment.py'
+      - 'scripts/summarize_03u1_physics.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  localized-double:
+    name: '03u0 ${{ matrix.grid }} ${{ matrix.horizon }}Myr, original flexure, paired'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - grid: N81
+            horizon: 15
+            max_time: 700
+          - grid: N121
+            horizon: 15
+            max_time: 900
+          - grid: N401
+            horizon: 0.5
+            max_time: 900
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout pinned upstream original author source
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler and GNU time
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Compile accepted 03t and independent observed derivative
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p qc_03u1/source qc_03u1/bin
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c qc_03u1/source/NBSP_AUDIT.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c qc_03u1/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c qc_03u1/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c qc_03u1/source
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c qc_03u1/source
+          python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c qc_03u1/source
+          python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c qc_03u1/source
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc qc_03u1/bin/tisc_reference
+          python3 scripts/patch_03u1_double_sediment_increment.py upstream/tisc/src/surf_proc.c qc_03u1/source
+          rm -f upstream/tao+tisc_commons/build/surf_proc.o
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc qc_03u1/bin/tisc_optimized
+          sha256sum qc_03u1/bin/tisc_reference qc_03u1/bin/tisc_optimized > qc_03u1/source/EXECUTABLES.sha256
+          git rev-parse HEAD > qc_03u1/source/LAB_COMMIT.txt
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Materialize identical original tectonic inputs
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py '${{ matrix.grid }}' full_coupled
+          mkdir -p qc_03u1/${{ matrix.grid }}
+          cp -a validation_03g/${{ matrix.grid }}/full_coupled/. qc_03u1/${{ matrix.grid }}/
+          cmp qc_03u1/${{ matrix.grid }}/reference/demo.PRM qc_03u1/${{ matrix.grid }}/optimized/demo.PRM
+      - name: Execute baseline and read-only observer independently
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          ROOT="$GITHUB_WORKSPACE/qc_03u1/${{ matrix.grid }}"
+          for variant in reference optimized; do
+            (
+              cd "$ROOT/$variant"
+              echo 'tisc demo -V1 -tf${{ matrix.horizon }} -qplotting_mode=0' > ACTUAL_COMMAND.txt
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s ${{ matrix.max_time }} \
+                "$GITHUB_WORKSPACE/qc_03u1/bin/tisc_$variant" demo -V1 -tf${{ matrix.horizon }} -qplotting_mode=0 > RUN.log 2>&1
+              code=$?
+              set -e
+              echo "$code" > EXIT_CODE.txt
+              echo "03u0 ${{ matrix.grid }} $variant exit=$code"
+              grep -a 'TISC_03T_CORRECTED_BALANCE' RUN.log | tail -n 3 || true
+            )
+          done
+      - name: Quantify all physical numeric differences, do not falsely require byte equality
+        run: |
+          python3 scripts/summarize_03u0_precision.py qc_03u1/${{ matrix.grid }} ${{ matrix.horizon }}
+      - name: Preserve paired physical outputs, local double source diff and QC
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC_03U1_LOCAL_DOUBLE_${{ matrix.grid }}_TF${{ matrix.horizon }}'
+          path: |
+            qc_03u1/source/
+            qc_03u1/${{ matrix.grid }}/
+          retention-days: 30
+          if-no-files-found: warn
