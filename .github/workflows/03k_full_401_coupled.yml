@@ -1,0 +1,93 @@
+name: 03k | Restore original flexure and run coupled 401 tectonics
+
+on:
+  push:
+    branches: [v03k-full401-sediment-audit]
+    paths:
+      - '.github/workflows/03k_full_401_coupled.yml'
+      - 'scripts/summarize_03k_coupled_run.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  coupled-401:
+    name: 'Full 401x401 original flexure, horizon ${{ matrix.mode }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: first_0_5_Myr
+            flags: '-tf0.5 -qplotting_mode=0'
+            horizon: '0.5'
+            limit_s: 900
+          - mode: original_15_Myr
+            flags: '-qplotting_mode=0'
+            horizon: '15'
+            limit_s: 6000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler and timing utilities
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Compile separately validated 03g + 03j-A + 03j-B
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p diagnostic_03k/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c diagnostic_03k/source/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c diagnostic_03k/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c diagnostic_03k/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c diagnostic_03k/source
+          make -C upstream/tisc/src tisc
+          sha256sum upstream/bin/tisc > diagnostic_03k/source/EXECUTABLE_SHA256.txt
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Materialize author's complete original 401x401 inputs
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_03g_validation.py N401 full_coupled
+          mkdir -p 'diagnostic_03k/${{ matrix.mode }}'
+          cp -a validation_03g/N401/full_coupled/optimized/. 'diagnostic_03k/${{ matrix.mode }}/'
+          git rev-parse HEAD > 'diagnostic_03k/${{ matrix.mode }}/LAB_COMMIT.txt'
+          git -C upstream rev-parse HEAD > 'diagnostic_03k/${{ matrix.mode }}/AUTHOR_COMMIT.txt'
+          grep -E '^(isost_model|Te|Timefinal|Nx|Ny|hydro_model|evaporation|erosed_model)[[:space:]]' 'diagnostic_03k/${{ matrix.mode }}/demo.PRM'
+      - name: Run full physics with original isostasy and erosion
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          ROOT="$GITHUB_WORKSPACE/diagnostic_03k/${{ matrix.mode }}"
+          (
+            cd "$ROOT"
+            echo "tisc demo -V1 ${{ matrix.flags }}" > ACTUAL_COMMAND.txt
+            echo "Started $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s ${{ matrix.limit_s }} \
+              tisc demo -V1 ${{ matrix.flags }} > RUN.log 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > EXIT_CODE.txt
+            echo "03k coupled ${{ matrix.mode }} exit=$rc"
+            grep -aE 'T=|outp_seds:|^TISC_03J_' RUN.log | tail -n 25 || true
+          )
+          python3 scripts/summarize_03k_coupled_run.py 'diagnostic_03k/${{ matrix.mode }}' '${{ matrix.horizon }}'
+      - name: Retain inputs, time sequence, numerical arrays, QA and exact patches
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'TISC03K_COUPLED_${{ matrix.mode }}'
+          path: |
+            diagnostic_03k/source/
+            diagnostic_03k/${{ matrix.mode }}/
+          retention-days: 30
+          if-no-files-found: warn
