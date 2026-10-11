@@ -12,7 +12,7 @@ def main(src,out):
  if "tisc_03ja_lake_evap" not in s or "TISC_03K_GUARD" not in s:
   raise RuntimeError("03m requires validated 03g + 03j + labeled 03k correction")
  if "TISC_03M_LEDGER" in s: raise RuntimeError("already instrumented")
- old='\tPRINT_SUMLINE("eros_nosd: %+8.2e N\\t sedim_inc: %+8.2e N   outp_seds:   %+8.2e N  ",  ctx->total_bedrock_eros_mass*g, ctx->total_sed_mass*g, total_lost_sed_mass*g);'
+ old='\tPRINT_SUMLINE("eros_nosd:'
  if s.count(old)!=1:raise RuntimeError("expected one diagnostic anchor, got "+str(s.count(old)))
  ins=r'''
     /* 03m no-change QC: print internal mass fields at 16+ digits. */
