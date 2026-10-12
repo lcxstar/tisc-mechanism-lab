@@ -1,0 +1,112 @@
+name: 10a | North Tian Shan south-Junggar first-order flexure gate
+on:
+  push:
+    branches: [v10-north-tianshan-south-junggar-flexure-pilot]
+    paths:
+      - '.github/workflows/10a_north_tianshan_static_flexure.yml'
+      - 'scripts/10a_north_tianshan_flexure.py'
+      - 'docs/10A_NORTH_TIANSHAN_SOUTH_JUNGGAR_STATIC_FLEXURE_TEST.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  static-flexure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 95
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler and plotting dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y build-essential gfortran time
+          python3 -m pip install -q numpy matplotlib
+          echo 'CI runner initialised; no first-use mail' > "$HOME/.tiscdefaults"
+      - name: Compile ORIGINAL static -Q solver with mandatory NBSP whitespace normalisation
+        run: |
+          set -euo pipefail
+          mkdir -p results/10_north_tianshan_pilot
+          test "$(git -C upstream rev-parse HEAD)" = 'd18b7d270f4d671b80223e10dede329ad35cafdd'
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c results/10_north_tianshan_pilot/UPSTREAM_NBSP_FIX.json
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          sha256sum upstream/bin/tisc > results/10_north_tianshan_pilot/TISC_EXE_SHA256.txt
+          git -C upstream rev-parse HEAD > results/10_north_tianshan_pilot/UPSTREAM_COMMIT.txt
+          git rev-parse HEAD > results/10_north_tianshan_pilot/LAB_BRANCH_COMMIT.txt
+      - name: Create uncalibrated geological-direction loads and run all nine real -Q models
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          root="$GITHUB_WORKSPACE/results/10_north_tianshan_pilot"
+          python3 scripts/10a_north_tianshan_flexure.py prepare --root "$root"
+          tail -n +2 "$root/RUN_MATRIX.tsv" | while IFS=$'\t' read -r name command; do
+            test -n "$name"
+            echo "::group::V10A $name"
+            (
+              cd "$root/$name"
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SECONDS.txt timeout -k 10s 1200 bash -c "$command" > RUN.log 2>&1
+              code=$?
+              set -e
+              echo "$code" > EXIT_CODE.txt
+              gzip -9 RUN.log
+              echo "exit=$code rows=$(gzip -cd RUN.log.gz | awk 'NF==4 && $1 ~ /^-?[0-9]/ {n++} END{print n+0}')"
+              test "$code" -eq 0
+            )
+            echo "::endgroup::"
+          done
+      - name: Re-check 11-grid and 51-grid original author numerical benchmarks
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          root="$GITHUB_WORKSPACE/results/10_north_tianshan_pilot"
+          (
+            cd upstream/tisc/demo
+            tisc -Q2nd_example_load.xyp -N11 -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4 > "$root/Q_ORIGINAL_N11.log"
+            tisc -Q2nd_example_load.xyp -N51 -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4 > "$root/Q_ORIGINAL_N51.log"
+          )
+          gzip -9 "$root/Q_ORIGINAL_N11.log" "$root/Q_ORIGINAL_N51.log"
+          cp upstream/tisc/demo/2nd_example_load.xyp "$root/ORIGINAL_AUTHOR_2ND_LOAD.xyp"
+          sha256sum "$root/ORIGINAL_AUTHOR_2ND_LOAD.xyp" > "$root/ORIGINAL_AUTHOR_2ND_LOAD.sha256"
+      - name: Compute physically discriminating acceptance, native transects and vector graphics
+        if: always()
+        run: |
+          set +e
+          python3 scripts/10a_north_tianshan_flexure.py analyze --root results/10_north_tianshan_pilot
+          code=$?
+          set -e
+          echo "$code" > results/10_north_tianshan_pilot/V10A_ANALYSIS_EXIT_CODE.txt
+          cat results/10_north_tianshan_pilot/V10A_ACCEPTANCE.md || true
+      - name: Archive every source-derived native run and full QC
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: V10A_NORTH_TIANSHAN_JUNGGAR_NATIVE_FLEXURE
+          path: results/10_north_tianshan_pilot/
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Permanently commit all case-by-case inputs, log and reference evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d results/10_north_tianshan_pilot
+          git add -f results/10_north_tianshan_pilot
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m "results(v10a): archive actual north-Tianshan static foreland flexure experiments and QC"
+            git pull --rebase origin v10-north-tianshan-south-junggar-flexure-pilot
+            git push origin HEAD:v10-north-tianshan-south-junggar-flexure-pilot
+          fi
+      - name: Final scientific acceptance gate
+        run: |
+          set -euo pipefail
+          test "$(cat results/10_north_tianshan_pilot/V10A_ANALYSIS_EXIT_CODE.txt)" = '0'
+          echo 'PASS: V10A static flexural response and author numerical references accepted.'
