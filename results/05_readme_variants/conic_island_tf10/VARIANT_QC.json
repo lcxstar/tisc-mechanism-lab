@@ -8,9 +8,9 @@
     "native_output_nodes": 10201,
     "expected_nodes": 10201,
     "native_values_finite": true,
-    "last_printed_age": null,
+    "last_printed_age": 10.0,
     "expected_end": 10,
     "command": "tisc conic_island -tf10 -V1 -qplotting_mode=0"
   },
-  "pass": false
+  "pass": true
 }
