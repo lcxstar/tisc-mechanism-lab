@@ -54,6 +54,8 @@ def field(case):
  wx=np.ones(N);wx[0]=wx[-1]=.5
  trap=(wx[None,:]*wx[:,None]).ravel()
  vol=float((sm*trap).sum()/1000)
+ main_lake=max(l,key=lambda q:len(q["nodes"])) if l else dict(nodes=set(),outlets=set())
+ main_outlets=sorted(main_lake["outlets"])
  membership={pt:i for i,L in enumerate(l) for pt in L["nodes"]}
  outs=set().union(*(L["outlets"] for L in l)) if l else set()
  center=(20.,20.);west=(10.,20.);east=(30.,20.)
@@ -64,7 +66,7 @@ def field(case):
   lake_member_set=set(membership),lake_outlet_set=outs,
   lake_components={frozenset(L["nodes"]) for L in l},vol_km3=vol,
   net_sed_max_m=float(sm.max()),w_absmax_m=float(np.max(np.abs(xy[:,2]))),
-  max_budget_pct=max(sedmass),n_lakes=len(l),n_outlet_nodes=len(outs),sills=sel)
+  max_budget_pct=max(sedmass),n_lakes=len(l),n_outlet_nodes=len(outs),main_lake_nodes=len(main_lake["nodes"]),main_lake_outlets=main_outlets,sills=sel)
 def diff(a,b):
  return dict(topography_RMS_m=float(np.sqrt(np.mean((b["topo"]-a["topo"])**2))),
   topography_max_abs_m=float(np.max(np.abs(b["topo"]-a["topo"]))),
@@ -90,6 +92,7 @@ for setting in arms:
    west_outlet=z["sills"]["west_sill"]["is_lake_outlet"],
    east_outlet=z["sills"]["east_sill"]["is_lake_outlet"],
    native_lake_components=z["n_lakes"],outlet_nodes=z["n_outlet_nodes"],
+   largest_lake_node_count=z["main_lake_nodes"],largest_lake_outlet_locations=str(z["main_lake_outlets"]),
    compacted_sediment_volume_km3=z["vol_km3"],
    maximum_sediment_thickness_m=z["net_sed_max_m"],
    maximum_w_deflection_m=z["w_absmax_m"],max_mass_error_percent=z["max_budget_pct"],**p))
@@ -99,6 +102,7 @@ s={"experiment":"03z actual original 41x41 TISC dual-sill toy full forward runs"
     len(set(a["PRM_sha256"] for a in arms))==1,
    "n_arms":len(rows),"all_mass_event_budgets_pass":all(z["max_budget_pct"]<.001 for z in data.values()),
    "cases":rows,"sill_state":{k:z["sills"] for k,z in data.items()},
+   "largest_lake_outlets":{k:z["main_lake_outlets"] for k,z in data.items()},
    "important_limits":["No claim of causal representation of first 401 3Myr lake bifurcation",
    "Small toy landscape is a physical TISC simulation with input perturbation only",
    "Final 0.1Myr snapshot can miss earlier spill timing; changed lake identities must be compared by membership sets, not numeric lake ID",
