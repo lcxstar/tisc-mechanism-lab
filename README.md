@@ -1,3 +1,20 @@
+# V09 — Ebro 2016/2017/2026 complete 60-Myr historical residual audit (12–13 October 2026)
+
+**Complete four-way factor experiment: PASS, 4/4 original author entire -60 to 0 Ma full-native forward runs.** The first downloadable February 2017 source cannot reproduce archived November 2016 late high peaks even on its own contemporary unchanged original input. Terrain-maximum difference exceeds 1 km by -51Ma although the max elastic deflection differs by less than 500m across 60Myr, and final signed topography-integral mismatch is less than 1%. Initial 5m pseudo-random topography seeds 1/2/999/zero did not explain this discrepancy. For identical original 104×55 geology, 2017 versus 2026 salt-fixed C gives a **676.75m cellwise final topography RMS difference across 5720 cells**, with **438 cells changing >1000m**. Source/version plus inherited defaults interacts nonlinearly with original-input grid/time changes (2×2 interaction -1759.8m at -30Ma, -227.2m at -0.5Ma). **Historic 2016 full numeric equality remains false**; screen output peak elevation is not measured geologic relief.
+
+- [**Complete verified V09 scientific report with historical model limitations**](docs/09_EBRO_HISTORICAL_LONGTERM_DISCREPANCY_AUDIT_20261013.md)
+- [True four-run, all 60Myr, original author source × input full physical time-series factorial](results/09_ebro_historical_longterm/09b_complete_2x2_scientific_comparison/V09_FULL60_CAUSAL_DECOMPOSITION.md)
+- [2016 vs earliest first Git Feb-2017 long-term first divergence by age](results/09_ebro_historical_longterm/09d_FebApr2017_longterm_onset/V09_FEB_APR_2017_SOURCE_DIVERGENCE.md)
+- [Whole Ebro topographic peak, signed area integral, deflection, precipitation and sediment 60Myr vector PDF figures](results/09_ebro_historical_longterm/09f_integral_vs_peak/)
+- [**Correct sixth-column native terrain 5720-cell matched-source response PDF**](results/09_ebro_historical_longterm/09h_matched_native_spatial_response/MATCHED_104x55_TERRAIN_SOURCE_DIFFERENCE.pdf)
+- [Original full 60Myr C PRNG seeds 1/2/999 and zero-relief real model outputs](results/09_ebro_historical_longterm/09e_rng_original_first_source/)
+- [08i corrected V08 physical native field mapping (third .xyw = discharge, SIXTH = terrain; supersedes old 08d)](https://github.com/lcxstar/tisc-mechanism-lab/blob/v08-salt-module-fix-regression/results/08_salt_module_fix_regression/08i_corrected_native_xyw/V08_CORRECTED_XYW_COLUMN_MAPPING_REPORT.md)
+- [All four complete original forward GitHub Actions 09a](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38281024056) and [fully verified 2×2 scientific processing 09b](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38283922004)
+
+**No Junggar geological basin-evolution source or input was edited, and the original TISC upstream repository is unmodified.**
+
+---
+
 # V08 — TISC salt_model switch repaired and independently validated
 
 **Final: PASS 14/14 (12 October 2026).** The original 2026 solver applies gypsum and halite sedimentation even when salt_model=0. A minimal guarded fix eliminates the spurious first Ebro 7.4-km salt thickness, while salt_model=1 reproduces the original source **byte-for-byte** on Ebro, 1lake, and 2lakes. The repaired original-input Ebro also completed its **full -60 to 0 Ma model** (121 printed ages, 208×110 grid), on the explicitly identified audited 03t+V08 solver variant. **Full equality with the archived 2016 Ebro history remains false.**
