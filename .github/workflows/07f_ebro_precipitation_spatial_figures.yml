@@ -1,0 +1,34 @@
+name: 07f | Plot original Ebro first-step chemical loading local maps
+on:
+  push:
+    branches: [v07-ebro-first-surface-cell-flux-audit]
+    paths: ['.github/workflows/07f_ebro_precipitation_spatial_figures.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native-spatial-figures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Plot already preserved native C grid trace, not a new physical model
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q numpy matplotlib
+          python3 scripts/07f_plot_ebro_precipitation_rise_maps.py \
+            --csv results/07_ebro_first_cell_flux/07c_function_source/ONE_SUBSTEP_HYDRO_BOUNDARIES.csv.gz \
+            --out results/07_ebro_first_cell_flux/07f_spatial_causal_figures
+      - name: Permanently save vector PDF, rendered maps and native trace QC
+        run: |
+          set -euo pipefail
+          git add -f results/07_ebro_first_cell_flux/07f_spatial_causal_figures
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'figures(Ebro): original native first substep chemical rise and Dq load PDF maps'
+          for i in 1 2 3 4 5; do
+            git fetch origin v07-ebro-first-surface-cell-flux-audit
+            git rebase origin/v07-ebro-first-surface-cell-flux-audit
+            if git push origin HEAD:v07-ebro-first-surface-cell-flux-audit; then exit 0; fi
+          done
+          exit 1
