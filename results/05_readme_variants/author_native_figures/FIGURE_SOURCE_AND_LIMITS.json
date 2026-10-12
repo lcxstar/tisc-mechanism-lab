@@ -1,0 +1,79 @@
+[
+  {
+    "case": "04_river",
+    "grid_Nx": 101,
+    "grid_Ny": 101,
+    "native_topography_min_m": -49.6,
+    "native_topography_max_m": 932.8,
+    "native_grid_cells": 10201,
+    "native_archive": "04_river_NATIVE_RAW.tar.gz",
+    "rendered_from_native_xyw": true,
+    "not_upstream_legacy_GMT": true
+  },
+  {
+    "case": "05_lake_one",
+    "grid_Nx": 51,
+    "grid_Ny": 51,
+    "native_topography_min_m": -11.4,
+    "native_topography_max_m": 3005.3,
+    "native_grid_cells": 2601,
+    "native_archive": "05_lake_one_NATIVE_RAW.tar.gz",
+    "rendered_from_native_xyw": true,
+    "not_upstream_legacy_GMT": true
+  },
+  {
+    "case": "05_lakes_two",
+    "grid_Nx": 81,
+    "grid_Ny": 81,
+    "native_topography_min_m": -3727.1,
+    "native_topography_max_m": 9907.2,
+    "native_grid_cells": 6561,
+    "native_archive": "05_lakes_two_NATIVE_RAW.tar.gz",
+    "rendered_from_native_xyw": true,
+    "not_upstream_legacy_GMT": true
+  },
+  {
+    "case": "06_tectonic",
+    "grid_Nx": 401,
+    "grid_Ny": 401,
+    "native_topography_min_m": -432.3,
+    "native_topography_max_m": 2349.5,
+    "native_grid_cells": 160801,
+    "native_archive": "06_tectonic_NATIVE_RAW.tar.gz",
+    "rendered_from_native_xyw": true,
+    "not_upstream_legacy_GMT": true
+  },
+  {
+    "case": "07_climate",
+    "grid_Nx": 101,
+    "grid_Ny": 101,
+    "native_topography_min_m": 525.8,
+    "native_topography_max_m": 2566.5,
+    "native_grid_cells": 10201,
+    "native_archive": "07_climate_NATIVE_RAW.tar.gz",
+    "rendered_from_native_xyw": true,
+    "not_upstream_legacy_GMT": true
+  },
+  {
+    "case": "08_ebro",
+    "grid_Nx": 208,
+    "grid_Ny": 110,
+    "native_topography_min_m": -8964.7,
+    "native_topography_max_m": 3057.4,
+    "native_grid_cells": 22880,
+    "native_archive": "08_ebro_NATIVE_RAW.tar.gz",
+    "rendered_from_native_xyw": true,
+    "not_upstream_legacy_GMT": true
+  },
+  {
+    "case": "09_iberia",
+    "grid_Nx": 159,
+    "grid_Ny": 141,
+    "native_topography_min_m": -5131.2,
+    "native_topography_max_m": 2836.7,
+    "native_grid_cells": 22419,
+    "native_archive": "09_iberia_NATIVE_RAW.tar.gz",
+    "rendered_from_native_xyw": true,
+    "not_upstream_legacy_GMT": true
+  }
+]
