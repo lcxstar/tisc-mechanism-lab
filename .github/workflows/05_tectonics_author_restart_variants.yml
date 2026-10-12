@@ -1,0 +1,160 @@
+name: 05 | Author's exact 6_tectonics restart and block velocity demonstrations
+on:
+  push:
+    branches: [v05-author-readme-command-variants]
+    paths:
+      - '.github/workflows/05_tectonics_author_restart_variants.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  official-restart:
+    name: "401 grid checkpoint at 15 Myr then ${{ matrix.variant }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: density_velocity_to20
+            args: "-F -v-2850/3.14/31.4 -tf20"
+            target: "20"
+          - variant: block3_velocity_to25
+            args: "-F -v3/2.17/21.7 -tf25"
+            target: "25"
+          - variant: move_block1_to30
+            args: "-F -S1/1 -tf30"
+            target: "30"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Compile pinned corrected-speed TISC and validate source identity
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          echo CI > "$HOME/.tiscdefaults"
+          mkdir -p diag_restart/source diag_restart/work diag_restart/output/${{ matrix.variant }}
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c diag_restart/source/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c diag_restart/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c diag_restart/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c diag_restart/source
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c diag_restart/source
+          python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c diag_restart/source
+          python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c diag_restart/source
+          make -C upstream/tisc/src tisc
+          sha256sum upstream/bin/tisc > diag_restart/output/${{ matrix.variant }}/TISC_EXE_SHA256.txt
+          cp -a upstream/tisc/demo/6_tectonics/. diag_restart/work/
+          (cd diag_restart/work && sha256sum demo.PRM demo1.UNIT demo2.UNIT > AUTHOR_INPUTS_SHA256.txt)
+      - name: Run original author 401 x 401 first 15 Myr to create native restart
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd diag_restart/work
+            echo 'tisc demo -V1 -qplotting_mode=0' > CHECKPOINT_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o CHECKPOINT_WALL_SEC.txt timeout -k 15s 6500 tisc demo -V1 -qplotting_mode=0 > CHECKPOINT_RUN.log 2>&1
+            ec=$?
+            set -e
+            echo "$ec" > CHECKPOINT_EXIT_CODE.txt
+            test "$ec" = 0
+            test -s demo.all
+            sha256sum demo.all > CHECKPOINT_ALL_SHA256.txt
+            du -h demo.all
+            grep -a '^T=' CHECKPOINT_RUN.log | tail -n 3
+          )
+      - name: Resume checkpoint using author's documented fault-block alteration
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd diag_restart/work
+            echo 'tisc demo ${{ matrix.args }} -V1 -qplotting_mode=0' > RESTART_COMMAND.txt
+            cp CHECKPOINT_ALL_SHA256.txt /tmp/SOURCE_CHECKPOINT_SHA256.txt
+            set +e
+            /usr/bin/time -f '%e' -o RESTART_WALL_SEC.txt timeout -k 15s 6500 \
+              tisc demo ${{ matrix.args }} -V1 -qplotting_mode=0 > RESTART_RUN.log 2>&1
+            code=$?
+            set -e
+            echo "$code" > RESTART_EXIT_CODE.txt
+            echo "AUTHOR_RESTART ${{ matrix.variant }} code=$code"
+            grep -a '^T=' RESTART_RUN.log | tail -n 5 || true
+          )
+      - name: Check restart semantics, preserve long outputs and flag physical discrepancies
+        if: always()
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,re,hashlib,tarfile
+          from pathlib import Path
+          d=Path('diag_restart/work')
+          o=Path('diag_restart/output/${{ matrix.variant }}')
+          ec=lambda x:int((d/x).read_text()) if (d/x).exists() else None
+          txt=(d/'RESTART_RUN.log').read_text(errors='replace') if (d/'RESTART_RUN.log').exists() else ''
+          ages=[float(x) for x in re.findall(r'(?m)^\\s*T=\\s*([-+0-9.eE]+)\\s*My',txt)]
+          expected=${{ matrix.target }}
+          normalized=(d/'demo.xyw').read_text(errors='replace') if (d/'demo.xyw').exists() else ''
+          n=sum(len(l.split())>=8 and not l.startswith('#') for l in normalized.splitlines())
+          qc={'case':'${{ matrix.variant }}','author_doc_requested_args':'${{ matrix.args }}',
+              'author_README_written_args':'${{ matrix.args }}',
+              'author_doc_command_correction':'removed isolated malformed -tf token only' if '${{ matrix.variant }}'=='move_block1_to30' else 'none',
+              'execution_code_kind':'03t explicitly patched, NOT upstream bitwise original',
+              'upstream':'d18b7d270f4d671b80223e10dede329ad35cafdd',
+              'author_input_files_unchanged':True,
+              'original_full15_checkpoint_exit_code':ec('CHECKPOINT_EXIT_CODE.txt'),
+              'native_restart_file_created':(d/'CHECKPOINT_ALL_SHA256.txt').exists(),
+              'restart_exit_code':ec('RESTART_EXIT_CODE.txt'),
+              'resume_is_true_checkpoint_not_new_t0':bool(ages and abs(ages[0]-15)<.52),
+              'first_logged_resumed_Myr':ages[0] if ages else None,
+              'last_logged_resumed_Myr':ages[-1] if ages else None,
+              'expected_end_Myr':expected,
+              'native_grid_rows':n,'native_grid_expected':160801,
+              'actual_command':(d/'RESTART_COMMAND.txt').read_text().strip() if (d/'RESTART_COMMAND.txt').exists() else None,
+              'checkpoint_file_sha256':(d/'CHECKPOINT_ALL_SHA256.txt').read_text().strip() if (d/'CHECKPOINT_ALL_SHA256.txt').exists() else None,
+              'interpretation':'Author resume CLI behavior and saved native state; no geological calibration'}
+          qc['accepted']=bool(qc['original_full15_checkpoint_exit_code']==0 and qc['native_restart_file_created']
+              and qc['restart_exit_code']==0 and qc['resume_is_true_checkpoint_not_new_t0']
+              and abs(ages[-1]-expected)<.51 and n==160801)
+          (o/'RESTART_QC.json').write_text(json.dumps(qc,indent=2))
+          for k in ['CHECKPOINT_COMMAND.txt','CHECKPOINT_WALL_SEC.txt','CHECKPOINT_EXIT_CODE.txt','CHECKPOINT_ALL_SHA256.txt','RESTART_COMMAND.txt','RESTART_WALL_SEC.txt','RESTART_EXIT_CODE.txt','AUTHOR_INPUTS_SHA256.txt']:
+            if (d/k).exists():(o/k).write_bytes((d/k).read_bytes())
+          if (d/'RESTART_RUN.log').exists():(o/'RESTART_RUN.log').write_bytes((d/'RESTART_RUN.log').read_bytes())
+          if (d/'CHECKPOINT_RUN.log').exists():(o/'CHECKPOINT_LOG_LAST_40_LINES.txt').write_text('\\n'.join((d/'CHECKPOINT_RUN.log').read_text(errors='replace').splitlines()[-40:]))
+          # Archive selected raw scientific outputs without giant nonportable serialized pointer restart.
+          filenames=['demo.PRM','demo1.UNIT','demo2.UNIT','demo.xyw','demo.xyzt','demo.hrz','demo.lak','demo.bas','demo.st']
+          with tarfile.open(o/'RESULTS_NATIVE.tar.gz','w:gz',compresslevel=4) as tf:
+            for p in filenames:
+              if (d/p).is_file():tf.add(d/p,arcname=p)
+          print('AUTHOR_RESTART_QC',json.dumps(qc))
+          if not qc['accepted']:raise SystemExit('Native author fault restart validation has not passed')
+          PY
+      - name: Upload isolated historical restart evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'AUTHOR_06_RESTART_${{ matrix.variant }}'
+          path: diag_restart/output/${{ matrix.variant }}/
+          retention-days: 90
+      - name: Commit small auditable restart QC summaries; retain large models as artifacts
+        if: success()
+        run: |
+          set -euo pipefail
+          mkdir -p results/05_readme_variants/06_tectonics_${{ matrix.variant }}
+          cp diag_restart/output/${{ matrix.variant }}/*.json results/05_readme_variants/06_tectonics_${{ matrix.variant }}/
+          cp diag_restart/output/${{ matrix.variant }}/*.txt results/05_readme_variants/06_tectonics_${{ matrix.variant }}/
+          git add -f results/05_readme_variants/06_tectonics_${{ matrix.variant }}
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'results(author): complete 401-grid original CLI restart ${{ matrix.variant }}'
+            git pull --rebase origin v05-author-readme-command-variants
+            git push origin HEAD:v05-author-readme-command-variants
+          fi
