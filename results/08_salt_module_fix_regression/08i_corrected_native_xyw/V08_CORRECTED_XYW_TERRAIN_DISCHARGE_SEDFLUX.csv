@@ -1,0 +1,9 @@
+contrast,A,B,grid_nodes,max_abs_actual_topography_diff_m,rms_actual_topography_diff_m,max_abs_discharge_diff_m3s,rms_discharge_diff_m3s,max_abs_sediment_flux_diff_kg_s,rms_sediment_flux_diff_kg_s,all_actual_topography_same_exact,all_discharge_same_exact,all_sediment_flux_same_exact,cells_z_absolute_difference_over_1m,cells_z_absolute_difference_over_100m,native_actual_height_column_number_1_based,native_discharge_column_number_1_based
+Ebro fixed default vs fixed explicit off,ebro_fixed_off,ebro_fixed_off_explicit,22880,0.0,0.0,0.0,0.0,0.0,0.0,True,True,True,0,0,6,3
+Ebro original ON vs fixed ON,ebro_orig_on,ebro_fixed_on,22880,0.0,0.0,0.0,0.0,0.0,0.0,True,True,True,0,0,6,3
+Lake 1 original ON vs fixed ON,lake1_orig_on,lake1_fixed_on,2601,0.0,0.0,0.0,0.0,0.0,0.0,True,True,True,0,0,6,3
+Lake 2 original ON vs fixed ON,lake2_orig_on,lake2_fixed_on,6561,0.0,0.0,0.0,0.0,0.0,0.0,True,True,True,0,0,6,3
+Ebro corrected salt OFF vs original zero dissolved ions,ebro_fixed_off,ebro_orig_zero_ions,22880,0.0,0.0,0.0,0.0,0.0,0.0,True,True,True,0,0,6,3
+Ebro original unguarded OFF vs corrected OFF,ebro_orig_off,ebro_fixed_off,22880,5593.5,105.7045929230843,581.06,22.460039969136517,0.0,0.0,False,False,True,16988,362,6,3
+Lake1 original unguarded OFF vs corrected OFF,lake1_orig_off,lake1_fixed_off,2601,357.0,20.18148511401357,200.27,12.676130700749486,0.0,0.0,False,False,True,1091,13,6,3
+Lake2 original unguarded OFF vs corrected OFF,lake2_orig_off,lake2_fixed_off,6561,4683.8,339.1449918150805,2899.0400000000004,272.4407049446637,0.0,0.0,False,False,True,5439,1763,6,3
