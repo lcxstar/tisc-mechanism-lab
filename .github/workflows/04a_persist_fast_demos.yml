@@ -1,4 +1,4 @@
-name: Original demo checkpoint | Persist six completed native models
+name: Original demo checkpoint | Persist all seven accepted full author models
 on:
   push:
     branches: [v04-official-demo-completion]
@@ -45,6 +45,14 @@ jobs:
           run-id: 38224145812
           github-token: ${{ github.token }}
           path: results/04_09_official_demo_suite/09_iberia
+      - name: Download complete author's original 401 x 401 tectonic and sediment model
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_FULL_06_tectonic
+          repository: lcxstar/tisc-mechanism-lab
+          run-id: 38224145812
+          github-token: ${{ github.token }}
+          path: results/04_09_official_demo_suite/06_tectonic
       - name: Download completed original climate/landscape model
         uses: actions/download-artifact@v4
         with:
@@ -67,12 +75,64 @@ jobs:
           import json
           from pathlib import Path
           p=Path('results/04_09_official_demo_suite')
-          for case in ('04_river','05_lake_one','05_lakes_two','07_climate','08_ebro','09_iberia'):
+          for case in ('04_river','05_lake_one','05_lakes_two','06_tectonic','07_climate','08_ebro','09_iberia'):
             d=p/case
             qc=json.loads((d/'RUN_QC.json').read_text())
             assert qc['checks_pass'] and qc['model_input_hashes_unchanged']
             assert (d/(case+'_NATIVE_RAW.tar.gz')).stat().st_size>10000
             print(case,qc['native_xyw_nodes'],qc['time_final_Myr'],qc['source_variant'])
+          PY
+      - name: Produce permanent 7 of 7 original demonstration suite acceptance table
+        run: |
+          python3 - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('results/04_09_official_demo_suite')
+          names=('04_river','05_lake_one','05_lakes_two','06_tectonic','07_climate','08_ebro','09_iberia')
+          rows=[]
+          for name in names:
+            j=json.loads((p/name/'RUN_QC.json').read_text())
+            assert j['checks_pass'] and j['model_input_hashes_unchanged']
+            assert (p/name/(name+'_NATIVE_RAW.tar.gz')).exists()
+            row={'case':name,'source_variant':j['source_variant'],
+                 'time_ini_Myr':j['time_ini_Myr'],'time_final_Myr':j['time_final_Myr'],
+                 'native_nodes':j['native_xyw_nodes'],
+                 'expected_nodes':j['grid_nodes_expected'],
+                 'inputs_Sha256_unchanged':j['model_input_hashes_unchanged'],
+                 'exit_code':j['process_exit_code'],'run_completed':j['checks_pass'],
+                 'science_match_to_author_historical_run':'UNTESTED_EXCEPT_EBRO_DIFFERENT'}
+            rows.append(row)
+          with (p/'OFFICIAL_DEMO_STATUS.csv').open('w',newline='') as f:
+            w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+          result={'status':'7_ACCEPTED_AUTHOR_INPUT_EXECUTIONS',
+                  'n_full_production_runs_completed':len(rows),
+                  'upstream_commit':'d18b7d270f4d671b80223e10dede329ad35cafdd',
+                  'modified_execution_source_variants_explicitly_declared':True,
+                  'historical_Ebro_numeric_output_agreement':False,
+                  'source_input_files_changed':False,'cases':rows}
+          (p/'OFFICIAL_DEMO_STATUS.json').write_text(json.dumps(result,indent=2))
+          notes=[
+            '# Original author models: full 04–09 suite accepted on numeric-execution basis',
+            '',
+            'All 7 original author-supplied project setups (including TWO 5_lakes cases) were run to their original time limits with original parameter files, saved SHA256 provenance, full original native output and independent QC.',
+            '',
+            '**7/7 process and finite native-grid gates passed. This is NOT proof of geological / historical numeric equality.**',
+            '',
+            '| Case | Native nodes | Original time interval (Myr) | Solver |',
+            '|---|---:|---|---|',
+          ]
+          for r in rows:notes.append('| '+r['case']+' | '+str(r['native_nodes'])+' | '+
+                  str(r['time_ini_Myr'])+' to '+str(r['time_final_Myr'])+
+                  ' | '+r['source_variant']+' |')
+          notes+=['',
+          'Normalized upstream = compile-only NBSP whitespace change. Audited 03t = declared performance, numerical guard and nonphysical accounting diagnostics added; no author geological/transport inputs changed.',
+          '',
+          '**The supplied 2016 Ebro_evol.screen differs significantly from the 2026 pinned-source reproduction** (e.g., -59.5Ma max elevation 1200.8m vs 9071.6m). Pure normalized 2026 code reproduces the latter early value. Thus Ebro execution passed, historical numeric equivalence FAILED; do not conceal this.',
+          '',
+          'See full scientific report ../../docs/04_OFFICIAL_AUTHOR_DEMO_COMPLETE_REPRODUCTION.md and 08_ebro/reference_compare/ for quantitative Ebro evidence. Earlier 03t/03v 401x401 full run remains an independent numerical baseline.',
+          ]
+          (p/'OFFICIAL_DEMO_STATUS.md').write_text('\n'.join(notes)+'\n')
+          print('OFFICIAL_DEMO_ACCEPTED',json.dumps(result))
           PY
       - name: Commit successful original full cases to public branch
         run: |
