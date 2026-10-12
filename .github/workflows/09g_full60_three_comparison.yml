@@ -1,0 +1,43 @@
+name: 09g | Completed 3-arm full 60 Myr original-source/input comparisons
+on:
+  push:
+    branches: [v09-ebro-historical-longterm-diagnostics]
+    paths: ['.github/workflows/09g_full60_three_comparison.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  completed-three:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: 1a32399e6842c32be7e01f7cc2ed8cfcb162c40d
+          path: first_upload
+      - name: Generate real 121-age old-vs-new source and input results from original already-archived full traces
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q matplotlib
+          python3 scripts/09g_complete_three_corners_without_unfinished_case.py \
+            --original-screen first_upload/demo/8_Ebro_evol/Ebro_evol.screen \
+            --old-old results/09_ebro_historical_longterm/09a_full_2x2/old2017__old2017/RUN.log \
+            --new-old results/09_ebro_historical_longterm/09a_full_2x2/new2026__old2017/RUN.log \
+            --new-new results/09_ebro_historical_longterm/09a_full_2x2/new2026__new2026/RUN.log \
+            --parser scripts/06a_audit_ebro_initial_parameters.py \
+            --out results/09_ebro_historical_longterm/09g_completed_three_corner
+      - name: Commit fully verifiable three complete experiments, never invent fourth result
+        run: |
+          set -euo pipefail
+          git add -f results/09_ebro_historical_longterm/09g_completed_three_corner
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'science(V09): completed 2017-v2026 source and old-vnew-input 60Myr stage results'
+          for i in 1 2 3 4 5 6 7 8; do
+            git fetch origin v09-ebro-historical-longterm-diagnostics
+            git rebase origin/v09-ebro-historical-longterm-diagnostics
+            if git push origin HEAD:v09-ebro-historical-longterm-diagnostics; then exit 0; fi
+          done
+          exit 1
