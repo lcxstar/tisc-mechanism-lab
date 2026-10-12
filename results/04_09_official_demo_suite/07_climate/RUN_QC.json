@@ -1,0 +1,108 @@
+{
+  "case": "07_climate",
+  "author_demo_folder": "tisc/demo/7_climate",
+  "original_upstream_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "source_variant": "audited_03t_optimized",
+  "model_input_hashes_unchanged": true,
+  "plotting_override_only": true,
+  "physical_model_inputs_changed": false,
+  "input_Nx": 101,
+  "input_Ny": 101,
+  "grid_nodes_expected": 10201,
+  "initial_surface_base_elevation_m": 0.0,
+  "time_ini_Myr": 0.0,
+  "time_final_Myr": 5.0,
+  "actual_command": "tisc sinusoidal -V1 -qplotting_mode=0",
+  "process_exit_code": 0,
+  "T_times_from_run_log": 51,
+  "last_logged_time_Myr": 5.0,
+  "native_xyw_nodes": 10201,
+  "native_xyw_finite": true,
+  "native_xyw_min_topography_m": 525.8,
+  "native_xyw_max_topography_m": 2566.5,
+  "native_final_outputs_present": {
+    "xyw": true,
+    "xyzt": false,
+    "hrz": true,
+    "bas": true,
+    "lak": true,
+    "st": true
+  },
+  "output_inventory": [
+    {
+      "name": ".gmtcommands4",
+      "bytes": 226
+    },
+    {
+      "name": "ACTUAL_COMMAND.txt",
+      "bytes": 38
+    },
+    {
+      "name": "AUTHOR_COMMIT.txt",
+      "bytes": 41
+    },
+    {
+      "name": "EXECUTION_SOURCE_SHA256.txt",
+      "bytes": 84
+    },
+    {
+      "name": "EXIT_CODE.txt",
+      "bytes": 2
+    },
+    {
+      "name": "ORIGINAL_INPUT_MANIFEST.json",
+      "bytes": 431
+    },
+    {
+      "name": "RUN.log",
+      "bytes": 1275358
+    },
+    {
+      "name": "WALL_SECONDS.txt",
+      "bytes": 7
+    },
+    {
+      "name": "sinusoidal.PRM",
+      "bytes": 7311
+    },
+    {
+      "name": "sinusoidal.ZINI",
+      "bytes": 77910
+    },
+    {
+      "name": "sinusoidal.all",
+      "bytes": 1435014
+    },
+    {
+      "name": "sinusoidal.bas",
+      "bytes": 992326
+    },
+    {
+      "name": "sinusoidal.grainsize",
+      "bytes": 295896
+    },
+    {
+      "name": "sinusoidal.hrz",
+      "bytes": 361697
+    },
+    {
+      "name": "sinusoidal.lak",
+      "bytes": 10479
+    },
+    {
+      "name": "sinusoidal.st",
+      "bytes": 349466
+    },
+    {
+      "name": "sinusoidal.thicksalt",
+      "bytes": 387712
+    },
+    {
+      "name": "sinusoidal.xyw",
+      "bytes": 1315969
+    }
+  ],
+  "upstream_native_input_manifest_sha256": "38bd1775c86aed8306e69b7f08ced01c1073dfe81ab18158eedd368405cc7a00",
+  "interpretation": "A numerical reproduction of author-provided demo inputs, not independently verified physical geology.",
+  "checks_pass": true
+}

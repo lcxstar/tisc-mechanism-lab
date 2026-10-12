@@ -1,0 +1,12 @@
+{
+  "upstream_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "before_sha256": "af25a5710cb84bdac37a9d9d458c98f5644f1cfbdd094864cfa09e418db45a29",
+  "after_sha256": "db93e8c3e38aa34fcfa16b5fc0bef645f3583301a941ddd562a93c25db5aee63",
+  "changes_original_source_equations": false,
+  "changes_original_float_counters": false,
+  "double_ledger_types": "static double, reset each Surface_Transport call",
+  "tracks_bedrock": "all Erode() bedrock + basement source code sites",
+  "tracks_net_sediment": "every Sediment() and sedimentary Erode() source code site",
+  "tracks_export": "both Fluvial_Transport boundary and lake export sites",
+  "known_limits": "no proof of cell block thickness rounding, burial compaction or all reservoirs; test scientific fields separately"
+}

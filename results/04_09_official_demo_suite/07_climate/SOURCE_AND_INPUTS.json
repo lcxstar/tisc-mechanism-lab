@@ -1,0 +1,11 @@
+{
+  "original_repo": "danigeos/tisc",
+  "original_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "original_demo_subdirectory": "tisc/demo/7_climate",
+  "prefix": "sinusoidal",
+  "full_physical_inputs_modified": false,
+  "files_sha256": {
+    "sinusoidal.PRM": "f1a388e618396ada850fe6bd08ffe82d484590a35c647d5d75d949677a73ecb8",
+    "sinusoidal.ZINI": "0cdc84787b54d80df83a8e11e26b7881ee26e34571b61a715f74768d4c97f046"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "patch": "03j-A exact original-order per-lake evaporation memoization",
+  "upstream": "danigeos/tisc@d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "prior_03g_sha256": "7b10a3cb717ed14271ab84fecf7439d536b12b6fcbe01089226642657e56208b",
+  "03j_a_sha256": "27b83c5daec4c2857d50e512fba681774f3a6f1279fa42b4ba927af7d558f420",
+  "source_diff_saved": true,
+  "physical_parameters_changed": false,
+  "hydrology_and_flow_source_unchanged": true,
+  "cache_miss_summation": "same float loop and same multiply",
+  "invalidation": "every Attempt_Delete_Node_From_Lake and 32-bit generation rollover",
+  "allocation_failure": "recompute exact original sum"
+}
