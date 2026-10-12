@@ -1,0 +1,12 @@
+{
+  "source_2016": "Historical author-provided Ebro_evol.screen",
+  "source_2026": "Pinned original input / audited 03t current source 60 Ma full",
+  "surface_disabled": "Same input / CLI -qerosed_model=0 -qhydro_model=0",
+  "data_ref": "Original logs aligned at matching 0.5 Myr stage intervals",
+  "historical_equality_proven": false,
+  "not_original_GMT_Pc": true,
+  "figures": [
+    "EBRO_2016_VS_2026_VS_NO_SURFACE_MAX_HEIGHT",
+    "EBRO_2016_VS_2026_SEDIMENT_VOLUME"
+  ]
+}
