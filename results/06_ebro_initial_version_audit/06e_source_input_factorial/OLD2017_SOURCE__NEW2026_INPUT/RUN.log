@@ -1,0 +1,51 @@
+
+* TISC: TECTONICS, ISOSTASY, SURFACE PROCESSES, AND CLIMATE PLANFORM MODELING *
+Version: TISC_2016-08-30
+Parameters at 'Ebro_evol.PRM'.
+Time start: Mon Oct 12 11:21:39 2026
+
+  topo_ini :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2
+T= -60.0000 My
+  topogr.  :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2 lFM
+  precipit.:  max= 0.5 m/yr	min= 0.2 m/yr	integr=9.60e+10 m/yr*m2
+  evaporat.:  max= 1.4 m/yr	min= 1.4 m/yr	integr=5.03e+11 m/yr*m2
+  rain_now : +2.74e+03 m3/s  evap_wat: +2.09e+03 m3/s outp_water: +6.49e+02 m3/s
+  lake 507/921 : 2.21e+01 km3 2.41e+04 km2  156 m  304,317   0 out Endorh 284,275 1068.2 m3/s
+  river_max:   159.47 m3/s    26.89 kg/s @   30.6,0.0 km, 164.8 m
+  topo_diff_eros_max=    -0.26 mm/yr    sedim_max:     2.46 mm/yr
+  eros_nosd: +3.65e+16 N     sedim_inc: +2.10e+16 N   outp_seds:   +1.55e+16 N  
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  eros-sed.:  max= 0.40 mm/yr	min= -2.45 mm/yr	difference=1.72e+06 m3/yr
+  sediment_vol: 1.16e+03 km3
+
+T= -59.5000 My
+  topogr.  :  max= 1376.2 m	min= 152.6 m	integr=1.21e+14 m*m2
+  load  now:  max = +2.58e+07 N/m2  min = -3.57e+06 N/m2   Total: -1.21e+16 N	Max at 438,188 km
+  load: -1.23e+16 N   restit_force: -1.21e+16 N
+  deflect. :  max= 10.6 m	min= -13.7 m	integr=-3.86e+11 m*m2
+  precipit.:  max= 0.4 m/yr	min= 0.2 m/yr	integr=9.60e+10 m/yr*m2
+  evaporat.:  max= 1.4 m/yr	min= 1.4 m/yr	integr=5.03e+11 m/yr*m2
+  rain_now : +2.91e+03 m3/s  evap_wat: +1.65e+03 m3/s outp_water: +1.26e+03 m3/s
+  lake 769/798 : 1.90e+00 km3 3.52e+03 km2  153 m  424,307   0 out Endorh 438,312 156.4 m3/s
+  river_max:   834.92 m3/s     0.00 kg/s @  407.2,78.0 km, 150.1 m
+  topo_diff_eros_max=    -2.43 mm/yr    sedim_max:     0.29 mm/yr
+  eros_nosd: +3.53e+16 N     sedim_inc: +1.18e+16 N   outp_seds:   +2.34e+16 N  
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  eros-sed.:  max= 2.43 mm/yr	min= -0.29 mm/yr	difference=2.60e+06 m3/yr
+  sediment_vol: 1.82e+03 km3
+
+T= -59.0000 My
+
+2 units:
+No. Density Age Volume Surf.  Vel_x Vel_y Shft_x Shft_y erosL
+     kg/m3  My  1e3km3 1e3km2 km/My km/My   km     km    [m] 
+ 1:  2150 -60.0    1.8 111.9   0.0   0.0    0.0    0.0 6.0e+04  S
+ 0:  2800 -60.0  331.2  57.1   0.0  -3.2    0.0    0.0 1.4e+05  -  1st unit
+ -:  2800 -60.0    -     -     0     0      0      0   1.4e+05   -   basement
+
+Final total sediment volume: 1.82 1e3 km3
+
+  2D prof. :  max =    1202.7 m     min =     147.0 m   sh: 1: tisc.gmt.job: not found
+
+Time end: Mon Oct 12 11:21:43 2026
+
