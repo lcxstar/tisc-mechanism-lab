@@ -38,6 +38,7 @@ jobs:
           python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c qc03aa/source
           python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c qc03aa/source
           python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c qc03aa/source
+          python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c qc03aa/source
           python3 scripts/patch_03x_raw_float_xyw.py upstream/tisc/src/tiscio.c qc03aa/source
           make -C upstream/tisc/src tisc
           cp upstream/bin/tisc qc03aa/bin/tisc_original
