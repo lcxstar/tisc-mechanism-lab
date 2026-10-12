@@ -55,6 +55,13 @@ def main():
                 src,nchanges=re.subn(r'(?m)^(time_load\s+)(-?\d+(?:\.\d+)?)',r'\g<1>-57',src,count=1)
                 assert nchanges==1
                 f.write_text(src)
+        if control.get('prm_overrides'):
+            f=w/'Ebro_evol.PRM'
+            src=f.read_text()
+            for key,val in control['prm_overrides'].items():
+                src,count=re.subn(r'(?m)^('+re.escape(key)+r'\\s+)\\S+',lambda m:m.group(1)+str(val),src,count=1)
+                assert count==1,(key,count)
+            f.write_text(src)
         after=original_hashes(w)
         changed_files=[k for k in original if after[k]!=original[k]]
         cmd=[str(a.tisc_executable.resolve()),'Ebro_evol','-tf-59','-V1','-qplotting_mode=0']+control['opts']
