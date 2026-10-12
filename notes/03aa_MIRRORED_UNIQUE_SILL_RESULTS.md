@@ -4,7 +4,7 @@
 
 ## Prior evidence retained
 
-- [03y controlled epsilon experiment](notes/03y_controlled_routing_protocol_and_outcome.md) rejected its globally applied 1e-8 downhill winner tie rule at long time/native mesh, despite an apparent N121 3-Myr short-time gain.
+- [03y controlled epsilon experiment](03y_controlled_routing_protocol_and_outcome.md) rejected its globally applied 1e-8 downhill winner tie rule at long time/native mesh, despite an apparent N121 3-Myr short-time gain.
 - [03z isolated lake saddle and Junggar science synthesis](03z_LOCAL_LAKE_OUTLET_SADDLE_TESTS.md) showed that lowering ONE genuinely controlling west lake entry throat by one 7.62939453125e-6m float32 ULP flips the deliberately exact-equality two-outlet 41×41 lake east→west, changing 229 downstream links; changing its outer notch does not.
 - The question remaining for algorithm validation is distinct: if a lake has a RESOLVED unique low outlet, does the original lake algorithm select it and respect E/W mirror geometry without artificial slope epsilon?
 
@@ -35,3 +35,19 @@ The exactly tied symmetric baseline deterministically chooses EAST, but such a t
 The 03aa result supports original TISC being geometrically responsive in this idealized controlled two-outlet lake, **not** a claim that its full real palaeotopography is correct, that it is globally numerically converged or that the 300-Myr Junggar fill deficit was cured. The very high Junggar V10.2B full-domain export/erosion proportion (~98.75%) and the low final basin-intersection fraction of outside nodes (28.82%, NOT sediment flux) remain separate [geological source-to-sink attribution tasks](https://github.com/lcxstar/junggar-tisc-model/blob/diagnostics/v102b-routing-export-grid-audit-20261012/docs/V102B_DOMAIN_EXPORT_AND_GRID_RELIABILITY_AUDIT_20261012.md).
 
 The next Junggar mechanism priorities are to recover stage-specific source-zone drainage and provenance-weighted entry, test palaeosill/rim closure from independent stratigraphy, assess thermal/flexural accommodation on a separate axis and only then compare 10km vs 5km meshes. Do not promote 03y epsilon, alter the original hydrology source, or close all boundaries just to trap more material.
+
+## 03aa definitive rerun and localization of the two residual link mismatches
+
+The complete run [38212195769](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38212195769), based on accepted unchanged routing source, finished **SUCCESS** with 7/7 independent original-TISC forward cases, byte-exact E/W reflected float32 DEM inputs, source/PRM consistency and independent corrected mass-budget QC below 0.001%. The results match the first successful [38212010449](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38212010449).
+
+[Permanent 03aa mirrored output comparison table](../results/03_tectonics/03AA_MIRRORED_UNIQUE_SILL_QC.csv).
+
+After reflecting one model's x coordinates across the 20-km midline, the **only two** remaining downstream pointer differences at every perturbation strength are:
+- **(20,0) km**, southern computational rectangle edge, native type R in both arms; reflected expected target (19,0) km but actual east-lowered case chooses (21,0) km.
+- **(20,40) km**, northern computational rectangle edge, native type R in both arms; reflected expected target (19,40) km but actual east-lowered case chooses (21,40) km.
+
+These locations are on the **fixed mirror axis and outer model boundary**, NOT the inner lake throats (11,20) and (29,20) km. Node types remain identical, actual dominant-lake outlet and full membership match under reflection, and sediment thickness and true flexure-w fields have **zero reflected RMS difference at recorded output precision**. This pattern is consistent with ambiguity in local boundary neighbor tie choices; the mathematical source-level tie mechanism has NOT been separately inspected, and no TISC code bug is claimed.
+
+The two failed intermediate 03aa workflow attempts [38212052194](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38212052194) and [38212154837](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38212154837) failed **before forward runs** because the workflow redundantly invoked the sediment-balance patch after a previous patch stage had already applied it. The redundant command was deleted without changing physics, and the final workflow [38212195769](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38212195769) completed. These CI configuration failures are not negative physical results.
+
+**Outcome:** For the explicit unique lower throat in this deliberately simple lake, the accepted TISC code selects the low outlet consistently, including mirrored cases. There is no numerical justification from 03aa to change global routing or to force sediment conservation within the Junggar basin mask. Pause synthetic tie experiments at this gate unless later real-case QC identifies a physically higher incorrect outlet; next priority is stage-resolved Junggar source-to-sink and accommodation reconstruction.
