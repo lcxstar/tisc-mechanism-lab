@@ -1,0 +1,2 @@
+cd8e60e0059504d770edce7ea0f814602c4775becb31348d017b4d7d583b2878  upstream/bin/tisc
+cadc3c5aafe2ce28eb60aec52c11ef60d10aa108321e3213fd69f7586ff7275f  upstream/tisc/src/surf_proc.c

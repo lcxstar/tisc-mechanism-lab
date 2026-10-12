@@ -1,0 +1,1 @@
+tisc Ebro_evol -tf-59 -V1 -qplotting_mode=0; EBRO_V07_DIAGNOSTIC_PATH=CELL_SUBSTEPS.csv
