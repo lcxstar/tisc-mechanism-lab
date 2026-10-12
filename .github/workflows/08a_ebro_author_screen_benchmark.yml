@@ -1,0 +1,44 @@
+name: Ebro 2003 | Compare historical author screen with complete 60 Myr output
+on:
+  push:
+    branches: [v04-official-demo-completion]
+    paths:
+      - '.github/workflows/08a_ebro_author_screen_benchmark.yml'
+      - 'scripts/compare_official_ebro_reference.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Verify original author example reference is unchanged
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          test -s upstream/tisc/demo/8_Ebro_evol/Ebro_evol.screen
+          test -f results/04_09_official_demo_suite/08_ebro/08_ebro_NATIVE_RAW.tar.gz
+      - name: Compare archived full Ebro run with 2016 author time series
+        run: |
+          python3 scripts/compare_official_ebro_reference.py \
+            --historical-screen upstream/tisc/demo/8_Ebro_evol/Ebro_evol.screen \
+            --archived-run results/04_09_official_demo_suite/08_ebro/08_ebro_NATIVE_RAW.tar.gz \
+            --out results/04_09_official_demo_suite/08_ebro/reference_compare
+          cat results/04_09_official_demo_suite/08_ebro/reference_compare/EBRO_AUTHOR_SCREEN_COMPARISON.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Permanently archive quantitative and dated reference differences
+        run: |
+          set -euo pipefail
+          git add -f results/04_09_official_demo_suite/08_ebro/reference_compare
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'qc(Ebro): verify all historical author age snapshots against original 60 Myr run'
+            git push origin HEAD:v04-official-demo-completion
+          fi
