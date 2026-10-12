@@ -103,3 +103,42 @@ The implication for Junggar: the original V10.2B whole-domain 98.75% net erosion
 The TIE baseline from the earlier nine-arm full-solver [38210167704](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210167704) and later 20-arm threshold [38210578478](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210578478) was independently recompiled/reexecuted and its files `micro.PRM`, `micro.ZINI`, `micro.xyw`, `micro.lak`, `micro.hrz`, `micro.xyzt`, `micro.bas`, `micro.st` were **byte-for-byte identical** in each run. This checks that the outlet flip is not an unstable nonrepeatable baseline. The original synthetic TIE `ZINI` data are bitwise float32-identical after E-W and N-S mirroring (`array_equal`), so the initial two-saddle model is deliberately a true exactly degenerate (E-W symmetric) case. Therefore this case is explicitly **not suitable for deciding which of the two physically equal outlets the true geology should choose**.
 
 The TISC `.lak` lake outlet member status changed at exactly the controlling inner saddle rather than at the low notch; main lake preserved 222 members, and its declared outlet changed from (29,20) to (11,20)km. The recorded increased net compacted sediment total (+0.0012 km³) is a consequence of the changed artificial drainage geometry over a very short 0.1Myr run, not a general sediment-retention benefit. Do **not** promote this sensitivity into a basin-wide mass-balance fix.
+
+## Integrated status, scientific conclusions and next independent tests (2026-10-12)
+
+### Completed, reproducible experiment ledger
+
+| Program | Verified archive | QC / observed outcome | Scientific verdict |
+|---|---|---|---|
+| 03y all-mesh original vs 1e-8 tie-margin trials | [four-job 03y success](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38183870409) | N121 3/15Myr and N401 3/6Myr complete; accepted baseline byte-exact; independent corrected mass ledger <0.001% | Do NOT promote global downhill epsilon as a fix |
+| 03z actual 401-grid frozen-snapshot test | [native float32 replay](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38209933445) | 360 local ULP perturbations; 6 altered local strict slope winners, 13 altered zero-slope neighbor counts | Local predicate sensitivity, not full evolving lake proof |
+| 03z 41-grid outer-notch negative controls | [9 original full TISC runs](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210167704) | 9/9 success; perturb external notch by ULP to 1cm without main lake outlet switching | Low-gradient proximity alone does not prove control |
+| 03z 41-grid inner-throat sweep | [20 original full TISC runs](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210578478) | 20/20 success, lake outlet east-to-west with one lowered west throat of 7.62939453125e-6m; 229/1681 downstream nodes changed | Truly controlling saddle is geometrically local; not proof of erroneous source code |
+
+03y native 401-grid rejection is decisive. At 3 Myr, the precision-pair topography RMS was 0.016721 m with original routing and 1.453640 m after the 1e-8 tie condition (15 vs 597 altered downstream links). At 6 Myr the terrain RMS rose from 15.4124 to 18.3764 m (17,385 vs 18,300 altered links). The N121 15-Myr case independently worsened (48.0548 to 50.9012 m). This disproves a universal stabilization claim, so do not run 801 merely to tune epsilon.
+
+An older [03z threshold workflow failure](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210494464) arose in result-reader metadata after physics computation; the fixed audit reader and successful repeat [38210578478](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210578478) do NOT modify hydrology source, TISC physics or model geology.
+
+### What the author model vs the Junggar model tells us
+
+The separate [Junggar V10.2B export/grid audit](https://github.com/lcxstar/junggar-tisc-model/blob/diagnostics/v102b-routing-export-grid-audit-20261012/docs/V102B_DOMAIN_EXPORT_AND_GRID_RELIABILITY_AUDIT_20261012.md) parses accepted 300–0-Ma V10.2B archived logs and the author's [15-Myr synthetic 6_tectonics](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38178743124). The full-domain printed step-log net-deposition/erosion ratios are respectively **1.2508% for Junggar** and **30.1250% for the toy example**; full-domain exported/erosion ratios are **98.7525%** vs **69.9496%**. These figures are NOT actual Junggar-mask preservation ratios, NOT a mountain source sediment provenance measurement and NOT matched geologic boundary conditions. The toy example itself exported about 70% of eroded load.
+
+At the final Junggar model timestep, **3,546 of 12,304 outside-basin cells, or 28.82%**, route through the mapped basin. This is per-cell terminal drainage graph connectivity, NOT a sediment-flux-weighted fraction over the 300-Myr history. The first 300–200-Ma model interval already shows about **99.45%** full-domain export/erosion, ruling out explanations limited to late Neogene outlet opening, without demonstrating which sources should have entered Junggar. The model's 121×113, 10-km grid is not equivalent to the author's 401×401, 1.25-km grid.
+
+Scientific distinction: the author's published Ebro palaeogeographic case (unlike synthetic 6_tectonics) used evolving barriers, foreland accommodation and a lake runoff/evaporation balance to permit prolonged endorheic sediment trapping. Artificially shutting the entire numerical rectangle or inserting a universal tiny slope epsilon does NOT recreate that physical basin history. The synthetic one-ULP outlet switch cannot independently explain the Junggar export deficit.
+
+| Independent Junggar hypothesis | Evidence status | Required discriminating experiment |
+|---|---|---|
+| Incorrect inherited palaeodivides and basin-entry catchments | plausible; 0-Ma catchment intersections observed, source loads unknown | stratigraphically staged source-mask to sink connectivity AND provenance-weighted mass flux |
+| Nearly degenerate controlling lake outlet elevations | proven for synthetic EXACT dual-throat geometry only | map plausible Junggar palaeosills with field/geologic uncertainty then isolate local input-DEM alternatives |
+| Inadequate basin accommodation / long-term subsidence | uncalibrated as an independent history | constrain accommodation and foredeep migration separately from drainage and sediment transport |
+| Excessive river capacity or missing lake water balance | parameter contrasts recorded, cause not isolated | transport coefficient only vs runoff/evaporation only, fixed geometry and tectonics |
+| 10-km grid poorly resolves divides and saddles | testable conjecture, not proof | matched 10 km vs 5 km stage-focused physical case (241×225 at 5km), identical forcing and source masks |
+
+### Next preregistered numerical experiment — 03aa mirrored uniquely lower spillway
+
+Before touching Junggar physical coefficients, retain unchanged accepted author routing/lake physics and run the SAME 41×41 synthetic lake with independent exact east-west mirrored initial DEM pairs. Change one controlling INNER throat only, using west-lower and its east-lower mirror at three separations: one float32 ULP as near-degenerate numerical stress, then 0.1 m and 1 m as increasingly resolvable unique outlets. The initial model must satisfy bitwise float32 E/W mirror equality **pairwise**, not simply approximate appearance. Keep the same PRM, 0.1-Myr horizon, spatial mesh, zero UNIT inputs and independent per-run sediment budget <0.001%.
+
+Record actual main-lake component memberships and outlets from native lake files, all downstream pointers, sediment thickness, true flexural w and integrated deposited sediment volume. Reflect one computed result back across the domain before comparing: the geometrically unique low side should select its physically reflected outlet. A reproducible preference in an **exact equal-height TIE** case is not a geology prediction or necessarily a bug. A case where a distinctly higher outlet is selected instead of the unique low saddle merits isolated source-level inspection before ANY patch.
+
+Priority after this numerical gate is not another global tolerance sweep: independently quantify Junggar stage-wise source-to-sink flux, accommodation and actual palaeodivide geometries before testing 10-vs-5-km resolution. No current experiment justifies forcibly retaining all eroded material in Junggar or treating external non-Junggar catchments as geological failures.
