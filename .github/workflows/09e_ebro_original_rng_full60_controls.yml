@@ -1,0 +1,75 @@
+name: 09e | Original Feb 2017 historical Ebro stochastic initial relief sensitivity full60
+on:
+  push:
+    branches: [v09-ebro-historical-longterm-diagnostics]
+    paths: ['.github/workflows/09e_ebro_original_rng_full60_controls.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original_rng:
+    name: 'first Git source Ebro -60..0Ma | ${{ matrix.label }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: explicit_default_seed1
+            cli: '-R5/1'
+          - label: independent_seed2
+            cli: '-R5/2'
+          - label: independent_seed999
+            cli: '-R5/999'
+          - label: zero_random_relief
+            cli: '-R0/1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: 1a32399e6842c32be7e01f7cc2ed8cfcb162c40d
+          path: first_upload
+      - name: Build first publicly archived original solver; report exact stochastic seed only
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          test "$(git -C first_upload rev-parse HEAD)" = 1a32399e6842c32be7e01f7cc2ed8cfcb162c40d
+          echo CI > "$HOME/.tiscdefaults"
+          rm -f first_upload/lib/libreria.o
+          make -C first_upload/src tisc 'OPTS=-O2 -w -std=gnu99 -fcommon'
+      - name: Run identical original author 104x55 geom and complete 60 Myr, with explicitly declared RNG control
+        run: |
+          set -euo pipefail
+          python3 scripts/09a_run_full_ebro_historical_factorial.py \
+            --source old2017 --input old2017 \
+            --old-root first_upload --new-root first_upload \
+            --extra-cli='${{ matrix.cli }}' \
+            --parser scripts/06a_audit_ebro_initial_parameters.py \
+            --timeout-seconds 6000 \
+            --work rng_case_${{ matrix.label }} \
+            --out results/09_ebro_historical_longterm/09e_rng_original_first_source/${{ matrix.label }}
+      - name: Preserve predeclared numerical sensitivity, no geological input edits
+        if: always()
+        run: |
+          set -euo pipefail
+          dest='results/09_ebro_historical_longterm/09e_rng_original_first_source/${{ matrix.label }}'
+          git add -f "$dest"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'results(V09): full 60Myr original Feb2017 solver with ${{ matrix.label }} original relief controls'
+            for i in 1 2 3 4 5 6 7 8 9 10; do
+              git fetch origin v09-ebro-historical-longterm-diagnostics
+              git rebase origin/v09-ebro-historical-longterm-diagnostics
+              if git push origin HEAD:v09-ebro-historical-longterm-diagnostics; then exit 0; fi
+            done
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'V09_ORIGINAL_2017_RNG_${{ matrix.label }}'
+          path: results/09_ebro_historical_longterm/09e_rng_original_first_source/${{ matrix.label }}
+          retention-days: 90
