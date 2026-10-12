@@ -1,3 +1,23 @@
+# TISC Mechanism Lab — Official author's demos reproduced and archived
+
+## Completed full input-run suite, 12 October 2026
+
+**All seven original model setups in official demo folders 4–9 (5_lakes has two separate cases) completed their full author-specified simulation horizon with intact author input SHA256 and finite native output grids.** Author 1–3 flexure checks were accepted earlier; the 6_tectonics 401-grid 15-Myr full coupled run has also been independently accepted in 03t/03v.
+
+- [Permanent 7/7 execution-acceptance table](results/04_09_official_demo_suite/OFFICIAL_DEMO_STATUS.md)
+- [Per-case raw author PRM/ZINI/UNIT, native TISC outputs, source patch audit, checksums and compressed log files](results/04_09_official_demo_suite/)
+- [Science and provenance audit, including historical Ebro mismatch](docs/04_OFFICIAL_AUTHOR_DEMO_COMPLETE_REPRODUCTION.md)
+- [Full archive-validation workflow success](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38226488227)
+- [Original complete author-run workflow](.github/workflows/04_09_author_demo_suite.yml)
+
+**Acceptance is numerical run completion, not automatic agreement with published palaeogeography.** Small author runs use compiler-normalized but otherwise unmodified source. Large models use explicitly labeled audited 03t acceleration/diagnostic changes, without adjusting author geological/transport parameters.
+
+**Important negative Ebro reference:** the complete 60–0 Ma current-source Ebro run differs substantially from the author's attached 2016 screen record. The earliest 0.5-Myr difference persists with the unmodified current source. It is not appropriate to claim historical 2016 numerical equivalence. See [121-point comparison](results/04_09_official_demo_suite/08_ebro/reference_compare/EBRO_AUTHOR_SCREEN_COMPARISON.md).
+
+Junggar-specific geological forward work is paused, and no Junggar physical parameters are introduced into these benchmark examples.
+
+---
+
 ## 03aa — Mirrored physically unique lake outlet audit — PASSED
 
 **New accepted numerical-physics check:** [seven-run original-TISC mirror test](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38212195769) has completed successfully. In a 41×41 equal-height two-sill test, we independently lowered the west or east **controlling inner throat** by one float32 ULP, 0.1m or 1m. For every exactly mirrored float32 input pair, the actual primary lake outlet followed the uniquely lower throat, lake component membership mirrored, and deposited thickness / actual lithosphere flexure-w mirrors agreed at reported precision. Two mirrored downstream pointers differ **only on the outer box's north/south edges at x=20km**; no lake-scale field difference was detected. Arbitrary global routing epsilon remains **rejected** and accepted physical TISC hydrology is unmodified.
