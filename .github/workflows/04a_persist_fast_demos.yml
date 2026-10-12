@@ -1,4 +1,4 @@
-name: Original demo checkpoint | Persist four completed native models
+name: Original demo checkpoint | Persist five completed native models
 on:
   push:
     branches: [v04-official-demo-completion]
@@ -45,13 +45,21 @@ jobs:
           run-id: 38224145812
           github-token: ${{ github.token }}
           path: results/04_09_official_demo_suite/09_iberia
+      - name: Download completed original Ebro Basin 60–0 Myr model
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_FULL_08_ebro
+          repository: lcxstar/tisc-mechanism-lab
+          run-id: 38224145812
+          github-token: ${{ github.token }}
+          path: results/04_09_official_demo_suite/08_ebro
       - name: Verify case QC and irreversible input invariance
         run: |
           python3 - <<'PY'
           import json
           from pathlib import Path
           p=Path('results/04_09_official_demo_suite')
-          for case in ('04_river','05_lake_one','05_lakes_two','09_iberia'):
+          for case in ('04_river','05_lake_one','05_lakes_two','08_ebro','09_iberia'):
             d=p/case
             qc=json.loads((d/'RUN_QC.json').read_text())
             assert qc['checks_pass'] and qc['model_input_hashes_unchanged']
