@@ -1,0 +1,82 @@
+name: 03z | Actual lake main-outlet topographic saddle threshold sweep
+on:
+  push:
+    branches: [v03z-local-lake-saddle-tests]
+    paths:
+      - '.github/workflows/03z_micro_lake_sill_threshold.yml'
+      - 'scripts/build_03z_micro_lake.py'
+      - 'scripts/build_03z_threshold_sweep.py'
+      - 'scripts/analyze_03z_micro_lake.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  full-physical-micro-saddle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install compiler and small experiment dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          python3 -m pip install -q numpy
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+      - name: Compile SAME accepted 03t science, original drainage and lake physics
+        run: |
+          set -euo pipefail
+          mkdir -p qc03z/source qc03z/bin
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c qc03z/source/NBSP_AUDIT.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c qc03z/source
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c qc03z/source
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c qc03z/source
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c qc03z/source
+          python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c qc03z/source
+          python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c qc03z/source
+          python3 scripts/patch_03x_raw_float_xyw.py upstream/tisc/src/tiscio.c qc03z/source
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc qc03z/bin/tisc_accept_original
+          echo CI > "$HOME/.tiscdefaults"
+          sha256sum qc03z/bin/tisc_accept_original > qc03z/source/EXE_SHA256.txt
+      - name: Generate nine exact same-physics dual-sill lake DEM initial conditions
+        run: |
+          python3 scripts/build_03z_micro_lake.py upstream/tisc/demo/6_tectonics/demo.PRM qc03z/toy
+          python3 scripts/build_03z_threshold_sweep.py qc03z/toy
+      - name: Run actual unmodified hydrology across all tiny DEM single-cell perturbations
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          for case in $(python3 -c 'import json; print(" ".join(z["name"] for z in json.load(open("qc03z/toy/INPUT_SPEC.json"))["experiments"]))'); do
+            (
+              cd "qc03z/toy/$case"
+              echo 'tisc micro -V1 -tf0.1 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s 180 \
+                 "$GITHUB_WORKSPACE/qc03z/bin/tisc_accept_original" micro -V1 -tf0.1 -qplotting_mode=0 > RUN.log 2>&1
+              code=$?
+              set -e
+              echo "$code" > EXIT_CODE.txt
+              echo "03Z_TINY $case TISC_EXIT=$code"
+              grep -a 'TISC_03T_CORRECTED_BALANCE' RUN.log | tail -n 1 || true
+            )
+          done
+      - name: Audit native lake outlets, lake components, sediment, w and basin volume
+        run: |
+          python3 scripts/analyze_03z_micro_lake.py qc03z/toy
+      - name: Preserve complete original executable input output diffs and metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 03Z_MICRO_41x41_TRUE_OUTLET_SADDLE_THRESHOLD
+          path: |
+            qc03z/source/
+            qc03z/toy/
+          retention-days: 45
+          if-no-files-found: warn
