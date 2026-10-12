@@ -120,3 +120,14 @@ dt_sec=1.57783674e+12
 - [V07 07e five active C-source counterfactuals and direct solute-flux events](../results/07_ebro_first_cell_flux/07e_salt_cause/) — [successful job](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38245090977)
 
 **Status:** Ebro first-step catastrophic terrain spike causally located and verified. Full Ebro numerical restoration to 2016 is not yet finished. Original author inputs and Junggar geological evolution remain untouched.
+
+## V07f map completion — final original-grid chemistry height and load figures
+
+Native 208×110 grids before/after the exact first `Calculate_Discharge()` call were plotted without spatial interpolation and permanently archived (read-only analysis, no new TISC run).
+
+- [Vector PDF — salt precipitation topography increase in first -60 to -59.95 Ma surface substep](../results/07_ebro_first_cell_flux/07f_spatial_causal_figures/SALT_DEPOSITION_HEIGHT_FIRST_005MYR.pdf)
+- [Vector PDF — matching isostatic load increment Dq (MPa)](../results/07_ebro_first_cell_flux/07f_spatial_causal_figures/SALT_DEPOSITION_LOAD_FIRST_005MYR.pdf)
+- [PNG and plot QC including 21 cells above 100m rise](../results/07_ebro_first_cell_flux/07f_spatial_causal_figures/)
+- [Successfully archived figure-generation workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38245920393)
+
+At first extreme grid row 83, column 130, the source-attributed local topographic rise is **7401.098653m** and load increment **160.885264MPa**. A total of **21 cells** rose by over 100m in that initial hydrological substep. Model axes are local TISC kilometres, not latitude/longitude. The spatial diagnosis has no paleogeographic CRS and must not be overlaid directly on WGS84 basemaps.
