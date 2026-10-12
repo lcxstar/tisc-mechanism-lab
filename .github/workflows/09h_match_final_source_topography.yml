@@ -1,0 +1,37 @@
+name: 09h | Ebro final source-version native 104x55 matched-grid topography PDF
+on:
+  push:
+    branches: [v09-ebro-historical-longterm-diagnostics]
+    paths: ['.github/workflows/09h_match_final_source_topography.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  source-only-longtime-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read two already complete -60..0Ma model runs on identical old geology and plot actual grid differences
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q numpy matplotlib
+          python3 scripts/09h_match_original_grid_topography_diff.py \
+            --old-tar results/09_ebro_historical_longterm/09a_full_2x2/old2017__old2017/EBRO_FULL60_ORIGINAL_NATIVE.tar.gz \
+            --new-tar results/09_ebro_historical_longterm/09a_full_2x2/new2026__old2017/EBRO_FULL60_ORIGINAL_NATIVE.tar.gz \
+            --old-qc results/09_ebro_historical_longterm/09a_full_2x2/old2017__old2017/FULL_RUN_QC.json \
+            --new-qc results/09_ebro_historical_longterm/09a_full_2x2/new2026__old2017/FULL_RUN_QC.json \
+            --out results/09_ebro_historical_longterm/09h_matched_native_spatial_response
+      - name: Archive matched native Cartesian XY change field, map PDF and numerical uncertainty boundaries
+        run: |
+          set -euo pipefail
+          git add -f results/09_ebro_historical_longterm/09h_matched_native_spatial_response
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'results(V09): direct original 104x55 final Ebro native C source-version elevation difference map'
+          for i in 1 2 3 4 5 6 7 8; do
+            git fetch origin v09-ebro-historical-longterm-diagnostics
+            git rebase origin/v09-ebro-historical-longterm-diagnostics
+            if git push origin HEAD:v09-ebro-historical-longterm-diagnostics; then exit 0; fi
+          done
+          exit 1
