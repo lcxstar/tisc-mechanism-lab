@@ -58,3 +58,42 @@ The accepted physical TISC 03t implementation (with the verified 03x **output-on
 - If infinitesimal changes change the primary outlet in the full original physical solver, isolate the lake-cell membership order/equality comparisons and reproduce the same in a minimal source-level C harness. Arbitrary global slope margin is ruled out by completed 03y negative results.
 - If no tested single-cell scenario changes the primary outlet even by several meters, the switch likely depends on multigrid morphology / lake-component overlap rather than single nominal notch height; design constrained two-cell or broad-spill crest tests, not global TISC changes.
 - This synthetic experiment must not be used as a proxy geological reconstruction of Junggar. Existing Junggar full basin is 121×113 at 10km, requiring separate paleodivide/source-to-sink work before 5km mesh proof.
+
+## Completed Test C — pinned original TISC main-lake outlet saddle threshold sweep, 20/20 PASS
+
+[Actions run 38210578478](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210578478) **COMPLETED SUCCESS** after fixing an audit-file key mismatch that had made earlier [run 38210494464](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210494464) appear failed despite completing all original physics simulations. The audit correction is *only* the analysis metadata lookup, not C source, numerics or geology. Successful run archive `03Z_MICRO_41x41_TRUE_OUTLET_SADDLE_THRESHOLD` ID 11728493161 includes each of 20 independent original `.PRM`, `.ZINI`, raw `.xyw`, `.lak`, `.hrz`, `.xyzt`, log, exit code, source diffs, JSON QC. [Permanent 20-case scientific outcome CSV](../results/03_tectonics/03Z_LAKE_THROAT_20CASE_SCIENCE.csv).
+
+**Strong first-order result from ACTUAL lake code:**
+
+| Indicator | Exact equal-throat base | West throat lowered by 1 float32 ULP |
+|---|---:|---:|
+| Same model source and physical parameters? | yes | **yes** |
+| Modified initial ZINI nodes | 0 | **1 of 1681** |
+| Initial right/east lake entry throat elevation | 114.16148376464844m | same |
+| Initial left/west throat elevation | 114.16148376464844m | **114.1614761352539m** |
+| Actual initial west/east throat difference | 0 | **7.62939453125e-6 m = 0.007629mm** |
+| **MAIN lake outlet from true `.lak` component geometry** | (29,20)km, **east** | (11,20)km, **west** |
+| Main lake component nodes | 222 | 222 |
+| Total lake components, identified by original source | 3 | 3 |
+| Changed outlet node classification / position | reference | **2 nodes** |
+| Changed terminal downstream pointers across all 41² nodes | reference | **229** of 1681 (13.62%) |
+| Basin-wide compacted sediment volume proxy after 0.1Myr | **0.0092km³** | **0.0104km³** |
+| Basin-wide compacted sediment volume delta | reference | **+0.0012km³**, about **+13.0%** relative to tiny baseline |
+| Spatial sediment thickness RMS delta after 0.1Myr | reference | **0.02649m** |
+
+**Crucial location control:** Prior [Test B (9 full original TISC runs)](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210167704) perturbed the outward notch locations (10,20)km or (30,20)km by ±1 ULP through 1cm. **No native lake outlet or downstream link changed there**. Test C changes only the **inward throat controlling the dominant lake's overflow connection**, the next cell in toward its interior, at (11,20)km or (29,20)km. **One ULP now flips the dominant lake from east to west**, and 229 network links also change. Therefore not all same-looking lowland nodes are physically topologically equivalent. In this artificial example, outlet-location sensitivity is strongly local to the controlling saddle connectivity.
+
+**20-case envelope:**
+- All of **13** progressively lower west-throat scenarios (requested 10µm through 4m) switch the primary outlet from east to the **west side**; the west endpoint is (11,20)km through 3m lowering, and (12,20)km for the 4m test.
+- All **6** east-throat raising scenarios (requested 0.1–3m) also switch primary outlet from east to **west**.
+- Initial TIE remains east; 229 downstream cells change in all tested nonbaseline cases except 4m west has 230 changes; the lake-component count stays 3 even though outlet locations change.
+- Real TISC solver produces sediment thickness spatial RMS ~0.0226–0.0266m in the series; the 0.1Myr integrated sedimentary volume perturbation is **small in absolute units** despite sharply changing basin-scale flow direction.
+- All C source and model lake/river rules stay the accepted 03t baseline; the output-only 03x float printer is applied; ALL cases have identical `.PRM`, no `.UNIT`, independent fresh initial condition, and satisfy corrected mass-budget <0.001%.
+
+### Interpretation — positive mechanism result, not an author code bug finding
+
+The **degenerate initial equal-height pair** yields an algorithmic tie; in source `Define_Drainage_Net()`, neighbor ordering, strictly negative and zero-slope comparisons, lake membership and connected-component sorting can control which side is chosen. Changing just one truly controlling saddle by 1 float32 ULP shows original full hydrology can select an opposite outlet. This is **strong proof of finite-precision/geometry sensitivity near a degenerate two-saddle configuration**, but **NOT** proof that the hydrological algorithm is faulty for a realistic nondegenerate basin. One-cell exact-equality ties may be underconstrained physically and mathematically. The outcome is not a palaeoclimatic or palaeogeographic prediction.
+
+The natural next numerical-only question is to benchmark a **unique obvious low outlet** separately from **exact equal outlets**, verify symmetry/rotation invariance and whether native C component/neighbor traversal order controls which exact-tie outlet is chosen, using a tiny explicitly logged C test or the same miniature model with rotated mirrored ZINI. Only promote a code correction if the original chooses a **physically higher unique saddle** when a resolvably lower spillway exists, or violates outlet/mass invariance beyond benign tie selection.
+
+The implication for Junggar: the original V10.2B whole-domain 98.75% net erosion export cannot be explained from these miniature results; one must identify the real stage-dependent eastern/northern source-to-sink corridors and **palaeodivide/closed basin entry heights** at the Junggar 10km grid, then test high-resolution 5km stage cases with explicit geological constraints and balanced sediment mass. A micro TISC algorithm test cannot itself create missing long-term subsidence or sediment input.
