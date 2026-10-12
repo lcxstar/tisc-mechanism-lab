@@ -1,0 +1,44 @@
+--- 03s/surf_proc.c
++++ 03t/surf_proc.c
+@@ -383,17 +383,30 @@
+           tisc03s_sed_increment_erased_count,tisc03s_sed_increment_erased_kg,tisc03s_sediment_calls);
+         fflush(stderr);
+     }
+-	PRINT_SUMLINE("eros_nosd: %+8.2e N	 sedim_inc: %+8.2e N   outp_seds:   %+8.2e N  ",  ctx->total_bedrock_eros_mass*g, ctx->total_sed_mass*g, total_lost_sed_mass*g);
+-	{
+-		float error = 0;
+-		float mass_error = ctx->total_bedrock_eros_mass - ctx->total_sed_mass - total_lost_sed_mass;
+-		float ref_mass = ctx->total_bedrock_eros_mass;
+-		if (ref_mass == 0) ref_mass = total_lost_sed_mass;
+-		if (ref_mass == 0) ref_mass = fabs(ctx->total_sed_mass);
+-		if (ref_mass > 0) error = - mass_error / ref_mass * 100;
+-		if (fabs(error)>=.5 || (fabs(error)>=.1 && verbose_level>=3))
+-			PRINT_WARNING("sediment_balance: %.1f%% (>0 => sed>eros)", error);
+-	}
++
++    /* 03t: show the numerically conservative double-ledger mass budget.
++     * Native ModelContext float32 is retained for upstream ABI compatibility,
++     * but is unfit for a sum of millions of sub-ULP lake deposits. */
++    PRINT_SUMLINE("eros_nosd: %+8.2e N\t sedim_inc: %+8.2e N   outp_seds:   %+8.2e N  ",
++        tisc03s_bed_kg*g, tisc03s_sed_kg*g, tisc03s_export_kg*g);
++    {
++        double error = 0;
++        const double mass_error = tisc03s_bed_kg - tisc03s_sed_kg - tisc03s_export_kg;
++        double ref_mass = tisc03s_bed_kg;
++        if (ref_mass == 0) ref_mass = tisc03s_export_kg;
++        if (ref_mass == 0) ref_mass = fabs(tisc03s_sed_kg);
++        if (ref_mass > 0) error = -mass_error / ref_mass * 100;
++        fprintf(stderr,
++            "\nTISC_03T_CORRECTED_BALANCE timeMyr=%.6f "
++            "erosion_kg=%.17g net_deposition_kg=%.17g export_kg=%.17g "
++            "balance_gap_kg=%.17g balance_pct=%.17g\n",
++            (double)(ctx->Time/Matosec),tisc03s_bed_kg,tisc03s_sed_kg,
++            tisc03s_export_kg,mass_error,error);
++        fflush(stderr);
++        if (fabs(error)>=.5 || (fabs(error)>=.1 && verbose_level>=3))
++            PRINT_WARNING("sediment_balance: %.1f%% (>0 => sed>eros)", error);
++    }
++
+ 
+ 	/* Update lake elevations one last time to perfectly match final topography for output files */
+ 	for (int il=1; il<=nlakes; il++) {

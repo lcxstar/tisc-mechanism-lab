@@ -1,0 +1,112 @@
+--- 03k-candidate/surf_proc.c
++++ 03s-observation/surf_proc.c
+@@ -77,6 +77,13 @@
+ 
+ 
+ 
++
++/* TISC-LAB 03s: independent double-precision observational mass ledger. */
++static double tisc03s_bed_kg=0.0, tisc03s_sed_kg=0.0, tisc03s_export_kg=0.0;
++static double tisc03s_sed_increment_erased_kg=0.0;
++static unsigned long long tisc03s_sed_increment_erased_count=0;
++static unsigned long long tisc03s_sediment_calls=0;
++
+ int Surface_Transport (ModelConfig *cfg, ModelContext *ctx, float **topo_ant, int lake_instant_fill) 
+ {
+ 	/*
+@@ -96,6 +103,13 @@
+ 	if (!cfg->hydro_model) return(0);
+ 
+ 	PRINT_DEBUG("Calculating surface transport");
++	/* Reset only independent observer values; author counters are untouched. */
++	tisc03s_bed_kg=(double)ctx->total_bedrock_eros_mass;
++	tisc03s_sed_kg=(double)ctx->total_sed_mass;
++	tisc03s_export_kg=0.0;
++	tisc03s_sed_increment_erased_kg=0.0;
++	tisc03s_sed_increment_erased_count=0;
++	tisc03s_sediment_calls=0;
+ 
+ 	Dtopo  = alloc_matrix(cfg->Ny, cfg->Nx);
+ 	topoini  = alloc_matrix(cfg->Ny, cfg->Nx);
+@@ -347,6 +361,28 @@
+ 					max_eros*1e3/(dt/secsperyr), max_sedim*1e3/(dt/secsperyr) );
+ 		}
+ 	}
++
++    {
++        const double tisc03s_native_bed=(double)ctx->total_bedrock_eros_mass;
++        const double tisc03s_native_sed=(double)ctx->total_sed_mass;
++        const double tisc03s_native_out=(double)total_lost_sed_mass;
++        const double tisc03s_native_gap=tisc03s_native_bed-tisc03s_native_sed-tisc03s_native_out;
++        const double tisc03s_precise_gap=tisc03s_bed_kg-tisc03s_sed_kg-tisc03s_export_kg;
++        fprintf(stderr,
++          "\nTISC_03S_LEDGER timeMyr=%.6f "
++          "float_bed_kg=%.17g float_sed_kg=%.17g float_out_kg=%.17g "
++          "float_gap_kg=%.17g float_gap_pct=%.12g "
++          "double_bed_kg=%.17g double_sed_kg=%.17g double_out_kg=%.17g "
++          "double_gap_kg=%.17g double_gap_pct=%.12g "
++          "sed_round_to_zero_count=%llu sed_round_to_zero_kg=%.17g sed_calls=%llu\n",
++          (double)(ctx->Time/Matosec),
++          tisc03s_native_bed,tisc03s_native_sed,tisc03s_native_out,
++          tisc03s_native_gap,tisc03s_native_bed?tisc03s_native_gap/tisc03s_native_bed*100:0.0,
++          tisc03s_bed_kg,tisc03s_sed_kg,tisc03s_export_kg,
++          tisc03s_precise_gap,tisc03s_bed_kg?tisc03s_precise_gap/tisc03s_bed_kg*100:0.0,
++          tisc03s_sed_increment_erased_count,tisc03s_sed_increment_erased_kg,tisc03s_sediment_calls);
++        fflush(stderr);
++    }
+ 	PRINT_SUMLINE("eros_nosd: %+8.2e N	 sedim_inc: %+8.2e N   outp_seds:   %+8.2e N  ",  ctx->total_bedrock_eros_mass*g, ctx->total_sed_mass*g, total_lost_sed_mass*g);
+ 	{
+ 		float error = 0;
+@@ -1856,6 +1892,7 @@
+ 					}
+ 				} else {
+ 					*total_lost_sed_mass += drainage[drow][dcol].masstr * dt_st;
++					tisc03s_export_kg += (double)drainage[drow][dcol].masstr * (double)dt_st;
+ 				}
+ 			}
+ 			/*If draining to an CLOSED (endorheic) lake:*/
+@@ -1884,6 +1921,7 @@
+ 			/*Transfers out of model or deposits in internal sinks.*/
+ 			if (AT_BORDER(row, col)) {
+ 				*total_lost_sed_mass += transfer_mass * dt_st;
++				tisc03s_export_kg += (double)transfer_mass * (double)dt_st;
+ 			} else {
+ 				float d_mass_sink = -transfer_mass * dt_st;
+ 				if (d_mass_sink < 0) {
+@@ -2466,7 +2504,14 @@
+ 	eros_now[row][col]   -= d_mass ;
+ 	accumul_erosion[row][col] -= d_mass ;
+ 
++	float tisc03s_native_before=ctx->total_sed_mass;
+ 	ctx->total_sed_mass += d_mass;
++	tisc03s_sed_kg += d_mass;
++	tisc03s_sediment_calls++;
++	if (d_mass!=0.0 && ctx->total_sed_mass==tisc03s_native_before) {
++		tisc03s_sed_increment_erased_count++;
++		tisc03s_sed_increment_erased_kg+=d_mass;
++	}
+ 	return (1);
+ }
+ 
+@@ -2487,11 +2532,13 @@
+ 			dh_eros_Block = MIN_2(Blocks[k].thick[row][col], MASS2SEDTHICK(cfg, mass_per_m2)*cfg->dx*cfg->dy);
+ 			mass_per_m2 -= THICK2SEDMASS(cfg, dh_eros_Block) / (cfg->dx*cfg->dy);
+ 			ctx->total_sed_mass -= THICK2SEDMASS(cfg, dh_eros_Block);
++			tisc03s_sed_kg -= (double)THICK2SEDMASS(cfg, dh_eros_Block);
+ 		}
+ 		else {
+ 			dh_eros_Block = MIN_2(Blocks[k].thick[row][col], fabs(mass_per_m2/Blocks[k].density));
+ 			mass_per_m2 -= dh_eros_Block * Blocks[k].density;
+ 			ctx->total_bedrock_eros_mass += dh_eros_Block * Blocks[k].density * cfg->dx*cfg->dy;
++			tisc03s_bed_kg += (double)dh_eros_Block * (double)Blocks[k].density * (double)cfg->dx * (double)cfg->dy;
+ 		}
+ 		Blocks[k].thick[row][col] -= dh_eros_Block;
+ 		dh_eros += dh_eros_Block;
+@@ -2503,6 +2550,7 @@
+ 		dh_eros += mass_per_m2/cfg->denscrust;
+ 		Dq[row][col] -=  g * mass_per_m2*(cfg->denscrust-cfg->densenv)/cfg->denscrust;
+ 		ctx->total_bedrock_eros_mass +=  mass_per_m2 * cfg->dx*cfg->dy;
++		tisc03s_bed_kg += (double)mass_per_m2 * (double)cfg->dx * (double)cfg->dy;
+ 	}
+ 	ctx->topo[row][col] -= dh_eros;
+ 	/*record of eros/sed is performed in kg*/
