@@ -81,6 +81,19 @@ jobs:
             echo 'tisc Ebro_evol -qerosed_model=0 -qhydro_model=0 -V1 -qplotting_mode=0' > ACTUAL_COMMAND.txt
             /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s 4800 tisc Ebro_evol -qerosed_model=0 -qhydro_model=0 -V1 -qplotting_mode=0 > RUN.log 2>&1
           fi
+      - name: Log original run file shape before numerical QC
+        if: always()
+        run: |
+          set -euo pipefail
+          echo "AUTHOR_CASE ${{ matrix.case }}"
+          find working/${{ matrix.case }} -maxdepth 1 -type f -printf '%f %s bytes\n' | sort | head -n 35
+          for p in working/${{ matrix.case }}/MODE1_N11.log working/${{ matrix.case }}/MODE2_N11.log working/${{ matrix.case }}/RUN.log; do
+            if test -f "$p"; then
+              echo "ORIGINAL_LOG:$p"
+              head -n 6 "$p"
+              tail -n 6 "$p"
+            fi
+          done
       - name: Inspect physical-output grids, reference magnitudes and keep negative cases visible
         if: always()
         run: |
@@ -106,8 +119,8 @@ jobs:
             passed=True
             for n,r in refs.items():
               a=coords(d/f'MODE1_N{n}.log');b=coords(d/f'MODE2_N{n}.log')
-              assert len(a)==n*n and len(b)==n*n, 'Missing direct load grid'
-              assert (0.0,0.0) in a and (0.0,0.0) in b
+              assert len(a)==n*n and len(b)==n*n, f'Missing direct load grid N{n} modes n1={len(a)} n2={len(b)} expected={n*n}'
+              assert (0.0,0.0) in a and (0.0,0.0) in b, f'Missing center N{n}, keys {list(a)[:4]} {list(b)[:4]}'
               observed=abs(b[(0.,0.)]);delta=max(abs(a[k]-b[k]) for k in a)
               result['checks'][str(n)]={'expected_center_m':r,'mode2_center_m':observed,
                   'mode1_center_m':abs(a[(0.,0.)]),'max_mode1_vs_mode2_grid_difference_m':delta}
@@ -125,12 +138,21 @@ jobs:
                   try:v=(float(z[0]),float(z[1]),float(z[5]))
                   except ValueError:continue
                   n+=1;finite &= all(math.isfinite(x) for x in v)
+            if n==0:
+              xyzt=d/(prefix+'.xyzt')
+              if xyzt.is_file():
+                for line in xyzt.read_text(errors='replace').splitlines():
+                  v=line.strip().split()
+                  if len(v)>=4 and not line.startswith(('#','>')):
+                    try:x,y,z=float(v[0]),float(v[1]),float(v[2])
+                    except ValueError:continue
+                    n+=1;finite &= all(math.isfinite(q) for q in (x,y,z))
             expected={'flex_project_T5000':141*141,'conic_island_tf10':101*101,
                       'ebro_without_surface':208*110}['${{ matrix.case }}']
             log=(d/'RUN.log').read_text(errors='replace') if (d/'RUN.log').exists() else ''
             ages=[]
             import re
-            ages=[float(m) for m in re.findall(r'(?m)^\\s*T=\\s*([-+0-9.eE]+)\\s*My',log)]
+            ages=[float(m) for m in re.findall(r'(?m)^\s*T=\s*([-+0-9.eE]+)\s*My',log)]
             target={'flex_project_T5000':9,'conic_island_tf10':10,'ebro_without_surface':0}['${{ matrix.case }}']
             last=ages[-1] if ages else None
             result['checks']={'native_output_nodes':n,'expected_nodes':expected,'native_values_finite':finite,
