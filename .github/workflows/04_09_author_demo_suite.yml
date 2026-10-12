@@ -1,0 +1,194 @@
+name: 04–09 | Original-author demo suite full forward reproduction
+on:
+  push:
+    branches: [v04-official-demo-completion]
+    paths:
+      - '.github/workflows/04_09_author_demo_suite.yml'
+      - 'scripts/qc_official_demo_completion.py'
+      - 'scripts/archive_official_demo_case.py'
+      - 'scripts/summarize_official_demo_suite.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  author-demo:
+    name: '${{ matrix.case_name }} | ${{ matrix.variant }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - case_name: 04_river
+            demo_dir: 4_river_transport
+            prefix: conic_island
+            variant: audited_03t_optimized
+            max_seconds: 5400
+          - case_name: 05_lake_one
+            demo_dir: 5_lakes
+            prefix: 1lake
+            variant: normalized_upstream
+            max_seconds: 2400
+          - case_name: 05_lakes_two
+            demo_dir: 5_lakes
+            prefix: 2lakes
+            variant: normalized_upstream
+            max_seconds: 2400
+          - case_name: 06_tectonic
+            demo_dir: 6_tectonics
+            prefix: demo
+            variant: audited_03t_optimized
+            max_seconds: 6500
+          - case_name: 07_climate
+            demo_dir: 7_climate
+            prefix: sinusoidal
+            variant: audited_03t_optimized
+            max_seconds: 6500
+          - case_name: 08_ebro
+            demo_dir: 8_Ebro_evol
+            prefix: Ebro_evol
+            variant: audited_03t_optimized
+            max_seconds: 6500
+          - case_name: 09_iberia
+            demo_dir: 9_Iberian_drainage
+            prefix: Iberia_present
+            variant: normalized_upstream
+            max_seconds: 3600
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Check source pin and install native compilation environment
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = "d18b7d270f4d671b80223e10dede329ad35cafdd"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          python3 -m pip install -q numpy
+          echo 'CI initialized, skip upstream legacy welcome notification' > "$HOME/.tiscdefaults"
+      - name: Copy original author inputs verbatim and record original SHA256
+        run: |
+          set -euo pipefail
+          mkdir -p "author_full/${{ matrix.case_name }}" "author_results/${{ matrix.case_name }}" "author_source_audit/${{ matrix.case_name }}"
+          cp -a "upstream/tisc/demo/${{ matrix.demo_dir }}/." "author_full/${{ matrix.case_name }}/"
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          base=Path('author_full/${{ matrix.case_name }}')
+          originals={}
+          for f in sorted(base.iterdir()):
+              if not f.is_file(): continue
+              if f.suffix.upper() in {'.PRM','.UNIT','.ZINI','.EET','.REC','.SLV','.INT','.INT2','.RIV','.PRFL','.XYG'}:
+                  originals[f.name]=hashlib.sha256(f.read_bytes()).hexdigest()
+          assert any(x.endswith('.PRM') for x in originals)
+          base.joinpath('ORIGINAL_INPUT_MANIFEST.json').write_text(json.dumps({
+              "original_repo":"danigeos/tisc",
+              "original_commit":"d18b7d270f4d671b80223e10dede329ad35cafdd",
+              "original_demo_subdirectory":"tisc/demo/${{ matrix.demo_dir }}",
+              "prefix":"${{ matrix.prefix }}",
+              "full_physical_inputs_modified":False,
+              "files_sha256":originals},indent=2))
+          print("AUTHOR_VERBATIM_INPUTS",len(originals),json.dumps(originals))
+          PY
+      - name: Build either normalized original or separately audited 03t patched variant
+        run: |
+          set -euo pipefail
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c author_source_audit/${{ matrix.case_name }}/ORIGINAL_NBSP_QC.json
+          if [ "${{ matrix.variant }}" = "audited_03t_optimized" ]; then
+            python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c author_source_audit/${{ matrix.case_name }}
+            python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c author_source_audit/${{ matrix.case_name }}
+            python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c author_source_audit/${{ matrix.case_name }}
+            python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c author_source_audit/${{ matrix.case_name }}
+            python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c author_source_audit/${{ matrix.case_name }}
+            python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c author_source_audit/${{ matrix.case_name }}
+          fi
+          make -C upstream/tisc/src tisc
+          test -x upstream/bin/tisc
+          sha256sum upstream/bin/tisc > author_full/${{ matrix.case_name }}/EXECUTION_SOURCE_SHA256.txt
+          echo d18b7d270f4d671b80223e10dede329ad35cafdd > author_full/${{ matrix.case_name }}/AUTHOR_COMMIT.txt
+          echo '${{ matrix.variant }}' > author_source_audit/${{ matrix.case_name }}/SOURCE_VARIANT.txt
+          sha256sum upstream/tisc/src/surf_proc.c > author_source_audit/${{ matrix.case_name }}/SURFACE_SOURCE_SHA256.txt
+      - name: Execute entire original author time interval with untouched parameters
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd "author_full/${{ matrix.case_name }}"
+            echo "tisc ${{ matrix.prefix }} -V1 -qplotting_mode=0" > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SECONDS.txt timeout -k 15s ${{ matrix.max_seconds }} \
+              "$tisc_dir/bin/tisc" '${{ matrix.prefix }}' -V1 -qplotting_mode=0 > RUN.log 2>&1
+            code=$?
+            set -e
+            echo "$code" > EXIT_CODE.txt
+            echo "AUTHOR_FORWARD ${{ matrix.case_name }} exit=$code source=${{ matrix.variant }}"
+            grep -aE '^T=|^TISC_03T_CORRECTED_BALANCE' RUN.log | tail -n 5 || true
+          )
+      - name: Scientific QC and original-input preservation
+        if: always()
+        run: |
+          set -euo pipefail
+          python3 scripts/qc_official_demo_completion.py \
+            --directory author_full/${{ matrix.case_name }} --case ${{ matrix.case_name }} \
+            --upstream d18b7d270f4d671b80223e10dede329ad35cafdd \
+            --source-variant ${{ matrix.variant }} \
+            --result author_results/${{ matrix.case_name }}
+      - name: Pack native reproducible evidence and metadata
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ -f author_full/${{ matrix.case_name }}/ORIGINAL_INPUT_MANIFEST.json ]; then
+            python3 scripts/archive_official_demo_case.py --case-dir author_full/${{ matrix.case_name }} \
+              --result-dir author_results/${{ matrix.case_name }} --case-name ${{ matrix.case_name }}
+          fi
+          if [ -d author_source_audit/${{ matrix.case_name }} ]; then
+            mkdir -p author_results/${{ matrix.case_name }}/SOURCE_PATCH_AUDIT
+            cp -a author_source_audit/${{ matrix.case_name }}/. author_results/${{ matrix.case_name }}/SOURCE_PATCH_AUDIT/
+          fi
+      - name: Upload per-demo native models and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'AUTHOR_FULL_${{ matrix.case_name }}'
+          path: author_results/${{ matrix.case_name }}/
+          retention-days: 60
+          if-no-files-found: warn
+  collect:
+    needs: [author-demo]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download every completed / failed demo scientific package
+        uses: actions/download-artifact@v4
+        with:
+          pattern: AUTHOR_FULL_*
+          path: author_suite_download
+      - name: Produce immutable machine-readable suite status
+        run: |
+          python3 scripts/summarize_official_demo_suite.py --input author_suite_download --out results/04_09_official_demo_suite
+      - name: Persist cases and status in the public GitHub branch
+        run: |
+          set -euo pipefail
+          git add results/04_09_official_demo_suite
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --cached --quiet; then
+            git commit -m "results(author): archive original demo models 4-9 with QC and provenance"
+            git push origin HEAD:v04-official-demo-completion
+          fi
+      - name: Artifact fallback for permanent results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AUTHOR_DEMO_SUITE_SUMMARY_AND_ARCHIVES
+          path: results/04_09_official_demo_suite/
+          retention-days: 60
