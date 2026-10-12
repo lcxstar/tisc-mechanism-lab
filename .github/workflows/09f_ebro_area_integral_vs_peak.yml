@@ -1,0 +1,42 @@
+name: 09f | Ebro 2016-2017 peak versus basin-wide signed-topography integral PDF audit
+on:
+  push:
+    branches: [v09-ebro-historical-longterm-diagnostics]
+    paths: ['.github/workflows/09f_ebro_area_integral_vs_peak.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  preserved-original-physical-fields:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: 1a32399e6842c32be7e01f7cc2ed8cfcb162c40d
+          path: first_upload
+      - name: Compare full model printed spatial extrema, signed topographic integral, flexure and sediment, no recalculation
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q matplotlib
+          python3 scripts/09f_compare_historic_area_integral_vs_maximum.py \
+            --author-screen first_upload/demo/8_Ebro_evol/Ebro_evol.screen \
+            --feb2017 results/09_ebro_historical_longterm/09c_first_Feb2017_source/RUN.log \
+            --apr2017 results/09_ebro_historical_longterm/09a_full_2x2/old2017__old2017/RUN.log \
+            --modernold2017 results/09_ebro_historical_longterm/09a_full_2x2/new2026__old2017/RUN.log \
+            --out results/09_ebro_historical_longterm/09f_integral_vs_peak
+      - name: Permanently retain figure PDFs, numerical age table and signed topology integral interpretation
+        run: |
+          set -euo pipefail
+          git add -f results/09_ebro_historical_longterm/09f_integral_vs_peak
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'figures(V09): whole-Ebro 60Myr peak vs integrated topography, deflection, rain and sediment'
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            git fetch origin v09-ebro-historical-longterm-diagnostics
+            git rebase origin/v09-ebro-historical-longterm-diagnostics
+            if git push origin HEAD:v09-ebro-historical-longterm-diagnostics; then exit 0; fi
+          done
+          exit 1
