@@ -1,5 +1,7 @@
 # V08 — TISC salt_model switch repaired and independently validated
 
+**Corrected native-file interpretation (08i, 13 October 2026):** In original TISC `.xyw`, column 3 is **water discharge**, column 4 sediment flux and column 6 **actual topography**. Old 08d/08e falsely labeled column-3 differences as elevation. The [correct 08i scientific audit](results/08_salt_module_fix_regression/08i_corrected_native_xyw/V08_CORRECTED_XYW_COLUMN_MAPPING_REPORT.md) has now verified **zero actual column-6 terrain difference** across all 22,880 Ebro cells for repaired `salt_model=0` versus original zero-ion test; original and repaired salt-on outputs remain bytewise identical in three author demos. [08i independently successful run](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38283605624). The original 60-Myr author-2016 historical mismatch is still not resolved.
+
 **Final: PASS 14/14 (12 October 2026).** The original 2026 solver applies gypsum and halite sedimentation even when salt_model=0. A minimal guarded fix eliminates the spurious first Ebro 7.4-km salt thickness, while salt_model=1 reproduces the original source **byte-for-byte** on Ebro, 1lake, and 2lakes. The repaired original-input Ebro also completed its **full -60 to 0 Ma model** (121 printed ages, 208×110 grid), on the explicitly identified audited 03t+V08 solver variant. **Full equality with the archived 2016 Ebro history remains false.**
 
 - [**Complete Chinese/English scientific report and exact limitations**](docs/08_TISC_SALT_MODULE_FIX_FULL_REGRESSION_20261012.md)
@@ -8,7 +10,7 @@
 - [Original actual per-case source diff](results/08_salt_module_fix_regression/08b_native14/MINIMAL_SALT_MODULE_FIX.diff)
 - [All 14 original C source regression runs, original input, native outputs, logs](results/08_salt_module_fix_regression/08b_native14/)
 - [Completed corrected full 60-Myr Ebro, raw native outputs and 2016 reference comparison](results/08_salt_module_fix_regression/08c_full_ebro_60Myr/)
-- [Independent full 22,880-node numerical evidence](results/08_salt_module_fix_regression/08d_native_numeric_comparison/NUMERIC_NATIVE_GRID_COMPARISON.md)
+- [**Corrected real terrain-column-6 original native parity (supersedes 08d)**](results/08_salt_module_fix_regression/08i_corrected_native_xyw/V08_CORRECTED_XYW_COLUMN_MAPPING_REPORT.md)
 - [Successfully executed 60-Myr corrected workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38272458498)
 - [Final fully green corrected scientific QC workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38273630389)
 
