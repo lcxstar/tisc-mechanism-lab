@@ -45,12 +45,12 @@ func=func.replace(original_cond,
 # Gate BOTH direct precipitation loops as a unit; keep allocations/frees and
 # unrelated hydrology/lake bookkeeping outside the guard.
 begin='\t/* Distribute salt deposition */'
-endmarker='\tfree(lake_gypsum_flux);'
+endmarker='\tfree(lake_gypsum_flux);\n\tfree(lake_halite_flux);'
 assert func.count(begin)==1 and func.count(endmarker)==1
 assert func.count('ctx->topo[r][c] += dh_salt;')==2
 assert func.count('Dq[r][c] += dh_salt * g')==2
 func=func.replace(begin,begin+'\n\tif (salt_model) {  /* 2026 Ebro V08: no salt material updates when mode is off */',1)
-func=func.replace(endmarker,'\t} /* end physically active salt precipitation */\n'+endmarker,1)
+func=func.replace(endmarker,endmarker+'\n\t} /* end physically active salt precipitation */',1)
 
 patched=pre+func+post
 assert original!=patched
