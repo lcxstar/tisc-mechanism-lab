@@ -6,10 +6,10 @@
 - [Additional original direct-Q / Te / island / no-surface cases, actual checksums and native output](results/05_readme_variants/)
 - [All 7 native original author final landscapes rendered as vector PDF and PNG](results/05_readme_variants/author_native_figures/)
 - [Quantitative 60-Myr Ebro hydrology / erosion off-vs-on analysis](results/05_readme_variants/ebro_surface_process_isolation/EBRO_SURFACE_OPTION_QC.md)
-- [Three genuine 401-grid restarts started from 15-Myr native .all checkpoints](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38229155504). Treat as UNVERIFIED until native outputs pass independent QC.
+- **Three genuine 401-grid -F continuation experiments all finished and passed independent verification (3/3).** Checkpoint at 15 Myr, resumed to 20/25/30 Myr, all 160,801 finite native nodes and exit 0. [Permanent 3/3 QC](results/05_readme_variants/06_restarter_summary/ALL_RESTART_QC.md), [native model archives, actual restart logs, input hashes and checkpoint SHA256](results/05_readme_variants/06_raw_checkpoints/), [independent successful archive Action 38231860488](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38231860488).
 - [Stable v04 7/7 author model archive](https://github.com/lcxstar/tisc-mechanism-lab/tree/v04-official-demo-completion/results/04_09_official_demo_suite).
 
-The Ebro historic 2016 reference mismatch has NOT been solved. An unchanged executable/parameters claim is NOT made for audited 03t variants. There is no Junggar geological-model tuning in this branch.
+**Preservation scope:** Archived per-case `.PRM`/`.UNIT` inputs, provenance hashes, original `.xyw/.xyzt/.hrz/.lak` and other native final fields, full restarted `RESTART_RUN.log`, QC and executable SHA256. The binary 15-Myr `demo.all` checkpoint itself was *not* permanently committed; only its SHA256 and a short baseline log extract survive from the three continuation jobs (an independent earlier full 0–15 Myr log is archived in v04). Nor is execution of the author's historical GMT4 `-Pc` figures established. These omissions mean not every transient runtime file is permanently present, despite all scientific run completions passing.\n\nThe Ebro historic 2016 reference mismatch has NOT been solved. An unchanged executable/parameters claim is NOT made for audited 03t variants. There is no Junggar geological-model tuning in this branch.
 
 ---
 
