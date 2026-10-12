@@ -1,0 +1,46 @@
+{
+  "case": "12_dt_eros_0025",
+  "correctly_pristine_source_except_nbsp": true,
+  "original_input_sha256": {
+    "Ebro_evol.SLV": "4132abcc226a871b17bc648dd576dc61c411e3a02bf6d533a97243ff1f6c5379",
+    "Ebro_evol.ZINI": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+    "Ebro_evol.INT": "6313a707f87e618264954fc6df61409b2f874a6ba5a22a2f6c9b5bfffdf72a59",
+    "Ebro_evol.PRFL": "13a410a93f06010d72a6195689cbbef1799df875d9f2708fef9a74b001276651",
+    "Ebro_evol.REC": "03bd8363e8a7f2e15780bef98c3ce0f326e018844eafc70a6708371179fac899",
+    "Ebro_evol1.UNIT": "f6fd992d7335736289a74de813a2f29c7886d330daeebb5af48e59bd617cd777",
+    "Ebro_evol3.UNIT": "4b2a8ea55c62857af478104f948c1419cce773760ade8d81a95af0e5614fd0e8",
+    "Ebro_evol4.UNIT": "45c10b12b14422941800ac53268487a40ddc3929961eb2abe35ac511e3ac4fd8",
+    "Ebro_evol5.UNIT": "93fe16562d8f26a432cc7c46ac859507b19289a983652f34c4149ef6f78a9ee4",
+    "Ebro_evol.INT2": "29cbe1996bac95a06dac03e6278576f558a76b908917f4959b58e90085fc399d",
+    "Ebro_evol2.UNIT": "6dbbbbfa65a5f3bf22e87304a75ad81f74fa989a63736f24fef1eb0b76dfef38",
+    "Ebro_evol.PRM": "24aeea2b07923251bac991ad7f488d909e34cbafdfa3e38c93bb428bb3de558e"
+  },
+  "changed_original_input_names": [],
+  "changed_original_input_before_after_sha256": {},
+  "CLI": [
+    "Ebro_evol",
+    "-tf-59",
+    "-V1",
+    "-qplotting_mode=0",
+    "-te0.025"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 3.46,
+  "ages_recorded": [
+    -60.0,
+    -59.5,
+    -59.0
+  ],
+  "initial_topography_max_m": 1201.9,
+  "firststep_topography_max_m": 3782.0,
+  "firststep_topography_max_difference_vs_2016_m": 2581.2,
+  "firststep_load_max_pa": 78900000.0,
+  "firststep_load_total_N": 2.05e+16,
+  "firststep_deflection_max_m": 19.6,
+  "firststep_sediment_vol_km3": 4420.0,
+  "historical_2016_topography_max_m": 1200.8,
+  "historical_2016_load_max_pa": 3500000.0,
+  "historical_2016_deflection_max_m": 10.7,
+  "full_window_final_60Myr_not_executed": true,
+  "numerical_pass": true
+}

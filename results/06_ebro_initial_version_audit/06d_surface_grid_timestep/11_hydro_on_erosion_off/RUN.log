@@ -1,0 +1,20 @@
+
+* TISC: TECTONICS, ISOSTASY, SURFACE PROCESSES, AND CLIMATE PLANFORM MODELING *
+Version: TISC_2026-03-22_factorized_stable
+Parameters at 'Ebro_evol.PRM'.
+Time start: Mon Oct 12 11:18:38 2026
+
+  sea_level: 150.0 m
+  topo_ini :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2
+T= -60.0000 My
+  topogr.  :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2 unitFM
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.07e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.07e+03 m3/s  evap_wat: +2.05e+03 m3/s outp_water: +1.02e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  26/584 : 3.01e+00 km3 3.19e+03 km2  157 m  380,96    1 out @	  400,69  295.1 m3/s
+  total_lake_area_nosea: 4.55e+10 km2
+  river_max:   209.33 m3/s     0.00 kg/s @  311.3,188.1 km, 156.9 m
+  topo_diff_eros_max=     0.00 mm/yr	sedim_max:    16.72 mm/yr
+  eros_nosd: +0.00e+00 N	 sedim_inc: +0.00e+00 N   outp_seds:   +0.00e+00 N  

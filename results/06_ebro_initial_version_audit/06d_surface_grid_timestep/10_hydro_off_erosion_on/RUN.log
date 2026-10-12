@@ -1,0 +1,39 @@
+
+* TISC: TECTONICS, ISOSTASY, SURFACE PROCESSES, AND CLIMATE PLANFORM MODELING *
+Version: TISC_2026-03-22_factorized_stable
+Parameters at 'Ebro_evol.PRM'.
+Time start: Mon Oct 12 11:18:38 2026
+
+  sea_level: 150.0 m
+  topo_ini :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2
+T= -60.0000 My
+  topogr.  :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2 unitFM
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  eros-sed.:  max= 0.00 mm/yr	min= -0.00 mm/yr	difference=6.14e+01 m3/yr
+  sediment_vol: 1.13e+00 km3
+
+T= -59.5000 My
+  topogr.  :  max= 1201.8 m	min= 152.5 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +2.04e+03 N/m2  min = -2.08e+03 N/m2   Total: +1.99e+12 N	Max at 209,174 km
+  load: +2.14e+12 N   restit_force: +1.99e+12 N
+  deflect. :  max= 0.0 m	min= -0.0 m	integr=6.81e+07 m*m2
+  eros-sed.:  max= 0.00 mm/yr	min= -0.00 mm/yr	difference=6.14e+01 m3/yr
+  sediment_vol: 2.25e+00 km3
+
+T= -59.0000 My
+
+2 Blocks:
+No. Density Age  Volume  Surf.     Vel_x  Vel_y   Shft_x Shft_y erosL
+     kg/m3  My   1e3km3  1e3km2    km/My  km/My   km     km     [m] 
+ 1:  2150 -60.00     0.0    0.0    0.0    0.0    0.0    0.0   6.0e+04  S
+ 0:  2800 -60.00   331.2   57.1    0.0   -3.2    0.0    0.0   1.4e+05  -  1st Block
+ -:  2800 -60.00   -       -       0      0      0      0     1.4e+05  -  basement
+
+Final total sediment volume: 0.00 1e3 km3
+
+  2D prof. :  max =    1194.6 m     min =     152.8 m   
+Time end: Mon Oct 12 11:18:38 2026
+
