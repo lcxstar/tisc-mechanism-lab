@@ -1,0 +1,88 @@
+name: 07a | Ebro first 10 surface substeps instrument all 22880 cells
+on:
+  push:
+    branches: [v07-ebro-first-surface-cell-flux-audit]
+    paths: ['.github/workflows/07a_ebro_substep_spatial_flux.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  spatial-substep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Compile pinned original 2026 solver with diagnostics-only instrumentation
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          mkdir -p results/07_ebro_first_cell_flux/07a_native_substep debug_source
+          echo 'CI' > "$HOME/.tiscdefaults"
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c debug_source/NBSP.json
+          python3 scripts/07a_instrument_ebro_cells.py upstream/tisc/src/surf_proc.c debug_source/INSTRUMENT_AUDIT.json
+          make -C upstream/tisc/src tisc
+          sha256sum upstream/bin/tisc upstream/tisc/src/surf_proc.c > debug_source/DEBUG_EXE_SOURCE_SHA256.txt
+      - name: Run 208x110 original-Ebro grid, one 0.5 Myr tectonic/surface step
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          d="results/07_ebro_first_cell_flux/07a_native_substep"
+          mkdir -p benchmark
+          cp -a upstream/tisc/demo/8_Ebro_evol/. benchmark/
+          (
+            cd benchmark
+            export EBRO_V07_DIAGNOSTIC_PATH="$GITHUB_WORKSPACE/benchmark/CELL_SUBSTEPS.csv"
+            printf '%s\n' 'tisc Ebro_evol -tf-59 -V1 -qplotting_mode=0; EBRO_V07_DIAGNOSTIC_PATH=CELL_SUBSTEPS.csv' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SECONDS.txt timeout -k 10s 700 "$tisc_dir/bin/tisc" Ebro_evol -tf-59 -V1 -qplotting_mode=0 > RUN.log 2>&1
+            ec=$?
+            set -e
+            echo "$ec" > EXIT_CODE.txt
+            echo "V07 TISC EXIT $ec"
+            grep -a 'V07STEP' RUN.log | head -n 32
+            test "$ec" = 0
+            test -s CELL_SUBSTEPS.csv
+            gzip -6 CELL_SUBSTEPS.csv
+          )
+          cp benchmark/ACTUAL_COMMAND.txt benchmark/WALL_SECONDS.txt benchmark/EXIT_CODE.txt benchmark/RUN.log "$d/"
+          cp benchmark/CELL_SUBSTEPS.csv.gz "$d/"
+          cp debug_source/* "$d/"
+          (
+            cd "$d"
+            sha256sum CELL_SUBSTEPS.csv.gz RUN.log > SCIENCE_ARTIFACT_SHA256.txt
+          )
+      - name: Analyze native cell location, routing and sediment mass stepwise
+        run: |
+          set -euo pipefail
+          python3 scripts/07b_analyze_ebro_cell_flux.py \
+            --csv results/07_ebro_first_cell_flux/07a_native_substep/CELL_SUBSTEPS.csv.gz \
+            --out results/07_ebro_first_cell_flux/07a_native_substep
+      - name: Permanently commit diagnostic data, individual cell routes and localization figures
+        if: always()
+        run: |
+          set -euo pipefail
+          git add -f results/07_ebro_first_cell_flux/07a_native_substep
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'results(Ebro): preserve first 10 substeps native cells, runoff/sediment flux and causal coordinates'
+            for i in 1 2 3 4 5; do
+              git fetch origin v07-ebro-first-surface-cell-flux-audit
+              git rebase origin/v07-ebro-first-surface-cell-flux-audit
+              if git push origin HEAD:v07-ebro-first-surface-cell-flux-audit; then exit 0; fi
+            done
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EBRO_07A_ORIGINAL_C_CODE_CELL_LEVEL_FLUX
+          path: results/07_ebro_first_cell_flux/07a_native_substep
+          retention-days: 90
