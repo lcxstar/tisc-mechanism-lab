@@ -2,6 +2,8 @@
 
 **验收日期：2026-10-12。最终结果：PASS，14/14 项独立验收条件通过。** 本次全部工作在公开机制实验仓库的 `v08-salt-module-fix-regression` 分支进行，原作者的 `danigeos/tisc` 仓库及准噶尔盆地演化仓库均未修改。
 
+> **2026-10-13 数值字段更正。** TISC 原生 `.xyw` 文件第 3 列为水流量，第 4 列为输沙质量通量，第 5 列为节点类型，第 **6 列才是地表高程**。原 V08 08d/08e 将第 3 列误用作地形比较的做法已作废。最新 [08i 正确物理列验收](../results/08_salt_module_fix_regression/08i_corrected_native_xyw/V08_CORRECTED_XYW_COLUMN_MAPPING_REPORT.md) 实际比较全部 22,880 个埃布罗网格的第 6 列高程，结果修复后 salt_model=0 与原程序关闭全部溶解离子输入的**真实高程差为 0 m**，水流量和输沙通量也相等。开启盐模块的埃布罗和两个湖泊案例仍保持原生文件逐字节一致。旧 08d 数值报告须仅作为历史调试记录保留，不得引用为地形数值证据。
+
 ## 1. 修复了什么
 
 V07 已确认，当前作者源码 `tisc/src/surf_proc.c` 中的 `Calculate_Discharge()` 即使在 `salt_model=0` 时，也会产生石膏和岩盐沉淀，直接增加网格地表高程、顶层地层厚度及等静力载荷。第一子步 row=83、col=130 的盐沉淀通量为石膏 67.6605 kg/s 和岩盐 95.5849 kg/s，在 0.05 Myr 内直接造成 **7,401.10 m** 的虚假地形增量。
@@ -28,13 +30,13 @@ V08 的最小修复在 `Calculate_Discharge()` 中加入原本应该发挥作用
 | Ebro，原始源码与修复源码，salt_model=1 | 9,071.6 m | 输出逐字节相同 |
 | 单湖泊，原始源码与修复源码，salt_model=1 | — | 输出逐字节相同 |
 | 双湖泊，原始源码与修复源码，salt_model=1 | — | 输出逐字节相同 |
-| Ebro，原始源码，但八项海水/河水离子浓度设为 0 | **1,521.6 m** | 与修复 salt_model=0 的 22,880 个网格节点的原生前三列数值完全相同 |
+| Ebro，原始源码，但八项海水/河水离子浓度设为 0 | **1,521.6 m** | 与修复 salt_model=0 的 22,880 个网格节点的原生地形高程（第 6 列）、水流量（第 3 列）及输沙通量（第 4 列数值）均完全相同 |
 
-每组计算均实际返回 `exit code=0`，并保留原始输入、日志、校验记录和原生数值输出。初次 08b 工作流显示失败，是因为错误地要求使用**不同化学输入**生成的整个文件也具有完全相同的 SHA256。后续 08d 独立网格审计证实，两者在 22,880 个网格位置的前三个原生数值列完全一致，差值为 0。其他确实要求字节级一致性的启用模式比较均成功。
+每组计算均实际返回 `exit code=0`，并保留原始输入、日志、校验记录和原生数值输出。初次 08b 工作流显示失败，是因为错误地要求使用**不同化学输入**生成的整个文件也具有完全相同的 SHA256。后续 08d 仅核对了原生第 1–3 列，其中第 3 列实际上是水流量而非高程；该数值字段解释有误。08i 已用真实的第 6 列地形高程重新核对，并证实全部 22,880 个网格的高程差为 0 m，水流量与输沙通量也相等。其他确实要求字节级一致性的启用模式比较均成功。
 
 **注意：单湖泊和双湖泊在 salt_model=0 时，其数值场相较原始错误程序发生改变，这是修复后的预期结果，不能用保持错误程序的一致性来否定修复。**
 
-[14 组实际运行记录](../results/08_salt_module_fix_regression/08b_native14/) · [独立的全网格数值差异核对](../results/08_salt_module_fix_regression/08d_native_numeric_comparison/NUMERIC_NATIVE_GRID_COMPARISON.md)
+[14 组实际运行记录](../results/08_salt_module_fix_regression/08b_native14/) · [08i 更正后的全网格真实高程、水流量及输沙通量核对](../results/08_salt_module_fix_regression/08i_corrected_native_xyw/V08_CORRECTED_XYW_COLUMN_MAPPING_REPORT.md)
 
 ## 3. 埃布罗盆地完整 60 Ma 修复模型已经重新运行
 
@@ -60,7 +62,7 @@ V08 的最小修复在 `Calculate_Discharge()` 中加入原本应该发挥作用
 
 ## 4. 最终回归验收
 
-最终独立验收读取上述实际运行结果、原生网格 CSV 对照、完整正演 QC 和模型输入 SHA256，并自动执行 14 项断言，结果 **PASS 14/14**。
+最初 08e 独立验收读取上述实际运行结果、旧版 08d 网格对照、完整正演 QC 和模型输入 SHA256，执行 14 项断言，得到 **PASS 14/14**；其中一项关于第三列高程的物理解释错误。随后 08i 直接重新比较了第 6 列的真实地形高程，验证了真正需要的修复后关闭盐模型高程不变性，补全并更正了科学验收。
 
 [正式验收报告](../results/08_salt_module_fix_regression/08e_final_scientific_acceptance/V08_SALT_MODULE_FINAL_ACCEPTANCE.md) · [机器可读 QC](../results/08_salt_module_fix_regression/08e_final_scientific_acceptance/V08_SALT_MODULE_FINAL_ACCEPTANCE.json)
 
@@ -69,6 +71,8 @@ V08 的最小修复在 `Calculate_Discharge()` 中加入原本应该发挥作用
 - [08c 完整埃布罗 60 Myr 修复正演](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38272458498)
 - [08d 独立原生网格差异复核](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38272983471)
 - [08e 最终 14/14 科学验收](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38273630389)
+
+[08i 经更正的全模型网格物理列验收](../results/08_salt_module_fix_regression/08i_corrected_native_xyw/V08_CORRECTED_XYW_COLUMN_MAPPING_REPORT.md) · [08i 成功的 GitHub Actions](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38283605624)
 
 ## 5. 后续不能夸大的结论
 
