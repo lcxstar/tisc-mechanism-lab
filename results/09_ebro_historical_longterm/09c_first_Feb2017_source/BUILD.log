@@ -1,0 +1,26 @@
+make: Entering directory '/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/first_upload/src'
+
+tisc HOME DIRECTORY: "/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/first_upload"
+ARCH=x86_64
+OP. SYSTEM=Linux6.17.0-1022-azure
+User home: /home/runner
+You are currently runner using the shell /bin/sh
+
+gcc  -O2 -w -std=gnu99 -fcommon -o tisc.o -DTISCDIR=\"`cd ..; pwd`\" -I../include  -c tisc.c -DSURFACE_TRANSPORT  
+if [ -f /usr/bin/ctags ]; then \
+	ctags *.c ../lib/thin_sheet.f ../lib/libreria.c ../include/*.h ;\
+	mv -f tags tisc.tags; echo tags file produced.;\
+fi
+(cd ../lib  ; make libreria.o ; )
+make[1]: Entering directory '/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/first_upload/lib'
+gcc  -c -o libreria.o -O2 -w -std=gnu99 -fcommon -I../include libreria.c
+make[1]: Leaving directory '/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/first_upload/lib'
+gcc  -c -o surf_proc.o -O2 -w -std=gnu99 -fcommon -I../include  surf_proc.c
+if [  ]; then \
+	cd ../lib; make thin_sheet; \
+fi
+
+gcc   tisc.o ../lib/libreria.o surf_proc.o   \
+	-lm -lc   -o ../bin/tisc
+chmod a+x ../bin/tisc
+make: Leaving directory '/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/first_upload/src'
