@@ -1,0 +1,51 @@
+name: 06a | Ebro historical log, first-step load and default parameter audit
+on:
+  push:
+    branches: [v06-ebro-initial-version-audit]
+    paths:
+      - '.github/workflows/06a_ebro_historical_initial_audit.yml'
+      - 'scripts/06a_audit_ebro_initial_parameters.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  historic-initial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Freeze original author commit and calculate exact early-time comparisons
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = "d18b7d270f4d671b80223e10dede329ad35cafdd"
+          python3 scripts/06a_audit_ebro_initial_parameters.py \
+            --author-screen upstream/tisc/demo/8_Ebro_evol/Ebro_evol.screen \
+            --current-raw results/04_09_official_demo_suite/08_ebro/08_ebro_NATIVE_RAW.tar.gz \
+            --upstream-input-dir upstream/tisc/demo/8_Ebro_evol \
+            --default-prm upstream/tisc/doc/template.PRM \
+            --out results/06_ebro_initial_version_audit/06a_historical_vs_current
+      - name: Permanently save independent read-only audit data
+        run: |
+          set -euo pipefail
+          git add -f results/06_ebro_initial_version_audit/06a_historical_vs_current
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'results(Ebro): pin original 2016 vs 2026 first-step load, flexure and inherited inputs'
+          for i in 1 2 3 4 5; do
+            git fetch origin v06-ebro-initial-version-audit
+            git rebase origin/v06-ebro-initial-version-audit
+            if git push origin HEAD:v06-ebro-initial-version-audit; then exit 0; fi
+          done
+          exit 1
+      - name: Persist supplemental forensic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EBRO_06A_AUTHOR_HISTORIC_PARAMETERS_FIRST_STEPS
+          path: results/06_ebro_initial_version_audit/06a_historical_vs_current/
+          retention-days: 90
