@@ -1,0 +1,45 @@
+name: 03z | Read-only local lake outlet and saddle ULP replay
+on:
+  push:
+    branches: [v03z-local-lake-saddle-tests]
+    paths:
+      - '.github/workflows/03z_frozen_native_outlet_ulp.yml'
+      - 'scripts/analyze_03z_native_outlet_ulp.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  local-saddle-from-authentic-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numpy only
+        run: python -m pip install -q numpy
+      - name: Fetch verified original paired whole-grid native float states
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p frozen03x
+          gh run download 38183004799 --repo "$GITHUB_REPOSITORY" --name TISC03X_RAWFLOAT_N401_TF3 --dir frozen03x
+          test -s frozen03x/experiment/reference/demo.xyw
+          test -s frozen03x/experiment/optimized/demo.lak
+          sha256sum frozen03x/experiment/{reference,optimized}/demo.{xyw,lak} > frozen_inputs.sha256
+      - name: Run isolated exact native float slope and lake outlet snapshot scenarios
+        run: |
+          python scripts/analyze_03z_native_outlet_ulp.py frozen03x output03z
+      - name: Publish deterministic, source-fingerprinted local experiment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 03Z_NATIVE_401_LOCAL_SADDLE_ULP_AUDIT
+          path: |
+            output03z/
+            frozen_inputs.sha256
+          retention-days: 45
+          if-no-files-found: warn
