@@ -69,8 +69,8 @@ for line in (a.work/'Ebro_evol.PRM').read_text().splitlines():
 expected=int(parameters['Nx'])*int(parameters['Ny'])
 qc={
  'case':a.source+'__'+a.input,
- 'source_version':'original 2017 C' if a.source=='old2017' else 'current 2026 C + V08 salt mode minimal guard',
- 'source_commit':'38c63ab5bacf2045530160ba8e41ae0071a04065' if a.source=='old2017' else 'd18b7d270f4d671b80223e10dede329ad35cafdd',
+ 'source_version':'original 2017 C, git-pinned run-specific' if a.source=='old2017' else 'current 2026 C + V08 salt mode minimal guard',
+ 'source_commit':subprocess.check_output(['git','-C',str(src),'rev-parse','HEAD'],text=True).strip(),
  'source_03t_optimized':False,
  'source_original_filename':'src/surf_proc.c' if a.source=='old2017' else 'tisc/src/surf_proc.c',
  'input_version':a.input,'original_demo_input_folder':str(inp),
