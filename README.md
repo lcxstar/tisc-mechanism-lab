@@ -1,3 +1,19 @@
+## 03z — Real TISC local lake outlet and controlling saddle isolation — PASSED
+
+The earlier 03y `1e-8` *global routing tolerance* was conclusively rejected. The focused 03z experiment used original accepted 03t lake physics, with one-cell initial DEM perturbations and actual TISC 41×41 forward evolution, **no modification to river/lake routing code**. Baseline DEM is left/right perfectly symmetric in stored float32, with equal east/west inner lake-entry throat heights 114.16148376464844m.
+
+- [Full scientific report and interpretation](notes/03z_LOCAL_LAKE_OUTLET_SADDLE_TESTS.md)
+- [Permanent 20-case main-lake saddle scan CSV](results/03_tectonics/03Z_LAKE_THROAT_20CASE_SCIENCE.csv)
+- [20/20 completed actual TISC threshold-sweep runs](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210578478)
+- [9/9 completed full-solver outlet-notch negative controls](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38210167704)
+- [360 local native float32 perturbations on original 401² actual TISC t3Myr output](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38209933445)
+
+**Result:** At a crucial inner lake outlet throat, lowering just **one of 1,681 initial cells by one single float32 ULP**, a drop of **0.000007629m = 0.007629mm**, changes the dominant lake outlet from the **east (29,20km)** to the **west (11,20km)**, and changes the downstream pointers of **229/1681 cells** after 0.1Myr. Initial DEM notches that were not the actual controlling inlet throat did **not** redirect the lake even when lowered by 1cm. Main lake remained 222 cells, 3 lakes total; basin-wide compacted sediment volume changed from 0.0092km³ to 0.0104km³ (+~13% relative) over this tiny synthetic experiment. No violation of accepted sediment balance QC was detected. Exact ties are model-underconstrained; this result establishes **a localized near-degenerate outlet-topology sensitivity**, not proof the TISC lake solver is incorrect for a resolved unique outlet.
+
+**Decision:** Keep original TISC route solver (reject global epsilon). For real Junggar use geologically informed palaeodivides, basin accommodation, and independently tested grid-scale saddle elevations; do not invoke 801 or arbitrarily block external sediment export.
+
+---
+
 ## 03y controlled lake/outlet numerical sensitivity
 
 **Experimental, do not promote to production.** [03y experiment protocol and measured results](notes/03y_controlled_routing_protocol_and_outcome.md) introduces a **1e-8 m/m steepest-downhill replacement tie margin in only two source comparisons**, without altering geology, lakes' strict flat/saddle classification or original 03t physics. Four physical binaries (F0/D0 without tie margin vs F1/D1 with tie margin) are compared to test whether this tiny rule reduces floating-point trajectory sensitivity. N121 at 3Myr appears less sensitive (float-vs-local-double topography RMS 0.02688→0.00320m, 4→0 different downstream edges), BUT N121 at **15Myr** becomes **MORE** sensitive by that metric (48.0548→50.9012m), even as average sediment thickness RMS 27.19→26.91m. Changing the tie condition by itself alters baseline physical topography up to 304m at t3 and 648.7m by t15. Hence an arbitrary global `epsilon` is NOT validated as a numeric fix; preserve and diagnose the outlet threshold in isolated DEM cases. **All four 03y runs completed successfully** in [03y Actions](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38183870409). N401 t3 and t6 both **worsen** with the tie modification: topography float-vs-local-double RMS increases from **0.01672→1.45364m** at t3 and **15.4124→18.3764m** at t6; 6Myr sediment RMS increases **14.2622→16.6381m**, w RMS **0.6991→1.3629m**, and changed downstream graph links **17,385→18,300**. The universal 1e-8 gradient-tie patch is *rejected*, not adopted. [All 16 paired QC comparisons](results/03_tectonics/03Y_ALL_FOUR_ARM_121_401_COMPLETE_QC.csv).
