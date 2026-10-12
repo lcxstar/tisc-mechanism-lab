@@ -1,0 +1,33 @@
+name: 08e | Final scientific V08 salt fix acceptance across original and full Ebro
+on:
+  push:
+    branches: [v08-salt-module-fix-regression]
+    paths: ['.github/workflows/08e_final_salt_scientific_acceptance.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  final-pinned-scientific-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify permanently archived 14 real original-source tests, numeric grids, complete 60 Myr and source SHA256
+        run: |
+          set -euo pipefail
+          python3 scripts/08e_final_salt_scientific_acceptance.py \
+            --dir results/08_salt_module_fix_regression \
+            --out results/08_salt_module_fix_regression/08e_final_scientific_acceptance
+      - name: Permanently commit final audit accepting numeric parity rather than incorrect cross-input file SHA
+        run: |
+          set -euo pipefail
+          git add -f results/08_salt_module_fix_regression/08e_final_scientific_acceptance
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qc(V08): final corrected original-source on/off scientific acceptance and 60Myr input SHA'
+          for i in 1 2 3 4 5 6; do
+            git fetch origin v08-salt-module-fix-regression
+            git rebase origin/v08-salt-module-fix-regression
+            if git push origin HEAD:v08-salt-module-fix-regression; then exit 0; fi
+          done
+          exit 1
