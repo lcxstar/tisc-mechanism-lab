@@ -1,0 +1,12 @@
+{
+  "original_repo": "danigeos/tisc",
+  "original_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "original_demo_subdirectory": "tisc/demo/4_river_transport",
+  "prefix": "conic_island",
+  "full_physical_inputs_modified": false,
+  "files_sha256": {
+    "conic_island.PRFL": "2f897ba0d0a0646099c7fb1531a96fc7760f83b013d748e2a7aab4cd028c4712",
+    "conic_island.PRM": "1f1953b86e6c061d542518092d22dcd5b3a9b28e9637fc9338d13db27390315f",
+    "conic_island.ZINI": "3d8d43e5089acc7cb86742a575b6c422b6f206d5e8941df609c0927ffe5fb409"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "case": "04_river",
+  "author_demo_folder": "tisc/demo/4_river_transport",
+  "original_upstream_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "source_variant": "audited_03t_optimized",
+  "model_input_hashes_unchanged": true,
+  "plotting_override_only": true,
+  "physical_model_inputs_changed": false,
+  "input_Nx": 101,
+  "input_Ny": 101,
+  "grid_nodes_expected": 10201,
+  "initial_surface_base_elevation_m": 0.0,
+  "time_ini_Myr": 0.0,
+  "time_final_Myr": 20.0,
+  "actual_command": "tisc conic_island -V1 -qplotting_mode=0",
+  "process_exit_code": 0,
+  "T_times_from_run_log": 41,
+  "last_logged_time_Myr": 20.0,
+  "native_xyw_nodes": 10201,
+  "native_xyw_finite": true,
+  "native_xyw_min_topography_m": -49.6,
+  "native_xyw_max_topography_m": 932.8,
+  "native_final_outputs_present": {
+    "xyw": true,
+    "xyzt": false,
+    "hrz": true,
+    "bas": true,
+    "lak": true,
+    "st": true
+  },
+  "output_inventory": [
+    {
+      "name": ".gmtcommands4",
+      "bytes": 223
+    },
+    {
+      "name": ".gmtdefaults4",
+      "bytes": 2681
+    },
+    {
+      "name": "ACTUAL_COMMAND.txt",
+      "bytes": 40
+    },
+    {
+      "name": "AUTHOR_COMMIT.txt",
+      "bytes": 41
+    },
+    {
+      "name": "EXECUTION_SOURCE_SHA256.txt",
+      "bytes": 84
+    },
+    {
+      "name": "EXIT_CODE.txt",
+      "bytes": 2
+    },
+    {
+      "name": "ORIGINAL_INPUT_MANIFEST.json",
+      "bytes": 538
+    },
+    {
+      "name": "RUN.log",
+      "bytes": 4757455
+    },
+    {
+      "name": "WALL_SECONDS.txt",
+      "bytes": 7
+    },
+    {
+      "name": "conic_island.PRFL",
+      "bytes": 15
+    },
+    {
+      "name": "conic_island.PRM",
+      "bytes": 3330
+    },
+    {
+      "name": "conic_island.ZINI",
+      "bytes": 958
+    },
+    {
+      "name": "conic_island.all",
+      "bytes": 2057554
+    },
+    {
+      "name": "conic_island.bas",
+      "bytes": 446385
+    },
+    {
+      "name": "conic_island.hrz",
+      "bytes": 629325
+    },
+    {
+      "name": "conic_island.lak",
+      "bytes": 24835
+    },
+    {
+      "name": "conic_island.pfl",
+      "bytes": 83255
+    },
+    {
+      "name": "conic_island.st",
+      "bytes": 316987
+    },
+    {
+      "name": "conic_island.xyw",
+      "bytes": 1284076
+    }
+  ],
+  "upstream_native_input_manifest_sha256": "4eae138e19e68a6402443950ddf6dd97f808254dae4311dfc9ae2b3bb5e31b85",
+  "interpretation": "A numerical reproduction of author-provided demo inputs, not independently verified physical geology.",
+  "checks_pass": true
+}

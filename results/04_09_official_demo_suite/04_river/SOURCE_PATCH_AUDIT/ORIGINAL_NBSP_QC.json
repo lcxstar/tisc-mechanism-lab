@@ -1,0 +1,12 @@
+{
+  "reason": "Two U+00A0 no-break spaces are invalid in C source",
+  "file": "upstream/tisc/src/surf_proc.c",
+  "number_of_nbsp_whitespace_changes": 2,
+  "before_sha256": "6aec3e2d80fc0344c24b50f31fe1640870e033a7bddc2ed305a0bc61ac3ae329",
+  "after_sha256": "8f7035e48f39ad01f5c4e01382ab51a1d07d7f3c21b029c8ea5cea6d2143ef4f",
+  "surrounding_source_text": [
+    "total_ice_melt*100;\n\t\t\tif (fabs(error)>=.5 || (fabs(error)>=.1 && verbose_level>=3))\n\t\t\t\tP",
+    "or / ref_mass * 100;\n\t\tif (fabs(error)>=.5 || (fabs(error)>=.1 && verbose_level>=3))\n\t\t\tPR"
+  ],
+  "actual_change": "U+00A0 to ASCII SPACE; no changed operators, constants or algorithms"
+}

@@ -1,0 +1,14 @@
+{
+  "scientific_scope": "Correct sediment mass accounting and warnings; retain physical simulation untouched",
+  "before_sha256": "db93e8c3e38aa34fcfa16b5fc0bef645f3583301a941ddd562a93c25db5aee63",
+  "after_sha256": "9bb7b336889d3bd3c589612d125a008357879293abff82e6a7a89c6475314f36",
+  "author": "danigeos/tisc@d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "depends_on": "03g+03j hydro speed and explicit 03k negative-slope physical correction plus independent 03s double ledger",
+  "changes_source_equations": false,
+  "changes_transport": false,
+  "changes_native_float32_fields": false,
+  "changes_serialization": false,
+  "changes_user_prm": false,
+  "uses_double_only_for": "printed eros_nosd/sedim_inc/outp_seds and sediment_balance diagnostics",
+  "remaining_limitations": "numerical block thickening and 121-to-401 grid convergence not proved by a balanced ledger"
+}

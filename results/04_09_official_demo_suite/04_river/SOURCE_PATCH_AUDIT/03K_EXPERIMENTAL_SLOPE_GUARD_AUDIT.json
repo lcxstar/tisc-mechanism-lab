@@ -1,0 +1,12 @@
+{
+  "status": "EXPERIMENTAL SCIENTIFIC CHANGE, NOT PURE REPRODUCTION",
+  "pinned_original_author": "danigeos/tisc@d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "source_sha_before": "c62eb59b7b5270b74be43d704f0507d469be4bd069b842b92addcfecb8c84e07",
+  "source_sha_after": "af25a5710cb84bdac37a9d9d458c98f5644f1cfbdd094864cfa09e418db45a29",
+  "physics_change": true,
+  "parameters_unchanged": true,
+  "purpose": "NaN caused by negative slope raised to mode 6 noninteger exponent ~1.05",
+  "semantics": "slope<0 => zero-incision slope, slope>=0 preserves original pow operand",
+  "NaN_input_slope_masked": false,
+  "requires_invariant_tests": true
+}

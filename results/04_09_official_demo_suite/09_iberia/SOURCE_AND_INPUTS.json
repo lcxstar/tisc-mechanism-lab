@@ -1,0 +1,13 @@
+{
+  "original_repo": "danigeos/tisc",
+  "original_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "original_demo_subdirectory": "tisc/demo/9_Iberian_drainage",
+  "prefix": "Iberia_present",
+  "full_physical_inputs_modified": false,
+  "files_sha256": {
+    "Iberia_present.PRM": "0ffce616674971655f452be34688e1d4e6c3ab793a9323a9d5eec4e56f37d870",
+    "Iberia_present.RIV": "1d55a0c4650ac8e7383aee749926be5ca52741ddfb6a4588f91566d9129ddd1d",
+    "Iberia_present.ZINI": "a3013fe2e4e73ffd50e64079241af5e8cb40747a2731aa2ea20c1a9721529a90",
+    "Iberia_present1.UNIT": "874542fd10f46979376c89a770b7cd9f30fea6c19f6c2cf8d42e3b04ce94443a"
+  }
+}

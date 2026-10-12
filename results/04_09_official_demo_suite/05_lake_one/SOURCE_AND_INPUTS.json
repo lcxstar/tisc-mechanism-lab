@@ -1,0 +1,16 @@
+{
+  "original_repo": "danigeos/tisc",
+  "original_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "original_demo_subdirectory": "tisc/demo/5_lakes",
+  "prefix": "1lake",
+  "full_physical_inputs_modified": false,
+  "files_sha256": {
+    "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+    "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+    "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+    "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+    "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75",
+    "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+    "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e"
+  }
+}

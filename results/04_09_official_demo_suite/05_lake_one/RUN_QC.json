@@ -1,0 +1,128 @@
+{
+  "case": "05_lake_one",
+  "author_demo_folder": "tisc/demo/5_lakes",
+  "original_upstream_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "source_variant": "normalized_upstream",
+  "model_input_hashes_unchanged": true,
+  "plotting_override_only": true,
+  "physical_model_inputs_changed": false,
+  "input_Nx": 51,
+  "input_Ny": 51,
+  "grid_nodes_expected": 2601,
+  "initial_surface_base_elevation_m": 0.0,
+  "time_ini_Myr": 0.0,
+  "time_final_Myr": 0.5,
+  "actual_command": "tisc 1lake -V1 -qplotting_mode=0",
+  "process_exit_code": 0,
+  "T_times_from_run_log": 11,
+  "last_logged_time_Myr": 0.5,
+  "native_xyw_nodes": 2601,
+  "native_xyw_finite": true,
+  "native_xyw_min_topography_m": -11.4,
+  "native_xyw_max_topography_m": 3005.3,
+  "native_final_outputs_present": {
+    "xyw": true,
+    "xyzt": true,
+    "hrz": true,
+    "bas": true,
+    "lak": true,
+    "st": true
+  },
+  "output_inventory": [
+    {
+      "name": ".gmtcommands4",
+      "bytes": 206
+    },
+    {
+      "name": "1lake.PRFL",
+      "bytes": 16
+    },
+    {
+      "name": "1lake.PRM",
+      "bytes": 11366
+    },
+    {
+      "name": "1lake.ZINI",
+      "bytes": 257
+    },
+    {
+      "name": "1lake.all",
+      "bytes": 842386
+    },
+    {
+      "name": "1lake.bas",
+      "bytes": 177361
+    },
+    {
+      "name": "1lake.hrz",
+      "bytes": 303941
+    },
+    {
+      "name": "1lake.lak",
+      "bytes": 15704
+    },
+    {
+      "name": "1lake.pfl",
+      "bytes": 137417
+    },
+    {
+      "name": "1lake.st",
+      "bytes": 84258
+    },
+    {
+      "name": "1lake.xyw",
+      "bytes": 335959
+    },
+    {
+      "name": "1lake.xyzt",
+      "bytes": 86790
+    },
+    {
+      "name": "2lakes.PRM",
+      "bytes": 11366
+    },
+    {
+      "name": "2lakes.SLV",
+      "bytes": 45
+    },
+    {
+      "name": "2lakes.ZINI",
+      "bytes": 169
+    },
+    {
+      "name": "2lakes1.UNIT",
+      "bytes": 77
+    },
+    {
+      "name": "ACTUAL_COMMAND.txt",
+      "bytes": 33
+    },
+    {
+      "name": "AUTHOR_COMMIT.txt",
+      "bytes": 41
+    },
+    {
+      "name": "EXECUTION_SOURCE_SHA256.txt",
+      "bytes": 84
+    },
+    {
+      "name": "EXIT_CODE.txt",
+      "bytes": 2
+    },
+    {
+      "name": "ORIGINAL_INPUT_MANIFEST.json",
+      "bytes": 847
+    },
+    {
+      "name": "RUN.log",
+      "bytes": 10959
+    },
+    {
+      "name": "WALL_SECONDS.txt",
+      "bytes": 5
+    }
+  ],
+  "upstream_native_input_manifest_sha256": "81b3ad4a9f41b8b1b9c4e3852355f9134d451d1343d554d395ed48937f27e4df",
+  "interpretation": "A numerical reproduction of author-provided demo inputs, not independently verified physical geology.",
+  "checks_pass": true
+}
