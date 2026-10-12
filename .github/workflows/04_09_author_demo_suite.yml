@@ -1,12 +1,5 @@
 name: 04–09 | Original-author demo suite full forward reproduction
 on:
-  push:
-    branches: [v04-official-demo-completion]
-    paths:
-      - '.github/workflows/04_09_author_demo_suite.yml'
-      - 'scripts/qc_official_demo_completion.py'
-      - 'scripts/archive_official_demo_case.py'
-      - 'scripts/summarize_official_demo_suite.py'
   workflow_dispatch:
 permissions:
   contents: write
@@ -178,11 +171,12 @@ jobs:
       - name: Persist cases and status in the public GitHub branch
         run: |
           set -euo pipefail
-          git add results/04_09_official_demo_suite
+          git add -f results/04_09_official_demo_suite
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if ! git diff --cached --quiet; then
             git commit -m "results(author): archive original demo models 4-9 with QC and provenance"
+            git pull --rebase origin v04-official-demo-completion
             git push origin HEAD:v04-official-demo-completion
           fi
       - name: Artifact fallback for permanent results
