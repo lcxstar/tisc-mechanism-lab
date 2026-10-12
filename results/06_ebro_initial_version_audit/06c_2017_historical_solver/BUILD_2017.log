@@ -13,7 +13,7 @@ if [ -f /usr/bin/ctags ]; then \
 fi
 (cd ../lib  ; make libreria.o ; )
 make[1]: Entering directory '/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/old_tisc/lib'
-make[1]: 'libreria.o' is up to date.
+gcc  -c -o libreria.o -O2 -w -std=gnu99 -fcommon -I../include libreria.c
 make[1]: Leaving directory '/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/old_tisc/lib'
 gcc  -c -o surf_proc.o -O2 -w -std=gnu99 -fcommon -I../include  surf_proc.c
 if [  ]; then \
@@ -22,7 +22,5 @@ fi
 
 gcc   tisc.o ../lib/libreria.o surf_proc.o   \
 	-lm -lc   -o ../bin/tisc
-../lib/libreria.o: file not recognized: file format not recognized
-collect2: error: ld returned 1 exit status
-make: *** [Makefile:80: tisc] Error 1
+chmod a+x ../bin/tisc
 make: Leaving directory '/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/old_tisc/src'
