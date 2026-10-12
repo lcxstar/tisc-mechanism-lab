@@ -1,0 +1,348 @@
+{
+  "upstream": "danigeos/tisc@d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "source": "compiler NBSP normalized only, *NO 03t changes*",
+  "run_time_window": "-60 to -59 Ma, output at -60 and -59.5 Ma",
+  "original_author_demo_inputs_unmodified_on_baseline": true,
+  "author_2016_firststep_max_m": 1200.8,
+  "runs": [
+    {
+      "case": "00_clean_source_baseline",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.67,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 9071.6,
+      "firststep_topography_max_difference_vs_2016_m": 7870.8,
+      "firststep_load_max_pa": 195000000.0,
+      "firststep_load_total_N": 1.06e+17,
+      "firststep_deflection_max_m": 60.3,
+      "firststep_sediment_vol_km3": 7780.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "01_Te_25km",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0",
+        "-qTe=25000"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.72,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 9071.6,
+      "firststep_topography_max_difference_vs_2016_m": 7870.8,
+      "firststep_load_max_pa": 195000000.0,
+      "firststep_load_total_N": 1.06e+17,
+      "firststep_deflection_max_m": 53.3,
+      "firststep_sediment_vol_km3": 7820.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "02_asthenosphere_3250",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0",
+        "-qdensasthen=3250"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.42,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 9071.6,
+      "firststep_topography_max_difference_vs_2016_m": 7870.8,
+      "firststep_load_max_pa": 195000000.0,
+      "firststep_load_total_N": 1.06e+17,
+      "firststep_deflection_max_m": 59.4,
+      "firststep_sediment_vol_km3": 7750.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "03_Te25_rho3250",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0",
+        "-qTe=25000",
+        "-qdensasthen=3250"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.6,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 9071.6,
+      "firststep_topography_max_difference_vs_2016_m": 7870.8,
+      "firststep_load_max_pa": 195000000.0,
+      "firststep_load_total_N": 1.06e+17,
+      "firststep_deflection_max_m": 52.6,
+      "firststep_sediment_vol_km3": 7730.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "04_hydrology_erosion_off",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0",
+        "-qhydro_model=0",
+        "-qerosed_model=0"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.09,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 1201.9,
+      "firststep_topography_max_difference_vs_2016_m": 1.1000000000001364,
+      "firststep_load_max_pa": null,
+      "firststep_load_total_N": null,
+      "firststep_deflection_max_m": null,
+      "firststep_sediment_vol_km3": null,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "05_unit1_initial_velocity_zero",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [
+        "Ebro_evol1.UNIT"
+      ],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.48,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 9071.6,
+      "firststep_topography_max_difference_vs_2016_m": 7870.8,
+      "firststep_load_max_pa": 195000000.0,
+      "firststep_load_total_N": 1.06e+17,
+      "firststep_deflection_max_m": 60.3,
+      "firststep_sediment_vol_km3": 7780.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "06_defer_unit1_load_to_minus58",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [
+        "Ebro_evol1.UNIT"
+      ],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.2,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 8085.9,
+      "firststep_topography_max_difference_vs_2016_m": 6885.099999999999,
+      "firststep_load_max_pa": 174000000.0,
+      "firststep_load_total_N": 8.96e+16,
+      "firststep_deflection_max_m": 45.8,
+      "firststep_sediment_vol_km3": 7490.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "07_delay_all_tectonic_units",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [
+        "Ebro_evol1.UNIT",
+        "Ebro_evol3.UNIT",
+        "Ebro_evol4.UNIT",
+        "Ebro_evol5.UNIT",
+        "Ebro_evol2.UNIT"
+      ],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.2,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 8085.9,
+      "firststep_topography_max_difference_vs_2016_m": 6885.099999999999,
+      "firststep_load_max_pa": 174000000.0,
+      "firststep_load_total_N": 8.96e+16,
+      "firststep_deflection_max_m": 45.8,
+      "firststep_sediment_vol_km3": 7490.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "08_dt_005",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0",
+        "-td0.05"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 5.57,
+      "ages_recorded": [
+        -60.0,
+        -59.95,
+        -59.9,
+        -59.85,
+        -59.8,
+        -59.75,
+        -59.7,
+        -59.65,
+        -59.6,
+        -59.55,
+        -59.5,
+        -59.45,
+        -59.4,
+        -59.35,
+        -59.3,
+        -59.25,
+        -59.2,
+        -59.15,
+        -59.1,
+        -59.05,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 5246.5,
+      "firststep_topography_max_difference_vs_2016_m": 4045.7,
+      "firststep_load_max_pa": 3480000.0,
+      "firststep_load_total_N": -1210000000000000.0,
+      "firststep_deflection_max_m": 38.0,
+      "firststep_sediment_vol_km3": 2850.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    },
+    {
+      "case": "09_unit1_initial_ramp_thickness_1000m",
+      "correctly_pristine_source_except_nbsp": true,
+      "changed_original_input_names": [
+        "Ebro_evol1.UNIT"
+      ],
+      "CLI": [
+        "Ebro_evol",
+        "-tf-59",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.37,
+      "ages_recorded": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "initial_topography_max_m": 1201.9,
+      "firststep_topography_max_m": 8920.9,
+      "firststep_topography_max_difference_vs_2016_m": 7720.099999999999,
+      "firststep_load_max_pa": 192000000.0,
+      "firststep_load_total_N": 9.74e+16,
+      "firststep_deflection_max_m": 58.2,
+      "firststep_sediment_vol_km3": 7580.0,
+      "historical_2016_topography_max_m": 1200.8,
+      "historical_2016_load_max_pa": 3500000.0,
+      "historical_2016_deflection_max_m": 10.7,
+      "full_window_final_60Myr_not_executed": true,
+      "numerical_pass": true
+    }
+  ],
+  "all_numerical_pass": true,
+  "causality": "An intervention can show dependency, not reproduce unknown historical 2016 source implementation."
+}

@@ -1,0 +1,379 @@
+
+* TISC: TECTONICS, ISOSTASY, SURFACE PROCESSES, AND CLIMATE PLANFORM MODELING *
+Version: TISC_2026-03-22_factorized_stable
+Parameters at 'Ebro_evol.PRM'.
+Time start: Mon Oct 12 11:11:08 2026
+
+  sea_level: 150.0 m
+  topo_ini :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2
+T= -60.0000 My
+  topogr.  :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2 unitFM
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.04e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.04e+03 m3/s  evap_wat: +2.67e+03 m3/s outp_water: +4.54e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  41/1072 : 1.21e+01 km3 1.22e+04 km2  155 m  342,349   1 out @	  339,289 600.4 m3/s
+  total_lake_area_nosea: 5.70e+10 km2
+  river_max:   152.46 m3/s     0.00 kg/s @   27.2,0.0 km, 154.0 m
+  topo_diff_eros_max=    -0.31 mm/yr	sedim_max:   147.28 mm/yr
+  eros_nosd: +3.67e+15 N	 sedim_inc: +2.79e+15 N   outp_seds:   +8.81e+14 N  
+  eros-sed.:  max= 0.80 mm/yr	min= -31.26 mm/yr	difference=9.74e+05 m3/yr
+  sediment_vol: 7.46e+02 km3
+
+T= -59.9500 My
+  topogr.  :  max= 7515.6 m	min= 152.5 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +1.60e+08 N/m2  min = -4.29e+05 N/m2   Total: +1.24e+16 N	Max at 397,119 km
+  load: +1.24e+16 N   restit_force: +1.24e+16 N
+  deflect. :  max= 15.7 m	min= -1.5 m	integr=3.93e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.57e+03 m3/s outp_water: +5.16e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake 1033/1039 : 1.86e+01 km3 6.27e+03 km2  149 m  441,248   1 out @	  438,161 371.6 m3/s
+  total_lake_area_nosea: 5.64e+10 km2
+  river_max:   288.35 m3/s     0.00 kg/s @  321.6,215.6 km, 151.9 m
+  topo_diff_eros_max=    -6.78 mm/yr	sedim_max:   105.71 mm/yr
+  eros_nosd: +3.62e+15 N	 sedim_inc: +2.60e+15 N   outp_seds:   +1.02e+15 N  
+  eros-sed.:  max= 6.83 mm/yr	min= -105.59 mm/yr	difference=1.13e+06 m3/yr
+  sediment_vol: 1.46e+03 km3
+
+T= -59.9000 My
+  topogr.  :  max= 7158.4 m	min= 142.3 m	integr=1.22e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +1.11e+08 N/m2  min = -7.20e+06 N/m2   Total: +1.19e+16 N	Max at 431,170 km
+  load: +2.32e+16 N   restit_force: +1.19e+16 N
+  deflect. :  max= 34.0 m	min= -3.2 m	integr=7.39e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.51e+03 m3/s outp_water: +5.72e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  56/814 : 1.52e+00 km3 1.38e+03 km2  152 m  284,284   1 out @	  298,220 438.9 m3/s
+  total_lake_area_nosea: 3.55e+10 km2
+  river_max:   378.14 m3/s     0.00 kg/s @  301.1,215.6 km, 151.9 m
+  topo_diff_eros_max=    -6.15 mm/yr	sedim_max:     3.25 mm/yr
+  eros_nosd: +3.60e+15 N	 sedim_inc: +1.55e+15 N   outp_seds:   +2.05e+15 N  
+  eros-sed.:  max= 6.21 mm/yr	min= -1.42 mm/yr	difference=2.26e+06 m3/yr
+  sediment_vol: 1.71e+03 km3
+
+T= -59.8500 My
+  topogr.  :  max= 6829.8 m	min= 134.6 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +3.53e+06 N/m2  min = -6.54e+06 N/m2   Total: +2.54e+15 N	Max at 606,174 km
+  load: +2.61e+16 N   restit_force: +2.54e+15 N
+  deflect. :  max= 36.0 m	min= -4.6 m	integr=8.31e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.46e+03 m3/s outp_water: +6.04e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  54/750 : 1.23e+00 km3 1.13e+03 km2  152 m  284,284   1 out @	  281,243 450.0 m3/s
+  total_lake_area_nosea: 3.17e+10 km2
+  river_max:   477.85 m3/s     0.00 kg/s @  304.5,211.0 km, 151.6 m
+  topo_diff_eros_max=    -5.59 mm/yr	sedim_max:     8.21 mm/yr
+  eros_nosd: +3.58e+15 N	 sedim_inc: +1.20e+15 N   outp_seds:   +2.37e+15 N  
+  eros-sed.:  max= 5.64 mm/yr	min= -2.03 mm/yr	difference=2.62e+06 m3/yr
+  sediment_vol: 1.92e+03 km3
+
+T= -59.8000 My
+  topogr.  :  max= 6545.7 m	min= 135.2 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +8.78e+06 N/m2  min = -5.95e+06 N/m2   Total: +1.06e+15 N	Max at 585,303 km
+  load: +2.74e+16 N   restit_force: +1.06e+15 N
+  deflect. :  max= 36.6 m	min= -6.0 m	integr=8.73e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.46e+03 m3/s outp_water: +6.23e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  12/628 : 1.32e+02 km3 2.89e+04 km2  150 m  421,147  15 out Sea	421,147 1152.1 m3/s
+  total_lake_area_nosea: 2.77e+10 km2
+  river_max:   566.75 m3/s     0.00 kg/s @  307.9,220.2 km, 151.0 m
+  topo_diff_eros_max=    -5.14 mm/yr	sedim_max:     3.90 mm/yr
+  eros_nosd: +3.56e+15 N	 sedim_inc: +1.09e+15 N   outp_seds:   +2.47e+15 N  
+  eros-sed.:  max= 5.19 mm/yr	min= -0.82 mm/yr	difference=2.73e+06 m3/yr
+  sediment_vol: 2.10e+03 km3
+
+T= -59.7500 My
+  topogr.  :  max= 6285.8 m	min= 134.8 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +4.21e+06 N/m2  min = -5.47e+06 N/m2   Total: +3.41e+14 N	Max at 630,197 km
+  load: +2.79e+16 N   restit_force: +3.41e+14 N
+  deflect. :  max= 37.0 m	min= -7.3 m	integr=8.90e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.42e+03 m3/s outp_water: +6.39e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake   9/547 : 1.10e+00 km3 1.16e+03 km2  150 m  626,289   1 out @	  643,294  70.9 m3/s
+  total_lake_area_nosea: 2.33e+10 km2
+  river_max:   648.62 m3/s     0.00 kg/s @  304.5,224.8 km, 150.7 m
+  topo_diff_eros_max=    -4.75 mm/yr	sedim_max:     4.59 mm/yr
+  eros_nosd: +3.55e+15 N	 sedim_inc: +1.12e+15 N   outp_seds:   +2.42e+15 N  
+  eros-sed.:  max= 4.79 mm/yr	min= -0.95 mm/yr	difference=2.68e+06 m3/yr
+  sediment_vol: 2.26e+03 km3
+
+T= -59.7000 My
+  topogr.  :  max= 6045.8 m	min= 134.6 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +4.95e+06 N/m2  min = -5.05e+06 N/m2   Total: -4.50e+13 N	Max at 602,234 km
+  load: +2.82e+16 N   restit_force: -4.50e+13 N
+  deflect. :  max= 37.3 m	min= -8.7 m	integr=8.97e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.43e+03 m3/s outp_water: +6.32e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  27/479 : 1.17e+02 km3 3.08e+04 km2  150 m  435,115  15 out Sea	435,115 1362.6 m3/s
+  total_lake_area_nosea: 1.95e+10 km2
+  river_max:   688.01 m3/s     0.00 kg/s @  307.9,229.4 km, 150.4 m
+  topo_diff_eros_max=    -4.39 mm/yr	sedim_max:     1.94 mm/yr
+  eros_nosd: +3.53e+15 N	 sedim_inc: +9.68e+14 N   outp_seds:   +2.56e+15 N  
+  eros-sed.:  max= 4.44 mm/yr	min= -0.90 mm/yr	difference=2.83e+06 m3/yr
+  sediment_vol: 2.40e+03 km3
+
+T= -59.6500 My
+  topogr.  :  max= 5823.5 m	min= 143.5 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +2.10e+06 N/m2  min = -4.68e+06 N/m2   Total: -7.09e+14 N	Max at 534,115 km
+  load: +2.77e+16 N   restit_force: -7.09e+14 N
+  deflect. :  max= 37.5 m	min= -10.0 m	integr=8.81e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.34e+03 m3/s outp_water: +7.19e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  25/409 : 1.11e+02 km3 3.10e+04 km2  150 m  435,142  16 out Sea	435,142 1448.2 m3/s
+  total_lake_area_nosea: 1.67e+10 km2
+  river_max:   731.83 m3/s     0.00 kg/s @  314.8,211.0 km, 150.1 m
+  topo_diff_eros_max=    -4.07 mm/yr	sedim_max:     3.34 mm/yr
+  eros_nosd: +3.51e+15 N	 sedim_inc: +1.06e+15 N   outp_seds:   +2.45e+15 N  
+  eros-sed.:  max= 4.12 mm/yr	min= -0.95 mm/yr	difference=2.71e+06 m3/yr
+  sediment_vol: 2.53e+03 km3
+
+T= -59.6000 My
+  topogr.  :  max= 5617.6 m	min= 143.6 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +3.61e+06 N/m2  min = -4.34e+06 N/m2   Total: -7.62e+14 N	Max at 585,133 km
+  load: +2.72e+16 N   restit_force: -7.62e+14 N
+  deflect. :  max= 37.6 m	min= -11.4 m	integr=8.66e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.27e+03 m3/s outp_water: +7.90e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  40/344 : 3.72e-01 km3 7.85e+02 km2  152 m  185,303   1 out @	  212,289 550.9 m3/s
+  total_lake_area_nosea: 1.51e+10 km2
+  river_max:   750.81 m3/s     0.00 kg/s @  304.5,224.8 km, 150.1 m
+  topo_diff_eros_max=    -3.80 mm/yr	sedim_max:     2.81 mm/yr
+  eros_nosd: +3.50e+15 N	 sedim_inc: +1.00e+15 N   outp_seds:   +2.50e+15 N  
+  eros-sed.:  max= 3.84 mm/yr	min= -1.08 mm/yr	difference=2.76e+06 m3/yr
+  sediment_vol: 2.64e+03 km3
+
+T= -59.5500 My
+  topogr.  :  max= 5425.6 m	min= 142.4 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +3.04e+06 N/m2  min = -4.04e+06 N/m2   Total: -1.04e+15 N	Max at 585,119 km
+  load: +2.63e+16 N   restit_force: -1.04e+15 N
+  deflect. :  max= 37.8 m	min= -12.7 m	integr=8.38e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.25e+03 m3/s outp_water: +7.98e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  11/303 : 1.45e+00 km3 1.52e+03 km2  151 m  284,284   1 out @	  304,243 658.6 m3/s
+  total_lake_area_nosea: 1.42e+10 km2
+  river_max:   592.82 m3/s     0.00 kg/s @  301.1,233.9 km, 150.8 m
+  topo_diff_eros_max=    -3.54 mm/yr	sedim_max:     3.21 mm/yr
+  eros_nosd: +3.48e+15 N	 sedim_inc: +1.10e+15 N   outp_seds:   +2.38e+15 N  
+  eros-sed.:  max= 3.58 mm/yr	min= -0.73 mm/yr	difference=2.64e+06 m3/yr
+  sediment_vol: 2.75e+03 km3
+
+T= -59.5000 My
+  topogr.  :  max= 5246.5 m	min= 141.1 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +3.48e+06 N/m2  min = -3.77e+06 N/m2   Total: -1.21e+15 N	Max at 623,179 km
+  load: +2.52e+16 N   restit_force: -1.21e+15 N
+  deflect. :  max= 38.0 m	min= -14.0 m	integr=8.03e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.24e+03 m3/s outp_water: +8.06e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  15/255 : 5.33e-01 km3 1.29e+03 km2  152 m  185,303   1 out @	  215,284 541.6 m3/s
+  total_lake_area_nosea: 1.29e+10 km2
+  river_max:   562.47 m3/s     0.00 kg/s @  304.5,229.4 km, 150.6 m
+  topo_diff_eros_max=    -3.31 mm/yr	sedim_max:     2.31 mm/yr
+  eros_nosd: +3.46e+15 N	 sedim_inc: +1.11e+15 N   outp_seds:   +2.35e+15 N  
+  eros-sed.:  max= 3.35 mm/yr	min= -0.64 mm/yr	difference=2.60e+06 m3/yr
+  sediment_vol: 2.85e+03 km3
+
+T= -59.4500 My
+  topogr.  :  max= 5078.8 m	min= 140.3 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +2.51e+06 N/m2  min = -3.53e+06 N/m2   Total: -1.39e+15 N	Max at 619,193 km
+  load: +2.39e+16 N   restit_force: -1.39e+15 N
+  deflect. :  max= 38.0 m	min= -15.4 m	integr=7.61e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.17e+03 m3/s outp_water: +8.92e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  38/222 : 6.08e-01 km3 1.59e+03 km2  151 m  161,317   1 out @	  209,239 653.8 m3/s
+  total_lake_area_nosea: 1.17e+10 km2
+  river_max:   607.84 m3/s     0.00 kg/s @  297.6,220.2 km, 150.1 m
+  topo_diff_eros_max=    -3.11 mm/yr	sedim_max:     1.45 mm/yr
+  eros_nosd: +3.43e+15 N	 sedim_inc: +9.28e+14 N   outp_seds:   +2.51e+15 N  
+  eros-sed.:  max= 3.14 mm/yr	min= -0.50 mm/yr	difference=2.77e+06 m3/yr
+  sediment_vol: 2.93e+03 km3
+
+T= -59.4000 My
+  topogr.  :  max= 4921.7 m	min= 139.6 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +1.57e+06 N/m2  min = -3.31e+06 N/m2   Total: -1.68e+15 N	Max at 561,161 km
+  load: +2.22e+16 N   restit_force: -1.68e+15 N
+  deflect. :  max= 38.0 m	min= -16.7 m	integr=7.09e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.15e+03 m3/s outp_water: +9.08e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake   6/201 : 3.29e+01 km3 1.01e+04 km2  150 m  661,156  121 out Sea	661,156 256.7 m3/s
+  total_lake_area_nosea: 1.07e+10 km2
+  river_max:   612.37 m3/s     0.00 kg/s @  290.8,229.4 km, 150.0 m
+  topo_diff_eros_max=    -2.92 mm/yr	sedim_max:     2.18 mm/yr
+  eros_nosd: +3.42e+15 N	 sedim_inc: +9.41e+14 N   outp_seds:   +2.48e+15 N  
+  eros-sed.:  max= 2.95 mm/yr	min= -0.57 mm/yr	difference=2.74e+06 m3/yr
+  sediment_vol: 3.01e+03 km3
+
+T= -59.3500 My
+  topogr.  :  max= 4774.0 m	min= 139.1 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +2.35e+06 N/m2  min = -3.12e+06 N/m2   Total: -1.68e+15 N	Max at 558,165 km
+  load: +2.07e+16 N   restit_force: -1.68e+15 N
+  deflect. :  max= 38.0 m	min= -18.0 m	integr=6.58e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.14e+03 m3/s outp_water: +9.09e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  26/186 : 1.14e+00 km3 2.47e+03 km2  151 m  233,252   1 out @	  270,248 705.9 m3/s
+  total_lake_area_nosea: 1.06e+10 km2
+  river_max:   599.82 m3/s     0.00 kg/s @  287.4,233.9 km, 150.1 m
+  topo_diff_eros_max=    -2.75 mm/yr	sedim_max:     3.38 mm/yr
+  eros_nosd: +3.40e+15 N	 sedim_inc: +9.63e+14 N   outp_seds:   +2.44e+15 N  
+  eros-sed.:  max= 2.79 mm/yr	min= -0.62 mm/yr	difference=2.70e+06 m3/yr
+  sediment_vol: 3.09e+03 km3
+
+T= -59.3000 My
+  topogr.  :  max= 4634.8 m	min= 138.5 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +3.67e+06 N/m2  min = -2.94e+06 N/m2   Total: -1.73e+15 N	Max at 616,170 km
+  load: +1.89e+16 N   restit_force: -1.73e+15 N
+  deflect. :  max= 37.9 m	min= -19.4 m	integr=6.03e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.05e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.05e+03 m3/s  evap_wat: +2.12e+03 m3/s outp_water: +9.27e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  26/159 : 1.49e+00 km3 2.91e+03 km2  151 m  233,248   1 out @	  270,248 741.9 m3/s
+  total_lake_area_nosea: 1.03e+10 km2
+  river_max:   615.85 m3/s     0.00 kg/s @  290.8,229.4 km, 150.0 m
+  topo_diff_eros_max=    -2.59 mm/yr	sedim_max:     1.11 mm/yr
+  eros_nosd: +3.37e+15 N	 sedim_inc: +1.01e+15 N   outp_seds:   +2.36e+15 N  
+  eros-sed.:  max= 2.63 mm/yr	min= -0.52 mm/yr	difference=2.61e+06 m3/yr
+  sediment_vol: 3.16e+03 km3
+
+T= -59.2500 My
+  topogr.  :  max= 4503.6 m	min= 137.7 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +2.64e+07 N/m2  min = -2.77e+06 N/m2   Total: +8.98e+17 N	Max at 99,495 km
+  load: +9.49e+17 N   restit_force: +8.98e+17 N
+  deflect. :  max= 552.2 m	min= -32.6 m	integr=3.02e+13 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.11e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.11e+03 m3/s  evap_wat: +2.60e+03 m3/s outp_water: +5.10e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  18/177 : 8.45e-01 km3 7.54e+02 km2  153 m  215,234   1 out @	  215,234 319.3 m3/s
+  total_lake_area_nosea: 7.79e+09 km2
+  river_max:   319.47 m3/s     0.00 kg/s @  290.8,229.4 km, 150.2 m
+  topo_diff_eros_max=    -2.45 mm/yr	sedim_max:     1.22 mm/yr
+  eros_nosd: +4.09e+15 N	 sedim_inc: +1.99e+15 N   outp_seds:   +2.09e+15 N  
+  eros-sed.:  max= 3.31 mm/yr	min= -1.22 mm/yr	difference=2.32e+06 m3/yr
+  sediment_vol: 3.29e+03 km3
+
+T= -59.2000 My
+  topogr.  :  max= 4379.3 m	min= -253.0 m	integr=1.25e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 1.3 km3
+  load  now:  max = +4.33e+06 N/m2  min = -3.00e+06 N/m2   Total: +5.75e+16 N	Max at 174,495 km
+  load: +9.85e+17 N   restit_force: +5.75e+16 N
+  deflect. :  max= 561.1 m	min= -33.7 m	integr=3.14e+13 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.10e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.10e+03 m3/s  evap_wat: +2.60e+03 m3/s outp_water: +5.00e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake   8/129 : 8.98e-01 km3 8.48e+02 km2  152 m  243,234   1 out @	  277,248 338.0 m3/s
+  total_lake_area_nosea: 6.58e+09 km2
+  river_max:   302.37 m3/s     0.00 kg/s @  294.2,224.8 km, 150.4 m
+  topo_diff_eros_max=    -2.32 mm/yr	sedim_max:     1.02 mm/yr
+  eros_nosd: +4.12e+15 N	 sedim_inc: +2.05e+15 N   outp_seds:   +2.07e+15 N  
+  eros-sed.:  max= 2.37 mm/yr	min= -1.02 mm/yr	difference=2.29e+06 m3/yr
+  sediment_vol: 3.42e+03 km3
+
+T= -59.1500 My
+  topogr.  :  max= 4261.6 m	min= -261.3 m	integr=1.23e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 1.5 km3
+  load  now:  max = +7.95e+05 N/m2  min = -2.48e+06 N/m2   Total: +4.45e+15 N	Max at 582,64 km
+  load: +9.90e+17 N   restit_force: +4.45e+15 N
+  deflect. :  max= 561.9 m	min= -34.7 m	integr=3.15e+13 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.10e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.10e+03 m3/s  evap_wat: +2.60e+03 m3/s outp_water: +5.01e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  20/114 : 8.88e-01 km3 8.17e+02 km2  152 m  243,234   1 out @	  257,220 309.4 m3/s
+  total_lake_area_nosea: 5.95e+09 km2
+  river_max:   273.61 m3/s     0.00 kg/s @  260.0,211.0 km, 150.9 m
+  topo_diff_eros_max=    -2.22 mm/yr	sedim_max:     1.20 mm/yr
+  eros_nosd: +4.11e+15 N	 sedim_inc: +2.11e+15 N   outp_seds:   +2.01e+15 N  
+  eros-sed.:  max= 2.49 mm/yr	min= -1.05 mm/yr	difference=2.22e+06 m3/yr
+  sediment_vol: 3.54e+03 km3
+
+T= -59.1000 My
+  topogr.  :  max= 4149.9 m	min= -262.1 m	integr=1.23e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 1.5 km3
+  load  now:  max = +1.30e+06 N/m2  min = -2.41e+06 N/m2   Total: -9.47e+14 N	Max at 565,96 km
+  load: +9.90e+17 N   restit_force: -9.47e+14 N
+  deflect. :  max= 561.6 m	min= -35.8 m	integr=3.15e+13 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.10e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.10e+03 m3/s  evap_wat: +2.60e+03 m3/s outp_water: +5.02e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  26/116 : 8.06e-01 km3 7.22e+02 km2  152 m  243,234   1 out @	  257,220 313.0 m3/s
+  total_lake_area_nosea: 5.32e+09 km2
+  river_max:   281.49 m3/s     0.00 kg/s @  263.4,206.4 km, 150.5 m
+  topo_diff_eros_max=    -2.49 mm/yr	sedim_max:     1.05 mm/yr
+  eros_nosd: +4.11e+15 N	 sedim_inc: +1.97e+15 N   outp_seds:   +2.14e+15 N  
+  eros-sed.:  max= 2.69 mm/yr	min= -1.05 mm/yr	difference=2.37e+06 m3/yr
+  sediment_vol: 3.66e+03 km3
+
+T= -59.0500 My
+  topogr.  :  max= 4043.8 m	min= -261.9 m	integr=1.23e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 1.5 km3
+  load  now:  max = +8.48e+05 N/m2  min = -2.75e+06 N/m2   Total: -2.01e+15 N	Max at 537,482 km
+  load: +9.88e+17 N   restit_force: -2.01e+15 N
+  deflect. :  max= 561.1 m	min= -37.0 m	integr=3.15e+13 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.10e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.10e+03 m3/s  evap_wat: +2.60e+03 m3/s outp_water: +5.01e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake  13/94 : 4.19e+01 km3 2.41e+04 km2  150 m  417,0    19 out Sea	417,0   1042.7 m3/s
+  total_lake_area_nosea: 4.27e+09 km2
+  river_max:   277.31 m3/s     0.00 kg/s @  263.4,211.0 km, 150.7 m
+  topo_diff_eros_max=    -2.73 mm/yr	sedim_max:     1.04 mm/yr
+  eros_nosd: +4.09e+15 N	 sedim_inc: +2.05e+15 N   outp_seds:   +2.04e+15 N  
+  eros-sed.:  max= 2.99 mm/yr	min= -1.04 mm/yr	difference=2.25e+06 m3/yr
+  sediment_vol: 3.78e+03 km3
+
+T= -59.0000 My
+
+2 Blocks:
+No. Density Age  Volume  Surf.     Vel_x  Vel_y   Shft_x Shft_y erosL
+     kg/m3  My   1e3km3  1e3km2    km/My  km/My   km     km     [m] 
+ 1:  2150 -60.00     3.8  207.1    0.0    0.0    0.0    0.0   6.0e+04  S
+ 0:  2800 -60.00   363.8   60.3    0.0   -3.2    0.0   -4.6   1.4e+05  -  1st Block
+ -:  2800 -60.00   -       -       0      0      0      0     1.4e+05  -  basement
+
+Final total sediment volume: 3.78 1e3 km3
+
+  2D prof. :  max =    1217.4 m     min =    -123.8 m   
+Time end: Mon Oct 12 11:11:14 2026
+

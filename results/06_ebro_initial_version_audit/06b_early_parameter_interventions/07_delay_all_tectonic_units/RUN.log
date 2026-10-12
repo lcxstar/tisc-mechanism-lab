@@ -1,0 +1,54 @@
+
+* TISC: TECTONICS, ISOSTASY, SURFACE PROCESSES, AND CLIMATE PLANFORM MODELING *
+Version: TISC_2026-03-22_factorized_stable
+Parameters at 'Ebro_evol.PRM'.
+Time start: Mon Oct 12 11:11:06 2026
+
+  sea_level: 150.0 m
+  topo_ini :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2
+T= -60.0000 My
+  topogr.  :  max= 1201.9 m	min= 152.5 m	integr=1.21e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.07e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.07e+03 m3/s  evap_wat: +1.76e+03 m3/s outp_water: +1.35e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake 101/570 : 5.34e+00 km3 6.77e+03 km2  167 m  174,326   1 out @	  301,294 471.8 m3/s
+  total_lake_area_nosea: 3.88e+10 km2
+  river_max:   379.31 m3/s     0.00 kg/s @  424.3,0.0 km, 153.7 m
+  topo_diff_eros_max=    -0.25 mm/yr	sedim_max:    15.92 mm/yr
+  eros_nosd: +3.54e+16 N	 sedim_inc: +2.22e+16 N   outp_seds:   +1.32e+16 N  
+  eros-sed.:  max= 5.61 mm/yr	min= -6.07 mm/yr	difference=1.45e+06 m3/yr
+  sediment_vol: 5.79e+03 km3
+
+T= -59.5000 My
+  topogr.  :  max= 8085.9 m	min= 152.6 m	integr=1.25e+14 m*m2
+  sea_level: 150.0 m
+  sea_level:    150.0 m   sea_volume = 0.0 km3
+  load  now:  max = +1.74e+08 N/m2  min = -3.37e+06 N/m2   Total: +8.96e+16 N	Max at 585,128 km
+  load: +9.35e+16 N   restit_force: +8.96e+16 N
+  deflect. :  max= 45.8 m	min= -14.2 m	integr=2.98e+12 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=3.06e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.59e+04 m/s*m2
+  rain_now : +3.06e+03 m3/s  evap_wat: +2.16e+03 m3/s outp_water: +9.06e+02 m3/s undergr_water: +0.00e+00 m3/s
+  lake   9/253 : 2.99e+01 km3 1.07e+04 km2  151 m  301,271   1 out @	  349,142 1039.4 m3/s
+  total_lake_area_nosea: 2.50e+10 km2
+  river_max:   565.66 m3/s     0.00 kg/s @  345.6,128.4 km, 150.7 m
+  topo_diff_eros_max=    -5.35 mm/yr	sedim_max:     1.12 mm/yr
+  eros_nosd: +3.32e+16 N	 sedim_inc: +9.87e+15 N   outp_seds:   +2.33e+16 N  
+  eros-sed.:  max= 5.39 mm/yr	min= -0.41 mm/yr	difference=2.58e+06 m3/yr
+  sediment_vol: 7.49e+03 km3
+
+T= -59.0000 My
+
+1 Blocks:
+No. Density Age  Volume  Surf.     Vel_x  Vel_y   Shft_x Shft_y erosL
+     kg/m3  My   1e3km3  1e3km2    km/My  km/My   km     km     [m] 
+ 0:  2150 -60.00     7.5  218.8    0.0    0.0    0.0    0.0   6.0e+04  S  1st Block
+ -:  2800 -60.00   -       -       0      0      0      0     1.4e+05  -  basement
+
+Final total sediment volume: 7.49 1e3 km3
+
+  2D prof. :  max =    1203.6 m     min =     118.3 m   
+Time end: Mon Oct 12 11:11:08 2026
+
