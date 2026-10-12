@@ -112,6 +112,6 @@ md+=['','**NEW SCIENTIFIC ACCEPTANCE = '+str(q['status'])+'**','',
  '## Boundary of claims','',
  'The source-localized improper salt deposition under salt_model=0 and 14 completed original-input native model runs are not undone by this post-processing error. '
  'However, old 08d/08e assertions about 22880 elevation columns should not be cited. Use this corrected addendum. '
- 'The original author's 2016 historical peak chronology still does not match repaired 2026 source.']
+ 'The original 2016 historical peak chronology still does not match repaired 2026 source.']
 (a.out/'V08_CORRECTED_XYW_COLUMN_MAPPING_REPORT.md').write_text('\n'.join(md))
 if not q['all_checks_pass']:raise SystemExit(1)
