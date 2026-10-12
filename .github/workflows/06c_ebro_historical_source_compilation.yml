@@ -30,6 +30,9 @@ jobs:
         run: |
           set -euo pipefail
           d=results/06_ebro_initial_version_audit/06c_2017_historical_solver
+          # Historical repository ships a precompiled lib/libreria.o for a different machine.
+          # Rebuild ONLY its source on the runner; do not change geological algorithms.
+          rm -f old_tisc/lib/libreria.o
           set +e
           make -C old_tisc/src tisc 'OPTS=-O2 -w -std=gnu99 -fcommon' > "$d/BUILD_2017.log" 2>&1
           ec=$?
