@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "passed_checks": 14,
+  "total_checks": 14,
+  "checks": {
+    "14_original_input_runs_exit0_finite_native_grid": true,
+    "salt_on_Ebro_bytewise_native_equal": true,
+    "salt_on_Lake1_bytewise_native_equal": true,
+    "salt_on_Lake2_bytewise_native_equal": true,
+    "fixed_off_default_equals_explicit_bytewise": true,
+    "corrected_off_equals_original_zero_ions_all_22880_native_xyz": true,
+    "fixed_off_removes_initial_9km_spike": true,
+    "full_60Myr_patched_Ebro_valid_execution": true,
+    "full_60Myr_native_22880_grid": true,
+    "full_60Myr_121_printed_age_labels": true,
+    "full_60Myr_no_author_input_edits": true,
+    "full_original_inputs_sha256_match_pinned_upstream": true,
+    "full_2016_comparison_120_numeric_printed_age_labels": true,
+    "historical_2016_is_still_not_numerically_reproduced": true
+  },
+  "comparison": {
+    "author_vs_original_RMS_m": 2341.004520570888,
+    "author_vs_repaired_RMS_m": 2122.166135736471,
+    "ages": {
+      "-59.5": {
+        "age": -59.5,
+        "author": 1200.8,
+        "baseline": 9071.6,
+        "repaired": 1521.6
+      },
+      "-30": {
+        "age": -30.0,
+        "author": 8505.0,
+        "baseline": 7554.1,
+        "repaired": 7483.6
+      },
+      "-0.5": {
+        "age": -0.5,
+        "author": 7537.1,
+        "baseline": 3081.7,
+        "repaired": 3311.6
+      }
+    }
+  },
+  "original_bytewise_zero_ions_check_failed_but_numeric_xyz_exact": [
+    "original_zero_ions_identical_to_fixed_off_Ebro"
+  ],
+  "proven_source_modes": "2026 normalized upstream + V08 salt gate for 14 regression runs",
+  "full_60_Myr_variant": "separately audited 03t optimized C + V08 salt gate; not bitwise original",
+  "original_author_input_untouched": true,
+  "original_2016_full_match": false
+}
