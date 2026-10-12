@@ -1,0 +1,44 @@
+name: 08i | Correct native Ebro lake .xyw actual terrain water sediment col mapping
+on:
+  push:
+    branches: [v08-salt-module-fix-regression]
+    paths: ['.github/workflows/08i_correct_native_xyw_scientific_acceptance.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fixed-physical-column-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Re-audit original fourteen archived short cases for true column 6 terrain vs column 3 discharge
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q numpy
+          python3 scripts/08i_correct_native_xyw_column_science.py \
+            --cases results/08_salt_module_fix_regression/08b_native14 \
+            --full60-qc results/08_salt_module_fix_regression/08c_full_ebro_60Myr/FULL60_SALT_FIXED_QC.json \
+            --out results/08_salt_module_fix_regression/08i_corrected_native_xyw
+      - name: Preserve complete corrected scientific evidence, do not erase historical mistaken QA
+        if: always()
+        run: |
+          set -euo pipefail
+          git add -f results/08_salt_module_fix_regression/08i_corrected_native_xyw
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'qc(V08): correct .xyw column6 actual terrain against previously mislabeled discharge'
+            for i in 1 2 3 4 5 6 7 8; do
+              git fetch origin v08-salt-module-fix-regression
+              git rebase origin/v08-salt-module-fix-regression
+              if git push origin HEAD:v08-salt-module-fix-regression; then exit 0; fi
+            done
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: V08_SALT_FIX_CORRECTED_NATIVE_TERRAIN_WATER
+          path: results/08_salt_module_fix_regression/08i_corrected_native_xyw
+          retention-days: 90
