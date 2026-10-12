@@ -1,3 +1,15 @@
+## 03aa — Mirrored physically unique lake outlet audit — PASSED
+
+**New accepted numerical-physics check:** [seven-run original-TISC mirror test](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38212195769) has completed successfully. In a 41×41 equal-height two-sill test, we independently lowered the west or east **controlling inner throat** by one float32 ULP, 0.1m or 1m. For every exactly mirrored float32 input pair, the actual primary lake outlet followed the uniquely lower throat, lake component membership mirrored, and deposited thickness / actual lithosphere flexure-w mirrors agreed at reported precision. Two mirrored downstream pointers differ **only on the outer box's north/south edges at x=20km**; no lake-scale field difference was detected. Arbitrary global routing epsilon remains **rejected** and accepted physical TISC hydrology is unmodified.
+
+- [03aa full experimental report and exact two-node residual](notes/03aa_MIRRORED_UNIQUE_SILL_RESULTS.md)
+- [Permanent 03aa mirrored outlet / sediment / flexure comparison CSV](results/03_tectonics/03AA_MIRRORED_UNIQUE_SILL_QC.csv)
+- [03z complete locally controlling-saddle results and Junggar transfer diagnosis](notes/03z_LOCAL_LAKE_OUTLET_SADDLE_TESTS.md)
+
+The 03aa result validates one synthetic resolved-sill response, NOT a global hydrological convergence proof and NOT an explanation for the Junggar V10.2B high computational-domain sediment export. Geological next priority: staged source-specific basin capture and flux, sediment accommodation and palaeodivide evidence, then targeted 10-vs-5-km grid comparisons.
+
+---
+
 ## 03z — Real TISC local lake outlet and controlling saddle isolation — PASSED
 
 The earlier 03y `1e-8` *global routing tolerance* was conclusively rejected. The focused 03z experiment used original accepted 03t lake physics, with one-cell initial DEM perturbations and actual TISC 41×41 forward evolution, **no modification to river/lake routing code**. Baseline DEM is left/right perfectly symmetric in stored float32, with equal east/west inner lake-entry throat heights 114.16148376464844m.
