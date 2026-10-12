@@ -173,7 +173,7 @@ def analyze(root):
     diagnostics=dict(max_basin_down_m=max_basin,max_zero_deflection_m=zero_resp,
       max_residual_pressure_half_m=linear_half,max_residual_pressure_onehalf_m=linear_more,
       coarse5vs10km_center_transect_RMS_m=coarse_rms,
-      "caution":"no true sediment transport, no underthrusting, no geological time and no real coordinate alignment"),
+      caution="no true sediment transport, no underthrusting, no geological time and no real coordinate alignment"),
     cases=summaries)
   (root/"V10A_NUMERIC_QC.json").write_text(json.dumps(out,indent=2,allow_nan=False))
   with (root/"V10A_CASE_METRICS.csv").open("w",newline="") as f:
