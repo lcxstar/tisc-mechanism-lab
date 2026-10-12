@@ -1,0 +1,55 @@
+name: 09b | Complete Ebro 2017 v 2026 C by 2017 v 2026 original input full60 2x2
+on:
+  push:
+    branches: [v09-ebro-historical-longterm-diagnostics]
+    paths: ['.github/workflows/09b_complete_historical_2x2_scientific_qc.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  final-true-full-factorial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: 1a32399e6842c32be7e01f7cc2ed8cfcb162c40d
+          path: first_upload
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Verify four original input and source actual simulations fully finished
+        run: |
+          set -euo pipefail
+          for k in old2017__old2017 old2017__new2026 new2026__old2017 new2026__new2026; do
+            test -s "results/09_ebro_historical_longterm/09a_full_2x2/$k/FULL_RUN_QC.json"
+            test -s "results/09_ebro_historical_longterm/09a_full_2x2/$k/RUN.log"
+          done
+      - name: Factorial decomposition of author 2016 versus two pinned programs and two author input snapshots
+        run: |
+          set -euo pipefail
+          python3 scripts/09b_compare_ebro_longterm_factorial.py \
+            --matrix-root results/09_ebro_historical_longterm/09a_full_2x2 \
+            --old-input first_upload/demo/8_Ebro_evol \
+            --new-input upstream/tisc/demo/8_Ebro_evol \
+            --old-screen first_upload/demo/8_Ebro_evol/Ebro_evol.screen \
+            --v08-full-csv results/08_salt_module_fix_regression/08c_full_ebro_60Myr/FULL60_AUTHOR2016_AND_ORIGINAL_V04_COMPARISON.csv \
+            --parser scripts/06a_audit_ebro_initial_parameters.py \
+            --out results/09_ebro_historical_longterm/09b_complete_2x2_scientific_comparison
+      - name: Commit formal four-run science interpretation, age-by-age fields and exact input SHA256
+        run: |
+          set -euo pipefail
+          git add -f results/09_ebro_historical_longterm/09b_complete_2x2_scientific_comparison
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'science(V09): full four arm original author source input 60Myr Ebro historical divergence factorization'
+          for i in 1 2 3 4 5 6 7 8; do
+            git fetch origin v09-ebro-historical-longterm-diagnostics
+            git rebase origin/v09-ebro-historical-longterm-diagnostics
+            if git push origin HEAD:v09-ebro-historical-longterm-diagnostics; then exit 0; fi
+          done
+          exit 1
