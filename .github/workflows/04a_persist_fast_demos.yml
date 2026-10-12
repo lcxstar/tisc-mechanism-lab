@@ -1,4 +1,4 @@
-name: Original demo checkpoint | Persist five completed native models
+name: Original demo checkpoint | Persist six completed native models
 on:
   push:
     branches: [v04-official-demo-completion]
@@ -45,6 +45,14 @@ jobs:
           run-id: 38224145812
           github-token: ${{ github.token }}
           path: results/04_09_official_demo_suite/09_iberia
+      - name: Download completed original climate/landscape model
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_FULL_07_climate
+          repository: lcxstar/tisc-mechanism-lab
+          run-id: 38224145812
+          github-token: ${{ github.token }}
+          path: results/04_09_official_demo_suite/07_climate
       - name: Download completed original Ebro Basin 60–0 Myr model
         uses: actions/download-artifact@v4
         with:
@@ -59,7 +67,7 @@ jobs:
           import json
           from pathlib import Path
           p=Path('results/04_09_official_demo_suite')
-          for case in ('04_river','05_lake_one','05_lakes_two','08_ebro','09_iberia'):
+          for case in ('04_river','05_lake_one','05_lakes_two','07_climate','08_ebro','09_iberia'):
             d=p/case
             qc=json.loads((d/'RUN_QC.json').read_text())
             assert qc['checks_pass'] and qc['model_input_hashes_unchanged']
@@ -72,4 +80,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'archive: preserve four completed author models and raw native fields'
+          git pull --rebase origin v04-official-demo-completion
           git push origin HEAD:v04-official-demo-completion
