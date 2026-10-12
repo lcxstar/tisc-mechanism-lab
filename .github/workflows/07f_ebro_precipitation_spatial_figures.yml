@@ -2,7 +2,7 @@ name: 07f | Plot original Ebro first-step chemical loading local maps
 on:
   push:
     branches: [v07-ebro-first-surface-cell-flux-audit]
-    paths: ['.github/workflows/07f_ebro_precipitation_spatial_figures.yml']
+    paths: ['.github/workflows/07f_ebro_precipitation_spatial_figures.yml', 'scripts/07f_plot_ebro_precipitation_rise_maps.py']
   workflow_dispatch:
 permissions:
   contents: write
