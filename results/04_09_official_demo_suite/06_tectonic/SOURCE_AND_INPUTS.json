@@ -1,0 +1,13 @@
+{
+  "original_repo": "danigeos/tisc",
+  "original_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "original_demo_subdirectory": "tisc/demo/6_tectonics",
+  "prefix": "demo",
+  "full_physical_inputs_modified": false,
+  "files_sha256": {
+    "demo.PRFL": "052ef8f06b69768fda09fbd9d95cf4918f1d860822330e40fe3404c7bb6c6861",
+    "demo.PRM": "5b9067630073020d3ed356cf0c14ad8fce1f0e4666e2d26b21214f07ae3b9bce",
+    "demo1.UNIT": "796ef060fbf534dbdd02ec912db0930704b5506c36355d356e15491702a7ad9b",
+    "demo2.UNIT": "5468b98f06644e048c0b98503e0c0b75bbd05a15c8561ae43c1d8a979b1d1cfe"
+  }
+}

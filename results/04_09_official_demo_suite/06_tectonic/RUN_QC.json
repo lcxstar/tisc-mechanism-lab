@@ -1,0 +1,116 @@
+{
+  "case": "06_tectonic",
+  "author_demo_folder": "tisc/demo/6_tectonics",
+  "original_upstream_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "source_variant": "audited_03t_optimized",
+  "model_input_hashes_unchanged": true,
+  "plotting_override_only": true,
+  "physical_model_inputs_changed": false,
+  "input_Nx": 401,
+  "input_Ny": 401,
+  "grid_nodes_expected": 160801,
+  "initial_surface_base_elevation_m": 100.0,
+  "time_ini_Myr": 0.0,
+  "time_final_Myr": 15.0,
+  "actual_command": "tisc demo -V1 -qplotting_mode=0",
+  "process_exit_code": 0,
+  "T_times_from_run_log": 31,
+  "last_logged_time_Myr": 15.0,
+  "native_xyw_nodes": 160801,
+  "native_xyw_finite": true,
+  "native_xyw_min_topography_m": -432.3,
+  "native_xyw_max_topography_m": 2349.5,
+  "native_final_outputs_present": {
+    "xyw": true,
+    "xyzt": true,
+    "hrz": true,
+    "bas": true,
+    "lak": true,
+    "st": true
+  },
+  "output_inventory": [
+    {
+      "name": ".gmtcommands4",
+      "bytes": 227
+    },
+    {
+      "name": "ACTUAL_COMMAND.txt",
+      "bytes": 32
+    },
+    {
+      "name": "AUTHOR_COMMIT.txt",
+      "bytes": 41
+    },
+    {
+      "name": "EXECUTION_SOURCE_SHA256.txt",
+      "bytes": 84
+    },
+    {
+      "name": "EXIT_CODE.txt",
+      "bytes": 2
+    },
+    {
+      "name": "ORIGINAL_INPUT_MANIFEST.json",
+      "bytes": 587
+    },
+    {
+      "name": "RUN.log",
+      "bytes": 121460
+    },
+    {
+      "name": "WALL_SECONDS.txt",
+      "bytes": 8
+    },
+    {
+      "name": "demo.PRFL",
+      "bytes": 26
+    },
+    {
+      "name": "demo.PRM",
+      "bytes": 3602
+    },
+    {
+      "name": "demo.all",
+      "bytes": 30428694
+    },
+    {
+      "name": "demo.bas",
+      "bytes": 13494092
+    },
+    {
+      "name": "demo.hrz",
+      "bytes": 11658502
+    },
+    {
+      "name": "demo.lak",
+      "bytes": 433882
+    },
+    {
+      "name": "demo.pfl",
+      "bytes": 92282
+    },
+    {
+      "name": "demo.st",
+      "bytes": 5270587
+    },
+    {
+      "name": "demo.xyw",
+      "bytes": 20267959
+    },
+    {
+      "name": "demo.xyzt",
+      "bytes": 5324436
+    },
+    {
+      "name": "demo1.UNIT",
+      "bytes": 227
+    },
+    {
+      "name": "demo2.UNIT",
+      "bytes": 238
+    }
+  ],
+  "upstream_native_input_manifest_sha256": "b37bb604c629539415e6053d548b29f43780a52a8ffef32ed6c1fc785848c0de",
+  "interpretation": "A numerical reproduction of author-provided demo inputs, not independently verified physical geology.",
+  "checks_pass": true
+}

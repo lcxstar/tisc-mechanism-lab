@@ -1,0 +1,8 @@
+case,source_variant,time_ini_Myr,time_final_Myr,native_nodes,expected_nodes,inputs_Sha256_unchanged,exit_code,run_completed,science_match_to_author_historical_run
+04_river,audited_03t_optimized,0.0,20.0,10201,10201,True,0,True,UNTESTED_EXCEPT_EBRO_DIFFERENT
+05_lake_one,normalized_upstream,0.0,0.5,2601,2601,True,0,True,UNTESTED_EXCEPT_EBRO_DIFFERENT
+05_lakes_two,normalized_upstream,0.0,1.0,6561,6561,True,0,True,UNTESTED_EXCEPT_EBRO_DIFFERENT
+06_tectonic,audited_03t_optimized,0.0,15.0,160801,160801,True,0,True,UNTESTED_EXCEPT_EBRO_DIFFERENT
+07_climate,audited_03t_optimized,0.0,5.0,10201,10201,True,0,True,UNTESTED_EXCEPT_EBRO_DIFFERENT
+08_ebro,audited_03t_optimized,-60.0,-0.0,22880,22880,True,0,True,UNTESTED_EXCEPT_EBRO_DIFFERENT
+09_iberia,normalized_upstream,0.0,0.1,22419,22419,True,0,True,UNTESTED_EXCEPT_EBRO_DIFFERENT

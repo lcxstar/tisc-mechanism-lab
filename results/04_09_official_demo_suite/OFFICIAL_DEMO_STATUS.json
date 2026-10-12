@@ -1,0 +1,94 @@
+{
+  "status": "7_ACCEPTED_AUTHOR_INPUT_EXECUTIONS",
+  "n_full_production_runs_completed": 7,
+  "upstream_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "modified_execution_source_variants_explicitly_declared": true,
+  "historical_Ebro_numeric_output_agreement": false,
+  "source_input_files_changed": false,
+  "cases": [
+    {
+      "case": "04_river",
+      "source_variant": "audited_03t_optimized",
+      "time_ini_Myr": 0.0,
+      "time_final_Myr": 20.0,
+      "native_nodes": 10201,
+      "expected_nodes": 10201,
+      "inputs_Sha256_unchanged": true,
+      "exit_code": 0,
+      "run_completed": true,
+      "science_match_to_author_historical_run": "UNTESTED_EXCEPT_EBRO_DIFFERENT"
+    },
+    {
+      "case": "05_lake_one",
+      "source_variant": "normalized_upstream",
+      "time_ini_Myr": 0.0,
+      "time_final_Myr": 0.5,
+      "native_nodes": 2601,
+      "expected_nodes": 2601,
+      "inputs_Sha256_unchanged": true,
+      "exit_code": 0,
+      "run_completed": true,
+      "science_match_to_author_historical_run": "UNTESTED_EXCEPT_EBRO_DIFFERENT"
+    },
+    {
+      "case": "05_lakes_two",
+      "source_variant": "normalized_upstream",
+      "time_ini_Myr": 0.0,
+      "time_final_Myr": 1.0,
+      "native_nodes": 6561,
+      "expected_nodes": 6561,
+      "inputs_Sha256_unchanged": true,
+      "exit_code": 0,
+      "run_completed": true,
+      "science_match_to_author_historical_run": "UNTESTED_EXCEPT_EBRO_DIFFERENT"
+    },
+    {
+      "case": "06_tectonic",
+      "source_variant": "audited_03t_optimized",
+      "time_ini_Myr": 0.0,
+      "time_final_Myr": 15.0,
+      "native_nodes": 160801,
+      "expected_nodes": 160801,
+      "inputs_Sha256_unchanged": true,
+      "exit_code": 0,
+      "run_completed": true,
+      "science_match_to_author_historical_run": "UNTESTED_EXCEPT_EBRO_DIFFERENT"
+    },
+    {
+      "case": "07_climate",
+      "source_variant": "audited_03t_optimized",
+      "time_ini_Myr": 0.0,
+      "time_final_Myr": 5.0,
+      "native_nodes": 10201,
+      "expected_nodes": 10201,
+      "inputs_Sha256_unchanged": true,
+      "exit_code": 0,
+      "run_completed": true,
+      "science_match_to_author_historical_run": "UNTESTED_EXCEPT_EBRO_DIFFERENT"
+    },
+    {
+      "case": "08_ebro",
+      "source_variant": "audited_03t_optimized",
+      "time_ini_Myr": -60.0,
+      "time_final_Myr": -0.0,
+      "native_nodes": 22880,
+      "expected_nodes": 22880,
+      "inputs_Sha256_unchanged": true,
+      "exit_code": 0,
+      "run_completed": true,
+      "science_match_to_author_historical_run": "UNTESTED_EXCEPT_EBRO_DIFFERENT"
+    },
+    {
+      "case": "09_iberia",
+      "source_variant": "normalized_upstream",
+      "time_ini_Myr": 0.0,
+      "time_final_Myr": 0.1,
+      "native_nodes": 22419,
+      "expected_nodes": 22419,
+      "inputs_Sha256_unchanged": true,
+      "exit_code": 0,
+      "run_completed": true,
+      "science_match_to_author_historical_run": "UNTESTED_EXCEPT_EBRO_DIFFERENT"
+    }
+  ]
+}

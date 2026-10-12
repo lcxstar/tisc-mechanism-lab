@@ -1,0 +1,85 @@
+--- 03g/surf_proc.c
++++ 03j-A/surf_proc.c
+@@ -383,6 +383,27 @@
+ 
+ 
+ 
++
++/* TISC-LAB 03j-A. Only caches lake evaporation, no water-routing changes. */
++static unsigned long long tisc_03ja_cache_hits=0, tisc_03ja_cache_misses=0;
++static unsigned long long tisc_03ja_cache_invalidations=0;
++static float tisc_03ja_lake_evap(int il, float *cache, unsigned int *stamps, unsigned int gen, size_t cap) {
++    if (cache && stamps && il>0 && (size_t)il<cap && stamps[il]==gen) {
++        tisc_03ja_cache_hits++;
++        return cache[il];
++    }
++    tisc_03ja_cache_misses++;
++    float lake_evap=0;
++    for (int i=0; i<Lake[il].n;i++) lake_evap += evaporation[Lake[il].row[i]][Lake[il].col[i]];
++    lake_evap *= dx*dy;
++    if (cache && stamps && il>0 && (size_t)il<cap) {
++        cache[il]=lake_evap;
++        stamps[il]=gen;
++    }
++    return lake_evap;
++}
++/* End 03j-A cache helper. */
++
+ int Calculate_Discharge (struct GRIDNODE *sortcell, ModelConfig *cfg, ModelContext *ctx, float *total_lost_water, float *total_evap_water, float *total_underground_water)
+ {
+ 	/*
+@@ -399,6 +420,12 @@
+ 		dt_st = ctx->dt / MAX_2(floor(ctx->dt/ctx->dt_eros+.5), 1);
+ 
+ 	PRINT_DEBUG("Calculating discharge");
++	/* One independent cache lifecycle for each hydrological substep. */
++	size_t tisc_03ja_cap=(size_t)cfg->Nx*(size_t)cfg->Ny+1;
++	float *tisc_03ja_cache=calloc(tisc_03ja_cap,sizeof(float));
++	unsigned int *tisc_03ja_stamps=calloc(tisc_03ja_cap,sizeof(unsigned int));
++	unsigned int tisc_03ja_gen=1;
++	tisc_03ja_cache_hits=tisc_03ja_cache_misses=tisc_03ja_cache_invalidations=0;
+ 	/*
+ 	  This loop starts from the highest cell and 
+ 	  descends node by node transferring water to 
+@@ -419,12 +446,17 @@
+ 			//lake surface must be lowered by making this a river node
+ 			if (il) {
+ 				float lake_evap=0;
+-				for (int i=0; i<Lake[il].n;i++) lake_evap += evaporation[Lake[il].row[i]][Lake[il].col[i]];
+-				lake_evap *= dx*dy;
++				lake_evap=tisc_03ja_lake_evap(il, tisc_03ja_cache, tisc_03ja_stamps, tisc_03ja_gen, tisc_03ja_cap);
+ 				if (Lake_Input_Discharge(cfg, il)<lake_evap && Lake[il].n>1) {
+ 					PRINT_DEBUGPLUS("Deletion attempt for [%d][%d] from lake %d ; lake_inp:%f ; evap:%f ; lakenodes:%d", row,col, il, Lake_Input_Discharge(cfg, il), lake_evap, Lake[il].n);
+ 					
+ 					Attempt_Delete_Node_From_Lake (cfg, ctx, row,col);
++					/* The call may remove, split, renumber, or merge lakes. */
++					if (++tisc_03ja_gen==0) {
++						if (tisc_03ja_stamps) memset(tisc_03ja_stamps,0,tisc_03ja_cap*sizeof(unsigned int));
++						tisc_03ja_gen=1;
++					}
++					tisc_03ja_cache_invalidations++;
+ 					
+ 					drow = drainage[row][col].dr_row;
+ 					dcol = drainage[row][col].dr_col;
+@@ -493,8 +525,7 @@
+ 			//(evaporation in endorheic lakes is done below)
+ 			if (drainage[row][col].type == 'E') {
+ 				float lake_evap=0, input_disch, factor;
+-				for (int i=0; i<Lake[il].n; i++) lake_evap += evaporation[Lake[il].row[i]][Lake[il].col[i]];
+-				lake_evap *= dx*dy;
++				lake_evap=tisc_03ja_lake_evap(il, tisc_03ja_cache, tisc_03ja_stamps, tisc_03ja_gen, tisc_03ja_cap);
+ 				input_disch = Lake_Input_Discharge(cfg, il);
+ 				if (input_disch) factor = MIN_2(1, lake_evap/input_disch);
+ 				else             factor = 0;
+@@ -819,6 +850,11 @@
+ 		}
+ 	}
+ 
++	fprintf(stderr,"\nTISC_03J_A hits=%llu misses=%llu invalidations=%llu grid=%d\n",
++		tisc_03ja_cache_hits,tisc_03ja_cache_misses,tisc_03ja_cache_invalidations,Nx*Ny);
++	fflush(stderr);
++	free(tisc_03ja_cache);
++	free(tisc_03ja_stamps);
+ 	return (1);
+ }
+ 

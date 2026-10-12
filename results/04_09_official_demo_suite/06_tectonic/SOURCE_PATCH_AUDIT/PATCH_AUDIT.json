@@ -1,0 +1,13 @@
+{
+  "patch": "03g merge-only lake membership guard with O(1) stamp lookup",
+  "repository": "danigeos/tisc",
+  "pinned_upstream": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "normalized_reference_sha256": "8f7035e48f39ad01f5c4e01382ab51a1d07d7f3c21b029c8ea5cea6d2143ef4f",
+  "optimized_surf_proc_sha256": "7b10a3cb717ed14271ab84fecf7439d536b12b6fcbe01089226642657e56208b",
+  "equations_or_user_parameters_changed": false,
+  "list_order_or_merge_order_changed": false,
+  "fallback_duplicate_check_outside_merge": "original linear scan",
+  "duplicate_detection_during_merge": "same semantics via target lake membership stamp",
+  "malloc_failure": "fallback to original linear scan",
+  "scientific_status": "performance experiment; must pass numerical equivalence checks"
+}
