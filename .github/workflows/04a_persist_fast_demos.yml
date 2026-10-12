@@ -1,0 +1,67 @@
+name: Original demo checkpoint | Persist four completed native models
+on:
+  push:
+    branches: [v04-official-demo-completion]
+    paths: ['.github/workflows/04a_persist_fast_demos.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  archive-four:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download finished original 04 river
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_FULL_04_river
+          repository: lcxstar/tisc-mechanism-lab
+          run-id: 38224145812
+          github-token: ${{ github.token }}
+          path: results/04_09_official_demo_suite/04_river
+      - name: Download finished original 05 single lake
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_FULL_05_lake_one
+          repository: lcxstar/tisc-mechanism-lab
+          run-id: 38224145812
+          github-token: ${{ github.token }}
+          path: results/04_09_official_demo_suite/05_lake_one
+      - name: Download finished original 05 two lakes
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_FULL_05_lakes_two
+          repository: lcxstar/tisc-mechanism-lab
+          run-id: 38224145812
+          github-token: ${{ github.token }}
+          path: results/04_09_official_demo_suite/05_lakes_two
+      - name: Download finished original 09 Iberian drainage
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_FULL_09_iberia
+          repository: lcxstar/tisc-mechanism-lab
+          run-id: 38224145812
+          github-token: ${{ github.token }}
+          path: results/04_09_official_demo_suite/09_iberia
+      - name: Verify case QC and irreversible input invariance
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('results/04_09_official_demo_suite')
+          for case in ('04_river','05_lake_one','05_lakes_two','09_iberia'):
+            d=p/case
+            qc=json.loads((d/'RUN_QC.json').read_text())
+            assert qc['checks_pass'] and qc['model_input_hashes_unchanged']
+            assert (d/(case+'_NATIVE_RAW.tar.gz')).stat().st_size>10000
+            print(case,qc['native_xyw_nodes'],qc['time_final_Myr'],qc['source_variant'])
+          PY
+      - name: Commit successful original full cases to public branch
+        run: |
+          git add results/04_09_official_demo_suite
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'archive: preserve four completed author models and raw native fields'
+          git push origin HEAD:v04-official-demo-completion
