@@ -59,7 +59,7 @@ def main():
             f=w/'Ebro_evol.PRM'
             src=f.read_text()
             for key,val in control['prm_overrides'].items():
-                src,count=re.subn(r'(?m)^('+re.escape(key)+r'\\s+)\\S+',lambda m:m.group(1)+str(val),src,count=1)
+                src,count=re.subn(r'(?m)^('+re.escape(key)+r'\s+)\S+',lambda m:m.group(1)+str(val),src,count=1)
                 assert count==1,(key,count)
             f.write_text(src)
         after=original_hashes(w)
