@@ -1,3 +1,18 @@
+# Original author's TISC demo README — command completion / v05
+
+**v04 stable** has fully archived all seven original project forward models (4–9, with both lake cases), along with prior 1–3 flexure. **v05** extends to the author's additional documented CLI flags, true binary restarts, and native PDF/PNG output.
+
+- [Command-by-command audited acceptance ledger](docs/05_AUTHOR_README_COMPLETE_COMMAND_LEDGER.md)
+- [Additional original direct-Q / Te / island / no-surface cases, actual checksums and native output](results/05_readme_variants/)
+- [All 7 native original author final landscapes rendered as vector PDF and PNG](results/05_readme_variants/author_native_figures/)
+- [Quantitative 60-Myr Ebro hydrology / erosion off-vs-on analysis](results/05_readme_variants/ebro_surface_process_isolation/EBRO_SURFACE_OPTION_QC.md)
+- [Three genuine 401-grid restarts started from 15-Myr native .all checkpoints](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38229155504). Treat as UNVERIFIED until native outputs pass independent QC.
+- [Stable v04 7/7 author model archive](https://github.com/lcxstar/tisc-mechanism-lab/tree/v04-official-demo-completion/results/04_09_official_demo_suite).
+
+The Ebro historic 2016 reference mismatch has NOT been solved. An unchanged executable/parameters claim is NOT made for audited 03t variants. There is no Junggar geological-model tuning in this branch.
+
+---
+
 # TISC Mechanism Lab — Official author's demos reproduced and archived
 
 ## Completed full input-run suite, 12 October 2026
