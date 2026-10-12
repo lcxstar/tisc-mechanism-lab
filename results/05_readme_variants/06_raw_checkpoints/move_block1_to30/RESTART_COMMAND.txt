@@ -1,0 +1,1 @@
+tisc demo -F -S1/1 -tf30 -V1 -qplotting_mode=0

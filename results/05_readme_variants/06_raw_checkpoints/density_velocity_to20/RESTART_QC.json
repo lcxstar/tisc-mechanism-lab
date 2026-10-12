@@ -1,0 +1,22 @@
+{
+  "case": "density_velocity_to20",
+  "author_doc_requested_args": "-F -v-2850/3.14/31.4 -tf20",
+  "author_README_written_args": "-F -v-2850/3.14/31.4 -tf20",
+  "author_doc_command_correction": "none",
+  "execution_code_kind": "03t explicitly patched, NOT upstream bitwise original",
+  "upstream": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "author_input_files_unchanged": true,
+  "original_full15_checkpoint_exit_code": 0,
+  "native_restart_file_created": true,
+  "restart_exit_code": 0,
+  "resume_is_true_checkpoint_not_new_t0": false,
+  "first_logged_resumed_Myr": null,
+  "last_logged_resumed_Myr": null,
+  "expected_end_Myr": 20,
+  "native_grid_rows": 160801,
+  "native_grid_expected": 160801,
+  "actual_command": "tisc demo -F -v-2850/3.14/31.4 -tf20 -V1 -qplotting_mode=0",
+  "checkpoint_file_sha256": "4a0e3245901fbf7fd8a8461d6adf1f19a6bc7eec3175d2815e2ba3461fbb3e1c  demo.all",
+  "interpretation": "Author resume CLI behavior and saved native state; no geological calibration",
+  "accepted": false
+}

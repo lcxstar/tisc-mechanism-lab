@@ -1,0 +1,833 @@
+
+* TISC: TECTONICS, ISOSTASY, SURFACE PROCESSES, AND CLIMATE PLANFORM MODELING *
+Version: TISC_2026-03-22_factorized_stable
+Reading Model-run data at 'demo.all'
+Resuming project 'demo'. Timefinal=20.0 My
+T= 15.0000 My
+  topogr.  :  max= 2349.5 m	min= -432.3 m	integr=5.17e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +5.03e+06 N/m2  min = -1.26e+07 N/m2   Total: -1.37e+17 N	Max at 231,-249 km
+  load: +5.42e+18 N   restit_force: -1.37e+17 N
+  deflect. :  max= 1941.9 m	min= -95.5 m	integr=1.70e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=23016 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=23463 misses=301 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=10 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=18769 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=19136 misses=286 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=38 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=19715 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20164 misses=206 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=38 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=19855 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20304 misses=159 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=40 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=19947 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20397 misses=141 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=40 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=20030 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20404 misses=156 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=38 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=20276 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20726 misses=156 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=42 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=20315 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20768 misses=166 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=40 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=20338 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20791 misses=149 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=42 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=20387 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20839 misses=152 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=44 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.79e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.79e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.79e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  44/152 : 7.61e-02 km3 1.45e+02 km2   11 m  -15,-110  1 out @	  -15,-116 919.9 m3/s
+  total_lake_area_nosea: 1.09e+09 km2
+  river_max:  1489.02 m3/s     0.00 kg/s @  -23.8,-250.0 km, -1.1 m
+  topo_diff_eros_max=    -1.36 mm/yr	sedim_max:     0.66 mm/yr
+TISC_03S_LEDGER timeMyr=15.000000 float_bed_kg=11096661115797504 float_sed_kg=-3286237318217728 float_out_kg=14306121598631936 float_gap_kg=76776835383296 float_gap_pct=0.691891322823 double_bed_kg=11097938510828568 double_sed_kg=-3208187945540862 double_out_kg=14306126869083468 double_gap_kg=-412714038 double_gap_pct=-3.7188351476e-06 sed_round_to_zero_count=8465933 sed_round_to_zero_kg=99665966539678.844 sed_calls=45072313
+
+  eros_nosd: +1.09e+17 N	 sedim_inc: -3.15e+16 N   outp_seds:   +1.40e+17 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=15.000000 erosion_kg=11097938510828568 net_deposition_kg=-3208187945540862 export_kg=14306126869083468 balance_gap_kg=-412714038 balance_pct=3.7188351476024433e-06
+
+  eros-sed.:  max= 1.19 mm/yr	min= -0.67 mm/yr	difference=1.55e+07 m3/yr
+  sediment_vol: 6.09e+04 km3
+
+T= 15.5000 My
+  topogr.  :  max= 2302.5 m	min= -372.9 m	integr=5.07e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +3.92e+06 N/m2  min = -1.11e+07 N/m2   Total: -1.43e+17 N	Max at 222,-249 km
+  load: +5.27e+18 N   restit_force: -1.43e+17 N
+  deflect. :  max= 1876.1 m	min= -95.7 m	integr=1.65e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=20066 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=20521 misses=307 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=16 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=15032 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=15432 misses=268 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=43 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=14137 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=14517 misses=218 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=49 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=13883 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=14340 misses=191 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=62 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=13534 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=13925 misses=187 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=54 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=13457 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=13912 misses=166 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=63 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=13273 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=13662 misses=164 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=52 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=13311 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=13765 misses=153 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=63 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=13272 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=13725 misses=155 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=53 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=13104 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=13483 misses=151 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=52 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.78e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.78e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.78e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  44/151 : 3.52e-02 km3 1.80e+02 km2   10 m  -15,-165  1 out @	  -10,-189 1264.4 m3/s
+  total_lake_area_nosea: 1.52e+09 km2
+  river_max:  1497.40 m3/s     0.00 kg/s @   -1.2,-250.0 km, -19.1 m
+  topo_diff_eros_max=    -1.34 mm/yr	sedim_max:     0.40 mm/yr
+TISC_03S_LEDGER timeMyr=15.500000 float_bed_kg=10412961378074624 float_sed_kg=-3408017894670336 float_out_kg=13796005111660544 float_gap_kg=24974161084416 float_gap_pct=0.239837258371 double_bed_kg=10413986648467456 double_sed_kg=-3382036219166204.5 double_out_kg=13796022728286414 double_gap_kg=139347246 double_gap_pct=1.3380778246e-06 sed_round_to_zero_count=2973192 sed_round_to_zero_kg=33784548860947.531 sed_calls=22332382
+
+  eros_nosd: +1.02e+17 N	 sedim_inc: -3.32e+16 N   outp_seds:   +1.35e+17 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=15.500000 erosion_kg=10413986648467456 net_deposition_kg=-3382036219166204.5 export_kg=13796022728286414 balance_gap_kg=139347246 balance_pct=-1.3380778246005014e-06
+
+  eros-sed.:  max= 1.34 mm/yr	min= -0.40 mm/yr	difference=1.50e+07 m3/yr
+  sediment_vol: 5.98e+04 km3
+
+T= 16.0000 My
+  topogr.  :  max= 2196.7 m	min= -272.9 m	integr=5.00e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +3.08e+06 N/m2  min = -1.21e+07 N/m2   Total: -1.39e+17 N	Max at 238,-249 km
+  load: +5.13e+18 N   restit_force: -1.39e+17 N
+  deflect. :  max= 1815.1 m	min= -96.1 m	integr=1.61e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=13472 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=13921 misses=310 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=31 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=12069 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=12518 misses=244 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=47 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=11609 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=12056 misses=189 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=51 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=11322 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=11769 misses=178 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=51 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=11064 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=11512 misses=156 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=52 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=10912 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=11356 misses=156 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=52 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=10743 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=11182 misses=158 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=53 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=10606 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=11044 misses=157 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=53 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=10477 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=10849 misses=155 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=52 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=10406 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=10759 misses=149 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=52 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.77e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.77e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.77e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake   9/149 : 8.77e-02 km3 3.45e+02 km2    0 m  281,51    1 out @	  276,42  746.3 m3/s
+  total_lake_area_nosea: 1.57e+09 km2
+  river_max:  1477.40 m3/s     0.00 kg/s @  -21.2,-250.0 km, -0.7 m
+  topo_diff_eros_max=    -1.35 mm/yr	sedim_max:     0.30 mm/yr
+TISC_03S_LEDGER timeMyr=16.000000 float_bed_kg=9637648914186240 float_sed_kg=-3449916642820096 float_out_kg=13079092391837696 float_gap_kg=8473165168640 float_gap_pct=0.0879173462749 double_bed_kg=9638360226102538 double_sed_kg=-3440742609031633.5 double_out_kg=13079102572467808 double_gap_kg=262666364 double_gap_pct=2.72521837572e-06 sed_round_to_zero_count=1120933 sed_round_to_zero_kg=12547232438609.961 sed_calls=14176141
+
+  eros_nosd: +9.46e+16 N	 sedim_inc: -3.38e+16 N   outp_seds:   +1.28e+17 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=16.000000 erosion_kg=9638360226102538 net_deposition_kg=-3440742609031633.5 export_kg=13079102572467808 balance_gap_kg=262666364 balance_pct=-2.7252183757217212e-06
+
+  eros-sed.:  max= 1.27 mm/yr	min= -0.29 mm/yr	difference=1.42e+07 m3/yr
+  sediment_vol: 5.84e+04 km3
+
+T= 16.5000 My
+  topogr.  :  max= 2136.4 m	min= -258.5 m	integr=4.94e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +3.21e+06 N/m2  min = -1.15e+07 N/m2   Total: -1.32e+17 N	Max at 6,-249 km
+  load: +5.00e+18 N   restit_force: -1.32e+17 N
+  deflect. :  max= 1758.9 m	min= -96.9 m	integr=1.57e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=10830 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=11265 misses=297 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=23 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=10162 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=10472 misses=213 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=20 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=10056 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=10488 misses=161 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=27 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=9744 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=10114 misses=153 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=24 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=9701 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=10131 misses=146 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=28 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=9523 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=9946 misses=154 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=22 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=9367 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=9792 misses=145 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=21 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=9111 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=9460 misses=131 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=20 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=9196 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=9617 misses=136 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=21 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=9048 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=9468 misses=161 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=21 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.76e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.76e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.76e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  65/161 : 9.66e-02 km3 2.20e+02 km2   15 m  -18,-161  1 out @	  -18,-188 1245.6 m3/s
+  total_lake_area_nosea: 1.32e+09 km2
+  river_max:  1432.46 m3/s     0.00 kg/s @  -20.0,-250.0 km, -0.2 m
+  topo_diff_eros_max=    -1.23 mm/yr	sedim_max:     0.30 mm/yr
+TISC_03S_LEDGER timeMyr=16.500000 float_bed_kg=8947940517216256 float_sed_kg=-3336541854236672 float_out_kg=12282225634574336 float_gap_kg=2256736878592 float_gap_pct=0.0252207407308 double_bed_kg=8948379833464589 double_sed_kg=-3333853795485613 double_out_kg=12282233511020900 double_gap_kg=117929302 double_gap_pct=1.31788440136e-06 sed_round_to_zero_count=330858 sed_round_to_zero_kg=4386117751331.4058 sed_calls=9147096
+
+  eros_nosd: +8.78e+16 N	 sedim_inc: -3.27e+16 N   outp_seds:   +1.20e+17 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=16.500000 erosion_kg=8948379833464589 net_deposition_kg=-3333853795485613 export_kg=12282233511020900 balance_gap_kg=117929302 balance_pct=-1.3178844013636458e-06
+
+  eros-sed.:  max= 1.27 mm/yr	min= -0.30 mm/yr	difference=1.33e+07 m3/yr
+  sediment_vol: 5.71e+04 km3
+
+T= 17.0000 My
+  topogr.  :  max= 1977.8 m	min= -254.9 m	integr=4.89e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +3.14e+06 N/m2  min = -1.14e+07 N/m2   Total: -1.24e+17 N	Max at -34,249 km
+  load: +4.88e+18 N   restit_force: -1.24e+17 N
+  deflect. :  max= 1707.7 m	min= -97.8 m	integr=1.53e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=9309 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=9725 misses=270 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=32 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=8749 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=9096 misses=184 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=22 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=8491 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=8848 misses=137 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=24 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=8328 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=8670 misses=132 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=26 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=8226 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=8635 misses=130 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=30 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=7883 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=8230 misses=123 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=27 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=7841 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=8244 misses=132 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=29 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=7578 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=7923 misses=128 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=25 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=7592 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=7994 misses=127 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=23 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=7402 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=7804 misses=129 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=23 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.75e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.75e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.75e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  23/129 : 7.08e-02 km3 2.84e+02 km2    2 m  281,50    1 out @	  278,44  743.1 m3/s
+  total_lake_area_nosea: 1.17e+09 km2
+  river_max:  1455.27 m3/s     0.00 kg/s @  -16.2,-250.0 km, 1.5 m
+  topo_diff_eros_max=    -1.12 mm/yr	sedim_max:     0.14 mm/yr
+TISC_03S_LEDGER timeMyr=17.000000 float_bed_kg=8234356933918720 float_sed_kg=-3290735759589376 float_out_kg=11525918400970752 float_gap_kg=-825707462656 float_gap_pct=-0.0100275889093 double_bed_kg=8234924454063182 double_sed_kg=-3290990428612865.5 double_out_kg=11525914589592232 double_gap_kg=293083816 double_gap_pct=3.55903466553e-06 sed_round_to_zero_count=113626 sed_round_to_zero_kg=881834991431.66028 sed_calls=6186503
+
+  eros_nosd: +8.08e+16 N	 sedim_inc: -3.23e+16 N   outp_seds:   +1.13e+17 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=17.000000 erosion_kg=8234924454063182 net_deposition_kg=-3290990428612865.5 export_kg=11525914589592232 balance_gap_kg=293083816 balance_pct=-3.5590346655261659e-06
+
+  eros-sed.:  max= 1.22 mm/yr	min= -0.15 mm/yr	difference=1.25e+07 m3/yr
+  sediment_vol: 5.56e+04 km3
+
+T= 17.5000 My
+  topogr.  :  max= 1879.1 m	min= -251.2 m	integr=4.83e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.01e+06 N/m2  min = -1.10e+07 N/m2   Total: -1.17e+17 N	Max at 105,4 km
+  load: +4.76e+18 N   restit_force: -1.17e+17 N
+  deflect. :  max= 1660.8 m	min= -99.0 m	integr=1.49e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=7609 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=8011 misses=250 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=23 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=7110 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=7457 misses=161 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=28 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=6878 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=7277 misses=123 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=34 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=6522 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=6864 misses=121 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=31 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=6484 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=6880 misses=117 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=30 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=6321 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=6716 misses=117 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=25 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=6035 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=6317 misses=121 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=24 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=6140 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=6531 misses=130 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=29 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=5742 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=5968 misses=134 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=26 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=5846 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=6234 misses=128 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=31 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.74e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.74e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.74e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  66/128 : 2.50e-02 km3 2.14e+02 km2   20 m  -26,-152  1 out @	  -22,-182 1232.9 m3/s
+  total_lake_area_nosea: 1.24e+09 km2
+  river_max:  1438.34 m3/s     0.00 kg/s @  -17.5,-250.0 km, 4.3 m
+  topo_diff_eros_max=    -1.03 mm/yr	sedim_max:     0.12 mm/yr
+TISC_03S_LEDGER timeMyr=17.500000 float_bed_kg=7659377850843136 float_sed_kg=-3070654656020480 float_out_kg=10730828686426112 float_gap_kg=-796179562496 float_gap_pct=-0.0103948333403 double_bed_kg=7659947117452059 double_sed_kg=-3070889528481650.5 double_out_kg=10730836376200994 double_gap_kg=269732716 double_gap_pct=3.52133914065e-06 sed_round_to_zero_count=114575 sed_round_to_zero_kg=838571514936.70557 sed_calls=3482898
+
+  eros_nosd: +7.51e+16 N	 sedim_inc: -3.01e+16 N   outp_seds:   +1.05e+17 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=17.500000 erosion_kg=7659947117452059 net_deposition_kg=-3070889528481650.5 export_kg=10730836376200994 balance_gap_kg=269732716 balance_pct=-3.5213391406509039e-06
+
+  eros-sed.:  max= 1.01 mm/yr	min= -0.13 mm/yr	difference=1.16e+07 m3/yr
+  sediment_vol: 5.42e+04 km3
+
+T= 18.0000 My
+  topogr.  :  max= 1730.7 m	min= -247.0 m	integr=4.78e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +8.97e+05 N/m2  min = -9.26e+06 N/m2   Total: -1.09e+17 N	Max at 158,-118 km
+  load: +4.65e+18 N   restit_force: -1.09e+17 N
+  deflect. :  max= 1618.2 m	min= -100.3 m	integr=1.46e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=5928 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=6224 misses=286 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=20 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=5466 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=5782 misses=154 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=27 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=5212 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=5507 misses=136 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=37 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=5062 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=5370 misses=129 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=35 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=4846 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=5130 misses=110 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=33 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=4719 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=5029 misses=113 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=34 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=4646 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=4976 misses=118 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=38 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=4473 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=4786 misses=126 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=30 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=4338 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=4643 misses=142 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=31 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=4301 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=4630 misses=150 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=28 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.74e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.74e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.74e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  35/150 : 3.09e-02 km3 2.56e+02 km2    4 m  282,50    1 out @	  279,45  722.9 m3/s
+  total_lake_area_nosea: 1.38e+09 km2
+  river_max:  1466.67 m3/s     0.00 kg/s @  -18.8,-250.0 km, 7.2 m
+  topo_diff_eros_max=    -0.81 mm/yr	sedim_max:     0.18 mm/yr
+TISC_03S_LEDGER timeMyr=18.000000 float_bed_kg=7097339504230400 float_sed_kg=-2903086506967040 float_out_kg=10001181388570624 float_gap_kg=-755377373184 float_gap_pct=-0.0106431060926 double_bed_kg=7097800653433215 double_sed_kg=-2903387518754758 double_out_kg=10001187936123482 double_gap_kg=236064490 double_gap_pct=3.32588222079e-06 sed_round_to_zero_count=53408 sed_round_to_zero_kg=755916113466.65857 sed_calls=2260403
+
+  eros_nosd: +6.96e+16 N	 sedim_inc: -2.85e+16 N   outp_seds:   +9.81e+16 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=18.000000 erosion_kg=7097800653433215 net_deposition_kg=-2903387518754758 export_kg=10001187936123482 balance_gap_kg=236064490 balance_pct=-3.3258822207949066e-06
+
+  eros-sed.:  max= 0.94 mm/yr	min= -0.19 mm/yr	difference=1.09e+07 m3/yr
+  sediment_vol: 5.29e+04 km3
+
+T= 18.5000 My
+  topogr.  :  max= 1606.6 m	min= -242.6 m	integr=4.74e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +8.15e+05 N/m2  min = -8.93e+06 N/m2   Total: -1.02e+17 N	Max at 5,-250 km
+  load: +4.55e+18 N   restit_force: -1.02e+17 N
+  deflect. :  max= 1579.5 m	min= -101.8 m	integr=1.43e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=4498 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=4855 misses=281 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=24 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=3755 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=4028 misses=124 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=28 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=3427 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=3735 misses=99 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=36 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=3113 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=3413 misses=114 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=35 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=2355 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=2671 misses=113 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=40 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1971 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=2256 misses=117 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=55 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1673 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1952 misses=104 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=109 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1609 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1945 misses=119 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=111 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1423 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1702 misses=124 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=108 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1397 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1731 misses=130 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=111 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.73e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.73e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.73e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  73/130 : 2.20e-02 km3 1.80e+02 km2   24 m  -28,-151  1 out @	  -25,-179 1264.3 m3/s
+  total_lake_area_nosea: 1.26e+09 km2
+  river_max:  1454.68 m3/s     0.00 kg/s @  -18.8,-250.0 km, 10.0 m
+  topo_diff_eros_max=    -0.69 mm/yr	sedim_max:     0.16 mm/yr
+TISC_03S_LEDGER timeMyr=18.500000 float_bed_kg=6612537554501632 float_sed_kg=-2704501177843712 float_out_kg=9317808068362240 float_gap_kg=-769336016896 float_gap_pct=-0.0116345050679 double_bed_kg=6612880956161670 double_sed_kg=-2704950461428337 double_out_kg=9317830841376754 double_gap_kg=576213254 double_gap_pct=8.71349806264e-06 sed_round_to_zero_count=17998 sed_round_to_zero_kg=465319365358.28271 sed_calls=896565
+
+  eros_nosd: +6.49e+16 N	 sedim_inc: -2.65e+16 N   outp_seds:   +9.14e+16 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=18.500000 erosion_kg=6612880956161670 net_deposition_kg=-2704950461428337 export_kg=9317830841376754 balance_gap_kg=576213254 balance_pct=-8.7134980626424707e-06
+
+  eros-sed.:  max= 0.85 mm/yr	min= -0.16 mm/yr	difference=1.01e+07 m3/yr
+  sediment_vol: 5.16e+04 km3
+
+T= 19.0000 My
+  topogr.  :  max= 1487.3 m	min= -237.9 m	integr=4.69e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.76e+06 N/m2  min = -7.73e+06 N/m2   Total: -9.51e+16 N	Max at 6,-250 km
+  load: +4.45e+18 N   restit_force: -9.51e+16 N
+  deflect. :  max= 1544.3 m	min= -103.4 m	integr=1.40e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=1777 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=2107 misses=264 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=25 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1310 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1587 misses=116 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=50 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1292 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1616 misses=112 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=91 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1152 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1428 misses=107 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=97 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1234 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1503 misses=108 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=95 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1211 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1487 misses=122 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=95 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1232 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1501 misses=125 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=100 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1176 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1452 misses=119 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=87 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1217 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1537 misses=121 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=60 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1155 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1450 misses=135 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=44 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.72e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.72e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.72e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  46/135 : 2.70e-02 km3 1.50e+02 km2    8 m  280,85    1 out @	  280,62  617.7 m3/s
+  total_lake_area_nosea: 1.25e+09 km2
+  river_max:  1489.40 m3/s     0.00 kg/s @  350.0,-98.8 km, -1.3 m
+  topo_diff_eros_max=    -0.64 mm/yr	sedim_max:     0.06 mm/yr
+TISC_03S_LEDGER timeMyr=19.000000 float_bed_kg=6175165465493504 float_sed_kg=-2553167736733696 float_out_kg=8729008854269952 float_gap_kg=-675652042752 float_gap_pct=-0.0109414402987 double_bed_kg=6175410330364085 double_sed_kg=-2553598396139310.5 double_out_kg=8729008105090308 double_gap_kg=621413088 double_gap_pct=1.0062701177e-05 sed_round_to_zero_count=7590 sed_round_to_zero_kg=338891584522.39636 sed_calls=237408
+
+  eros_nosd: +6.06e+16 N	 sedim_inc: -2.51e+16 N   outp_seds:   +8.56e+16 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=19.000000 erosion_kg=6175410330364085 net_deposition_kg=-2553598396139310.5 export_kg=8729008105090308 balance_gap_kg=621413088 balance_pct=-1.006270117703034e-05
+
+  eros-sed.:  max= 0.78 mm/yr	min= -0.07 mm/yr	difference=9.47e+06 m3/yr
+  sediment_vol: 5.04e+04 km3
+
+T= 19.5000 My
+  topogr.  :  max= 1380.9 m	min= -233.2 m	integr=4.65e+13 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +5.84e+05 N/m2  min = -7.32e+06 N/m2   Total: -8.91e+16 N	Max at 150,211 km
+  load: +4.36e+18 N   restit_force: -8.91e+16 N
+  deflect. :  max= 1512.2 m	min= -105.1 m	integr=1.37e+14 m*m2
+TISC_03J_B zero_evap_proven_skips=1723 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=2042 misses=251 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=23 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1344 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1642 misses=122 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=71 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1226 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1521 misses=111 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=80 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1152 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1404 misses=99 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=63 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1172 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1462 misses=91 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=33 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1164 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1480 misses=91 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=23 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1138 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1427 misses=98 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=23 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1223 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1539 misses=99 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=24 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1099 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1322 misses=96 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=23 grid=160801 substep=1
+
+TISC_03J_B zero_evap_proven_skips=1225 original_predicate_fallbacks=0 nonnegative_invariant_at_end=1 grid=160801
+
+TISC_03J_A hits=1539 misses=96 invalidations=0 grid=160801
+
+TISC_03K_GUARD negative_incision_slopes=24 grid=160801 substep=1
+
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=4.72e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=0.00e+00 m/s*m2
+  rain_now : +4.71e+03 m3/s  evap_wat: +0.00e+00 m3/s outp_water: +4.71e+03 m3/s undergr_water: +0.00e+00 m3/s
+  lake  33/96 : 7.86e-02 km3 3.33e+02 km2    9 m  288,50    1 out @	  279,44  700.5 m3/s
+  total_lake_area_nosea: 1.28e+09 km2
+  river_max:  1545.58 m3/s     0.00 kg/s @  350.0,-100.0 km, -1.2 m
+  topo_diff_eros_max=    -0.50 mm/yr	sedim_max:     0.06 mm/yr
+TISC_03S_LEDGER timeMyr=19.500000 float_bed_kg=5801397547171840 float_sed_kg=-2403588521328640 float_out_kg=8205918881710080 float_gap_kg=-932813209600 float_gap_pct=-0.0160791120073 double_bed_kg=5801805978464794 double_sed_kg=-2404093159677560.5 double_out_kg=8205899229396909 double_gap_kg=-91254555 double_gap_pct=-1.57286464488e-06 sed_round_to_zero_count=6789 sed_round_to_zero_kg=270812124929.39749 sed_calls=275661
+
+  eros_nosd: +5.69e+16 N	 sedim_inc: -2.36e+16 N   outp_seds:   +8.05e+16 N  
+TISC_03T_CORRECTED_BALANCE timeMyr=19.500000 erosion_kg=5801805978464794 net_deposition_kg=-2404093159677560.5 export_kg=8205899229396909 balance_gap_kg=-91254555 balance_pct=1.5728646448833284e-06
+
+  eros-sed.:  max= 0.70 mm/yr	min= -0.06 mm/yr	difference=8.90e+06 m3/yr
+  sediment_vol: 4.92e+04 km3
+
+T= 20.0000 My
+
+6 Blocks:
+No. Density Age  Volume  Surf.     Vel_x  Vel_y   Shft_x Shft_y erosL
+     kg/m3  My   1e3km3  1e3km2    km/My  km/My   km     km     [m] 
+ 5:  2200  15.00     0.7   58.6    0.0    0.0    0.0    0.0   1.2e-06  S
+ 4:  2200  10.00    15.2   73.8    0.0    0.0    0.0    0.0   1.2e-06  S
+ 3:  2200   5.00    22.9   95.5   10.0    0.0    0.0    0.0   1.2e-06  S
+ 2:  2200   0.00    10.5   67.3   10.0    0.0    0.0    0.0   1.2e-06  S
+ 1:  2850   0.00   480.7  130.1    3.1   31.4  120.0    0.0   1.2e-07  -
+ 0:  2850   6.00   166.3   75.2    3.1   31.4   60.0    0.0   1.2e-07  -  1st Block
+ -:  2850   0.00   -       -       0      0      0      0     1.2e-07  -  basement
+
+Final total sediment volume: 49.25 1e3 km3
+
+  2D prof. :  max =    1091.1 m     min =       2.4 m   
+Time end: Mon Oct 12 09:44:16 2026
+

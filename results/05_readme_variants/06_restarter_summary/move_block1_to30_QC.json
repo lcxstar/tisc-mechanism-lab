@@ -1,0 +1,25 @@
+{
+  "case": "move_block1_to30",
+  "author_requested_end_time_Myr": 30.0,
+  "actual_command": "tisc demo -F -S1/1 -tf30 -V1 -qplotting_mode=0",
+  "checkpoint_created_original_401_full15": true,
+  "checkpoint_native_all_sha256": "d47431e736540b007e77ce44d21c227c810236397e2fb90ccb5840c7c1d9d183  demo.all",
+  "checkpoint_restart_program_is_same_03t_executable": true,
+  "same_original_author_inputs_sha256": true,
+  "restart_process_exit_code": 0,
+  "restart_timeline_from_saved_run_log": [
+    15.0,
+    15.5,
+    16.0,
+    16.5,
+    17.0
+  ],
+  "last_recorded_time_Myr": 30.0,
+  "expected_restarted_from_15Ma": true,
+  "native_final_401grid_nodes": 160801,
+  "native_grid_finite": true,
+  "actual_native_result_archive": "RESULTS_NATIVE.tar.gz",
+  "this_is_not_historical_pristine_solver": true,
+  "supersedes_old_regex_time_parser": true,
+  "validated": true
+}

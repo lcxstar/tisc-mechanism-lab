@@ -1,0 +1,1 @@
+tisc demo -V1 -qplotting_mode=0
