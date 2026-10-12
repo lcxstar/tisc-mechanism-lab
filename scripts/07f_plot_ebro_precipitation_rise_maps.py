@@ -34,7 +34,7 @@ assert (rmax,cmax)==(83,130)
 metadata={'first_stable_phase':'after_custom_node_defs',
 'first_abnormal_phase':'after_routing',
 'source_C':'Calculate_Discharge',
-'row':rmax,'col':cmax,'x_km':float(xx[rmax,cmax]),'y_km':float(yy[rmax,cmax]),
+'row':int(rmax),'col':int(cmax),'x_km':float(xx[rmax,cmax]),'y_km':float(yy[rmax,cmax]),
 'delta_topography_m':float(dz[rmax,cmax]),'delta_Dq_MPa':float(dq[rmax,cmax]),
 'n_cells_above_100m_chemical_height_change':int((dz>100).sum()),
 'not_WGS84_geographic_coordinates':True,'no_numeric_interpolation':True,
