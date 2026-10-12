@@ -87,7 +87,7 @@ data={a["name"]:field(a["name"]) for a in arms};base=data["TIE"]
 rows=[]
 for setting in arms:
  k=setting["name"];z=data[k];p=diff(base,z)
- rows.append(dict(case=k,sill_gap_input_m=setting["actual_east_minus_west_m"],
+ rows.append(dict(case=k,sill_gap_input_m=setting.get("actual_east_minus_west_m",float(setting.get("east_throat_initial_delta_m",0))-float(setting.get("west_throat_initial_delta_m",0))),
    west_type=z["sills"]["west_sill"]["type"],east_type=z["sills"]["east_sill"]["type"],
    west_outlet=z["sills"]["west_sill"]["is_lake_outlet"],
    east_outlet=z["sills"]["east_sill"]["is_lake_outlet"],
