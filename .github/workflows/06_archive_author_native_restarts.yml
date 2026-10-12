@@ -1,0 +1,79 @@
+name: Original TISC 401 restart | Independent QC and durable autosave
+on:
+  workflow_run:
+    workflows: ["05 | Author's exact 6_tectonics restart and block velocity demonstrations"]
+    types: [completed]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  archive-previous-author-restart:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.head_branch == 'v05-author-readme-command-variants' && github.event.workflow_run.id == 38229155504) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v05-author-readme-command-variants
+      - name: Download pinned author 401-grid native checkpoint continuation artifact 20 Myr
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_06_RESTART_density_velocity_to20
+          run-id: 38229155504
+          repository: lcxstar/tisc-mechanism-lab
+          github-token: ${{ github.token }}
+          path: restart_review/density_velocity_to20
+      - name: Download pinned author 401-grid native checkpoint continuation artifact 25 Myr
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_06_RESTART_block3_velocity_to25
+          run-id: 38229155504
+          repository: lcxstar/tisc-mechanism-lab
+          github-token: ${{ github.token }}
+          path: restart_review/block3_velocity_to25
+      - name: Download pinned author 401-grid native checkpoint continuation artifact 30 Myr
+        uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_06_RESTART_move_block1_to30
+          run-id: 38229155504
+          repository: lcxstar/tisc-mechanism-lab
+          github-token: ${{ github.token }}
+          path: restart_review/move_block1_to30
+      - name: Independently analyze and archive native 401-grid continuation fields
+        run: |
+          set -euo pipefail
+          python3 scripts/audit_05_official_tectonic_restarts.py \
+            --archive-root restart_review \
+            --out results/05_readme_variants/06_restarter_summary
+          mkdir -p results/05_readme_variants/06_raw_checkpoints
+          for case in density_velocity_to20 block3_velocity_to25 move_block1_to30; do
+            target="results/05_readme_variants/06_raw_checkpoints/$case"
+            mkdir -p "$target"
+            cp -a restart_review/"$case"/. "$target/"
+            if test -f "$target/RESULTS_NATIVE.tar.gz"; then
+              (
+                cd "$target"
+                sha256sum RESULTS_NATIVE.tar.gz > RESULTS_NATIVE_SHA256.txt
+                file_size=$(stat -c '%s' RESULTS_NATIVE.tar.gz)
+                if [ "$file_size" -gt 85000000 ]; then
+                  split -b 80000000 -d RESULTS_NATIVE.tar.gz RESULTS_NATIVE.part
+                  echo "Reconstruct with: cat RESULTS_NATIVE.part* > RESULTS_NATIVE.tar.gz" > RECONSTRUCT_ARCHIVE.txt
+                  rm RESULTS_NATIVE.tar.gz
+                fi
+              )
+            fi
+          done
+      - name: Commit long-run models, original inputs, scripts and acceptance evidence to public branch
+        run: |
+          set -euo pipefail
+          git add -f results/05_readme_variants/06_restarter_summary results/05_readme_variants/06_raw_checkpoints
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'archive(author): save original checkpoint and three 401-grid restart models with independent QC'
+          for i in 1 2 3 4 5 6; do
+            git fetch origin v05-author-readme-command-variants
+            git rebase origin/v05-author-readme-command-variants
+            if git push origin HEAD:v05-author-readme-command-variants; then exit 0; fi
+          done
+          exit 1
