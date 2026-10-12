@@ -79,3 +79,33 @@ To assess if this hydrologic numerical effect explains genuine missing Junggar b
 [03y run 38183870409, job 114601948476](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38183870409) **PASS**, input and original baseline outputs byte-identical, 4/4 completed original-domain 401² t3Myr forward trajectories; corrected sediment budget QC passed. Original unmodified F0 vs local double D0 had **terrain RMS 0.016721m**, **15** different directed river links and **5** type differences. With the registered epsilon=1e-8, F1 vs D1 has **terrain RMS 1.453640m** and **597** different directed links; sediment thickness RMS from **0.009277m** to **1.497640m**, max local thickness difference from **0.9m** to **244.0m**. The intervention itself changes F0 vs F1 maximum local terrain by **295.2m**, maximum local sediment thickness by **335.1m** while global compacted volume changes **-0.0463%**.
 
 **Decision hard gate:** At native 401², a superficially tiny gradient tie change makes precision-pair disagreement substantially worse at the first t3Myr hydrology split. Combined with 121² long-run t15 result (terrain RMS 48.05→50.90m), this falsifies any claim that this particular epsilon universally stabilizes the drainage network. Only a *geographically local* lake outlet diagnosis with case-specific saddle elevations and drainage graph comparison should be pursued. Keep original 03t baseline as the accepted code; do not amend source for Junggar from the epsilon test.
+
+## Final 03y four-job QC after 401-grid 6-Myr result — ALL COMPLETE (2026-10-12)
+
+[GitHub Actions 38183870409](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38183870409) finished with `completed/success`, **four jobs passed**: N121/t3, N121/t15, N401/t3, N401/t6. Four-arm F0/D0/F1/D1 comparisons total **16** pairwise comparisons, archived in [03Y_ALL_FOUR_ARM_121_401_COMPLETE_QC.csv](../results/03_tectonics/03Y_ALL_FOUR_ARM_121_401_COMPLETE_QC.csv).
+
+### Final native 401-grid, 6-Myr result (job 114601948376)
+
+All four arms completed 6 Myr with successful exit and corrected independent sediment budget residuals under 0.001%, **and baseline F0 and D0 reproduced all seven previously accepted science outputs byte-for-byte**. `F0/D0` are pre-intervention float/local-double controls, `F1/D1` are the same controls with only the 1e-8 dimensionless downhill neighbor replacement tie tolerance.
+
+| Quantitative output difference | F0 vs D0, original descent | F1 vs D1, 1e-8 tie modification |
+|---|---:|---:|
+| terrain spatial RMS (m) | 15.4124 | **18.3764** |
+| maximum absolute terrain difference (m) | 250.4 | **354.3** |
+| sediment thickness spatial RMS (m) | 14.2622 | **16.6381** |
+| maximum absolute sediment thickness difference (m) | 331.5 | **377.5** |
+| true plate deflection w spatial RMS (m) | 0.6991 | **1.3629** |
+| changed downstream graph connections, nodes | 17,385 | **18,300** |
+| changed drainage class, nodes | 4,173 | 4,165 |
+| integrated output compacted-sediment volume pairwise difference (%) | -0.4155% | +0.6361% |
+
+The direct physical modification **F0→F1**, with no change in input geological parameters, produced terrain RMS 21.425m and maximum local terrain 462.0m, sediment thickness RMS 17.470m and maximum local thickness 361.6m, **20,604** changed downstream graph connections, `w` RMS 1.303m and compacted sediment volume change **-0.6127%**. Small domain-integrated sediment difference therefore *conceals considerable local reorganization*. Neither run is claimed geologically correct.
+
+### Final evidence summary
+
+- N121 t3: apparent short-time precision robustness improved (terrain RMS 0.02688→0.00320m; 4→0 changed downstream connections).
+- N121 t15: the same rule **worsened** terrain precision sensitivity (48.0548→50.9012m).
+- N401 t3: strong **worsening** (0.01672→1.45364m; 15→597 changed river connections).
+- N401 t6: **worsening** (15.4124→18.3764m terrain RMS; 17,385→18,300 changed river links; 14.2622→16.6381m sediment RMS).
+
+**Decision: REJECT 1e-8 global gradient tie rule as a universal stabilization or as a Junggar production correction.** No reason to rerun it at 801². Preserve F0/D0 accepted 03t baseline. A future experiment must isolate the actual lake saddle/plateau membership and drainage choices on a controlled small DEM, with explicit source-specific diagnostic tracing at t≈2.5–3.0Myr of the synthetic demonstration and independently validated geological basin-scale outputs before changing any global lake physics. This also does NOT explain the Junggar 300–0Ma domain-export deficit or justify arbitrary sediment closure. See [V10.2B separate source-to-sink audit](https://github.com/lcxstar/junggar-tisc-model/blob/diagnostics/v102b-routing-export-grid-audit-20261012/docs/V102B_DOMAIN_EXPORT_AND_GRID_RELIABILITY_AUDIT_20261012.md).
