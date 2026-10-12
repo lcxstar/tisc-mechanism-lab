@@ -1,0 +1,46 @@
+{
+  "full_author_model": "8_Ebro_evol",
+  "author_reference": "Ebro_evol.screen supplied with danigeos/tisc pinned checkout",
+  "author_reference_log_origin": "historical 2016 output not guaranteed same compiler version",
+  "archived_current_model_source_variant": "audited_03t_optimized",
+  "n_original_stages": 121,
+  "n_current_stages": 121,
+  "n_exact_matching_log_ages": 121,
+  "time_range_common_Myr": [
+    -60.0,
+    0.0
+  ],
+  "field_comparison": {
+    "model_surface_max_m": {
+      "matched": 120,
+      "signed_bias": -1318.3383333333334,
+      "RMS_difference": 2341.004520570888,
+      "max_absolute_difference": 7870.8
+    },
+    "model_surface_min_m": {
+      "matched": 120,
+      "signed_bias": -164.57666666666674,
+      "RMS_difference": 614.3128430748186,
+      "max_absolute_difference": 1521.8000000000002
+    },
+    "profile_max_m": {
+      "matched": 0,
+      "signed_bias": null,
+      "RMS_difference": null,
+      "max_absolute_difference": null
+    },
+    "profile_min_m": {
+      "matched": 0,
+      "signed_bias": null,
+      "RMS_difference": null,
+      "max_absolute_difference": null
+    },
+    "printed_sediment_volume_km3": {
+      "matched": 120,
+      "signed_bias": 17028.833333333332,
+      "RMS_difference": 49005.92678442068,
+      "max_absolute_difference": 89000.0
+    }
+  },
+  "conclusion_scope": "Independent reference log comparison; numerical magnitudes do not validate geology; source was optimized and TISC version differs from original reference run."
+}
