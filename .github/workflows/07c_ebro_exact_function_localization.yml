@@ -1,0 +1,84 @@
+name: 07c | Split first anomalous surface step by exact hydro function
+on:
+  push:
+    branches: [v07-ebro-first-surface-cell-flux-audit]
+    paths: ['.github/workflows/07c_ebro_exact_function_localization.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-hydro-stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Compile original upstream with stage-boundary read-only probes
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          python3 -m pip install -q numpy
+          mkdir -p results/07_ebro_first_cell_flux/07c_function_source
+          echo CI > "$HOME/.tiscdefaults"
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c results/07_ebro_first_cell_flux/07c_function_source/ORIGINAL_NBSP_AUDIT.json
+          python3 scripts/07a_instrument_ebro_cells.py upstream/tisc/src/surf_proc.c results/07_ebro_first_cell_flux/07c_function_source/READ_ONLY_SOURCE_AUDIT.json
+          python3 scripts/07c_split_ebro_hydro_stage.py upstream/tisc/src/surf_proc.c results/07_ebro_first_cell_flux/07c_function_source/ROUTINE_SPLIT_AUDIT.json
+          make -C upstream/tisc/src tisc
+          sha256sum upstream/bin/tisc upstream/tisc/src/surf_proc.c > results/07_ebro_first_cell_flux/07c_function_source/EXE_SHA256.txt
+      - name: Run original full 208×110 Ebro input first 0.5 Myr with full hydro-stage cell traces
+        run: |
+          set -euo pipefail
+          mkdir -p case_input
+          cp -a upstream/tisc/demo/8_Ebro_evol/. case_input/
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          dest=results/07_ebro_first_cell_flux/07c_function_source
+          (
+            cd case_input
+            export EBRO_V07_DIAGNOSTIC_PATH="$GITHUB_WORKSPACE/case_input/ONE_SUBSTEP_HYDRO_BOUNDARIES.csv"
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s 600 "$tisc_dir/bin/tisc" Ebro_evol -tf-59 -V1 -qplotting_mode=0 > RUN.log 2>&1
+            ec=$?
+            set -e
+            echo "$ec" > EXIT_CODE.txt
+            grep -a V07STEP RUN.log | head -n 20
+            test "$ec" = 0
+            test -s ONE_SUBSTEP_HYDRO_BOUNDARIES.csv
+            gzip -6 ONE_SUBSTEP_HYDRO_BOUNDARIES.csv
+          )
+          cp case_input/RUN.log case_input/EXIT_CODE.txt case_input/WALL_SEC.txt "$dest/"
+          cp case_input/ONE_SUBSTEP_HYDRO_BOUNDARIES.csv.gz "$dest/"
+          (cd "$dest" && sha256sum ONE_SUBSTEP_HYDRO_BOUNDARIES.csv.gz RUN.log > SOURCE_TRACE_SHA256.txt)
+      - name: Identify first hydro routine changing exact grid cells, water and sediment fields
+        run: |
+          set -euo pipefail
+          python3 scripts/07d_locate_ebro_first_modified_cell_function.py \
+            --csv results/07_ebro_first_cell_flux/07c_function_source/ONE_SUBSTEP_HYDRO_BOUNDARIES.csv.gz \
+            --out results/07_ebro_first_cell_flux/07c_function_source
+      - name: Commit native history, call attribution, cell coordinates and flux table
+        if: always()
+        run: |
+          set -euo pipefail
+          git add -f results/07_ebro_first_cell_flux/07c_function_source
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'qc(Ebro): exact hydro routine from initial native cell field and nonconservative terrain jump'
+            for i in 1 2 3 4 5 6; do
+              git fetch origin v07-ebro-first-surface-cell-flux-audit
+              git rebase origin/v07-ebro-first-surface-cell-flux-audit
+              if git push origin HEAD:v07-ebro-first-surface-cell-flux-audit; then exit 0; fi
+            done
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EBRO_07C_FIRST_SUBSTEP_EXACT_HYDRO_ROUTINE
+          path: results/07_ebro_first_cell_flux/07c_function_source
+          retention-days: 90
