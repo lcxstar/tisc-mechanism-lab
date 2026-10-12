@@ -1,0 +1,36 @@
+{
+  "comparison": "new2026_source_V08_salt_fixed__old2017_input MINUS old2017_source__old2017_input",
+  "both_original_geological_input_SHA_identical": true,
+  "same_coordinate_pairs": 5720,
+  "max_positive_delta_m": 1129.1299999999999,
+  "positive_site_original_native_x": 461.03,
+  "positive_site_original_native_y": 185.19,
+  "max_negative_delta_m": -1134.15,
+  "negative_site_original_native_x": 454.15,
+  "negative_site_original_native_y": 129.63,
+  "mean_delta_m": -2.5426171328671328,
+  "median_delta_m": 0.0,
+  "rms_delta_m": 111.34317891183235,
+  "percentile_5_50_95_99_m": [
+    -33.993,
+    0.0,
+    28.08650000000006,
+    168.87350000000015
+  ],
+  "n_abs_difference_more_than_100m": 210,
+  "n_abs_difference_more_than_500m": 79,
+  "n_abs_difference_more_than_1000m": 32,
+  "old_max_topography_native_m": 1134.15,
+  "new_max_topography_native_m": 1129.58,
+  "native_xy_units_inferred": "km",
+  "native_extent": [
+    -48.16,
+    660.57,
+    0.0,
+    500.0
+  ],
+  "age_interpretation": "native final 0 Ma grid output, not age -0.5 logged scalar checkpoint",
+  "archived_2016_full_native_spatial_field_available": false,
+  "source_change_includes_default_parameter_changes": true,
+  "source_fixed_2026_has_minimal_salt_mode_gate": true
+}
