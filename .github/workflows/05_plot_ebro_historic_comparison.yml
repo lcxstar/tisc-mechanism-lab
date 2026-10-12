@@ -1,0 +1,35 @@
+name: 05 | Visual compare historical Ebro, current Ebro, and no surface
+on:
+  push:
+    branches: [v05-author-readme-command-variants]
+    paths:
+      - '.github/workflows/05_plot_ebro_historic_comparison.yml'
+      - 'scripts/plot_05_ebro_reference_comparison.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  plot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m pip install -q matplotlib
+      - name: Generate native-log quantitative time-series figures
+        run: |
+          python3 scripts/plot_05_ebro_reference_comparison.py \
+            --reference results/04_09_official_demo_suite/08_ebro/reference_compare/EBRO_AUTHOR_SCREEN_COMPARISON.csv \
+            --surface results/05_readme_variants/ebro_surface_process_isolation/EBRO_WITH_VS_WITHOUT_SURFACE.csv \
+            --out results/05_readme_variants/ebro_science_figures
+      - name: Commit evidence and figures
+        run: |
+          git add -f results/05_readme_variants/ebro_science_figures
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'figures(Ebro): historical vs pinned source and no-surface state histories'
+          for i in 1 2 3 4 5; do
+            git fetch origin v05-author-readme-command-variants
+            git rebase origin/v05-author-readme-command-variants
+            if git push origin HEAD:v05-author-readme-command-variants; then exit 0; fi
+          done
+          exit 1
