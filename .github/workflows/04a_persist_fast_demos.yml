@@ -60,7 +60,7 @@ jobs:
           PY
       - name: Commit successful original full cases to public branch
         run: |
-          git add results/04_09_official_demo_suite
+          git add -f results/04_09_official_demo_suite
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'archive: preserve four completed author models and raw native fields'
