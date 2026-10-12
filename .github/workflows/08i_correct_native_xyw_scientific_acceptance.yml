@@ -2,7 +2,7 @@ name: 08i | Correct native Ebro lake .xyw actual terrain water sediment col mapp
 on:
   push:
     branches: [v08-salt-module-fix-regression]
-    paths: ['.github/workflows/08i_correct_native_xyw_scientific_acceptance.yml']
+    paths: ['.github/workflows/08i_correct_native_xyw_scientific_acceptance.yml', 'scripts/08i_correct_native_xyw_column_science.py']
   workflow_dispatch:
 permissions:
   contents: write
