@@ -1,0 +1,51 @@
+{
+  "case": "ebro_orig_off",
+  "model": "Ebro",
+  "source_version": "original",
+  "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "full_input_hashes_original_unchanged": true,
+  "original_author_geological_input_hashes": {
+    "Ebro_evol.SLV": "4132abcc226a871b17bc648dd576dc61c411e3a02bf6d533a97243ff1f6c5379",
+    "Ebro_evol.ZINI": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+    "Ebro_evol.INT": "6313a707f87e618264954fc6df61409b2f874a6ba5a22a2f6c9b5bfffdf72a59",
+    "Ebro_evol.PRFL": "13a410a93f06010d72a6195689cbbef1799df875d9f2708fef9a74b001276651",
+    "Ebro_evol.REC": "03bd8363e8a7f2e15780bef98c3ce0f326e018844eafc70a6708371179fac899",
+    "Ebro_evol1.UNIT": "f6fd992d7335736289a74de813a2f29c7886d330daeebb5af48e59bd617cd777",
+    "Ebro_evol3.UNIT": "4b2a8ea55c62857af478104f948c1419cce773760ade8d81a95af0e5614fd0e8",
+    "Ebro_evol4.UNIT": "45c10b12b14422941800ac53268487a40ddc3929961eb2abe35ac511e3ac4fd8",
+    "Ebro_evol5.UNIT": "93fe16562d8f26a432cc7c46ac859507b19289a983652f34c4149ef6f78a9ee4",
+    "Ebro_evol.INT2": "29cbe1996bac95a06dac03e6278576f558a76b908917f4959b58e90085fc399d",
+    "Ebro_evol2.UNIT": "6dbbbbfa65a5f3bf22e87304a75ad81f74fa989a63736f24fef1eb0b76dfef38",
+    "Ebro_evol.PRM": "24aeea2b07923251bac991ad7f488d909e34cbafdfa3e38c93bb428bb3de558e"
+  },
+  "actual_command": [
+    "Ebro_evol",
+    "-V1",
+    "-qplotting_mode=0",
+    "-tf-59"
+  ],
+  "rc": 0,
+  "seconds": 2.988,
+  "times_logged": [
+    -60.0,
+    -59.5,
+    -59.0
+  ],
+  "max_topography_at_minus59_5_Ma": 9071.6,
+  "max_load_at_minus59_5_Pa": 195000000.0,
+  "logged_surface_native_nodes": 22880,
+  "expected_surface_native_nodes": 22880,
+  "native_surface_sha256": "913c988f8eafd72781568918ab7f33bc931d5425ec853d9763c17763df5f5f25",
+  "model_fields": {
+    "xyw": "913c988f8eafd72781568918ab7f33bc931d5425ec853d9763c17763df5f5f25",
+    "xyzt": "863742daeb90fda85785af286bcdf9e04adcb469d5aa16ad976bc17009ab6c48",
+    "lak": "5c06d31a87e5c835a4c24e8d055af1c03953b6c9a40979af7c25d34bdc4ab90f",
+    "st": "1d75a0c2bf2f0a44148274d965ffcbaf82bc207ef11965dc28a23de7556db02a",
+    "bas": "c32a9416591a790c32f85b6f9e4c47013b9d256deacdeb3abeb7b2075c3bdb99",
+    "hrz": "48a7094c628398795d45055c74be963ac814092e44fec85aa7623b74e765ba11"
+  },
+  "salt_invariant_status": 0,
+  "salt_invariant_sample": [],
+  "passed_basic": true,
+  "experiment_not_2016_equivalence_claim": true
+}

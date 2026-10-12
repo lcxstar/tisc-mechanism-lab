@@ -1,0 +1,207 @@
+
+* TISC: TECTONICS, ISOSTASY, SURFACE PROCESSES, AND CLIMATE PLANFORM MODELING *
+Version: TISC_2026-03-22_factorized_stable
+Parameters at '1lake.PRM'.
+Time start: Mon Oct 12 15:45:34 2026
+
+  sea_level: 0.0 m
+  topo_ini :  max= 3003.2 m	min= -1.6 m	integr=1.91e+15 m*m2
+T= 0.0000 My
+  topogr.  :  max= 3003.2 m	min= -1.6 m	integr=1.91e+15 m*m2
+  sea_level: 0.0 m
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 7.26e+02 kg/s  halite= 1.04e+03 kg/s   accum_gypsum= 1.15e+15 kg  accum_halite= 1.64e+15 kg
+  lake   1/1 : 2.30e+05 km3 3.47e+05 km2 1605 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   131.83 m3/s     0.00 kg/s @  240.0,40.0 km, 1552.8 m
+  topo_diff_eros_max=    -0.08 mm/yr	sedim_max:     1.74 mm/yr
+  eros_nosd: +1.38e+16 N	 sedim_inc: +1.38e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.14 mm/yr	min= -0.74 mm/yr	difference=2.96e+00 m3/yr
+  sediment_vol: 2.08e+03 km3
+
+T= 0.0500 My
+  topogr.  :  max= 3003.2 m	min= 1.5 m	integr=1.91e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.97e+06 N/m2  min = -1.17e+05 N/m2   Total: +2.97e+16 N	Max at -500,0 km
+  load: +2.42e+16 N   restit_force: +2.97e+16 N
+  deflect. :  max= 6.1 m	min= -1.6 m	integr=7.61e+11 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 7.14e+02 kg/s  halite= 1.02e+03 kg/s   accum_gypsum= 2.27e+15 kg  accum_halite= 3.25e+15 kg
+  lake   1/1 : 2.32e+05 km3 3.47e+05 km2 1614 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   131.83 m3/s     0.00 kg/s @  240.0,40.0 km, 1570.8 m
+  topo_diff_eros_max=    -0.07 mm/yr	sedim_max:     1.67 mm/yr
+  eros_nosd: +1.33e+16 N	 sedim_inc: +1.33e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.11 mm/yr	min= -0.55 mm/yr	difference=-1.20e+00 m3/yr
+  sediment_vol: 4.12e+03 km3
+
+T= 0.1000 My
+  topogr.  :  max= 3003.4 m	min= 2.5 m	integr=1.91e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.89e+06 N/m2  min = -9.22e+04 N/m2   Total: +3.67e+16 N	Max at -500,60 km
+  load: +5.58e+16 N   restit_force: +3.67e+16 N
+  deflect. :  max= 11.4 m	min= -3.2 m	integr=1.75e+12 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 7.06e+02 kg/s  halite= 1.01e+03 kg/s   accum_gypsum= 3.39e+15 kg  accum_halite= 4.84e+15 kg
+  lake   1/1 : 2.36e+05 km3 3.47e+05 km2 1625 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   144.50 m3/s     0.00 kg/s @  260.0,20.0 km, 1640.4 m
+  topo_diff_eros_max=    -0.06 mm/yr	sedim_max:     1.59 mm/yr
+  eros_nosd: +1.30e+16 N	 sedim_inc: +1.30e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.10 mm/yr	min= -0.46 mm/yr	difference=-3.77e+00 m3/yr
+  sediment_vol: 6.12e+03 km3
+
+T= 0.1500 My
+  topogr.  :  max= 3003.7 m	min= 2.5 m	integr=1.92e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.80e+06 N/m2  min = -8.42e+04 N/m2   Total: +6.23e+16 N	Max at -500,20 km
+  load: +1.14e+17 N   restit_force: +6.23e+16 N
+  deflect. :  max= 18.3 m	min= -4.8 m	integr=3.56e+12 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 6.98e+02 kg/s  halite= 9.98e+02 kg/s   accum_gypsum= 4.49e+15 kg  accum_halite= 6.41e+15 kg
+  lake   1/1 : 2.39e+05 km3 3.47e+05 km2 1634 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   144.50 m3/s     0.00 kg/s @  240.0,20.0 km, 1558.6 m
+  topo_diff_eros_max=    -0.06 mm/yr	sedim_max:     1.55 mm/yr
+  eros_nosd: +1.28e+16 N	 sedim_inc: +1.28e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.10 mm/yr	min= -0.44 mm/yr	difference=1.27e+00 m3/yr
+  sediment_vol: 8.10e+03 km3
+
+T= 0.2000 My
+  topogr.  :  max= 3003.9 m	min= 0.2 m	integr=1.92e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.75e+06 N/m2  min = -8.31e+04 N/m2   Total: +6.62e+16 N	Max at -500,-100 km
+  load: +1.75e+17 N   restit_force: +6.62e+16 N
+  deflect. :  max= 25.0 m	min= -6.5 m	integr=5.50e+12 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 6.93e+02 kg/s  halite= 9.90e+02 kg/s   accum_gypsum= 5.58e+15 kg  accum_halite= 7.97e+15 kg
+  lake   1/1 : 2.42e+05 km3 3.47e+05 km2 1639 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   200.27 m3/s     0.00 kg/s @  240.0,40.0 km, 1599.1 m
+  topo_diff_eros_max=    -0.06 mm/yr	sedim_max:     1.50 mm/yr
+  eros_nosd: +1.26e+16 N	 sedim_inc: +1.26e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.10 mm/yr	min= -0.47 mm/yr	difference=-1.51e+00 m3/yr
+  sediment_vol: 1.01e+04 km3
+
+T= 0.2500 My
+  topogr.  :  max= 3004.1 m	min= -2.6 m	integr=1.91e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.70e+06 N/m2  min = -8.32e+04 N/m2   Total: +4.92e+16 N	Max at -500,120 km
+  load: +2.20e+17 N   restit_force: +4.92e+16 N
+  deflect. :  max= 30.6 m	min= -8.1 m	integr=6.90e+12 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 6.87e+02 kg/s  halite= 9.81e+02 kg/s   accum_gypsum= 6.66e+15 kg  accum_halite= 9.52e+15 kg
+  lake   1/1 : 2.45e+05 km3 3.47e+05 km2 1648 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   159.71 m3/s     0.00 kg/s @  240.0,0.0 km, 1572.0 m
+  topo_diff_eros_max=    -0.06 mm/yr	sedim_max:     1.45 mm/yr
+  eros_nosd: +1.24e+16 N	 sedim_inc: +1.24e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.10 mm/yr	min= -0.45 mm/yr	difference=8.93e-01 m3/yr
+  sediment_vol: 1.20e+04 km3
+
+T= 0.3000 My
+  topogr.  :  max= 3004.4 m	min= -3.8 m	integr=1.91e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.65e+06 N/m2  min = -8.33e+04 N/m2   Total: +6.99e+16 N	Max at -500,-40 km
+  load: +2.86e+17 N   restit_force: +6.99e+16 N
+  deflect. :  max= 37.5 m	min= -9.8 m	integr=8.97e+12 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 6.80e+02 kg/s  halite= 9.71e+02 kg/s   accum_gypsum= 7.74e+15 kg  accum_halite= 1.11e+16 kg
+  lake   1/1 : 2.48e+05 km3 3.47e+05 km2 1654 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   174.92 m3/s     0.00 kg/s @  240.0,60.0 km, 1645.1 m
+  topo_diff_eros_max=    -0.06 mm/yr	sedim_max:     1.42 mm/yr
+  eros_nosd: +1.23e+16 N	 sedim_inc: +1.23e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.10 mm/yr	min= -0.50 mm/yr	difference=-2.85e+00 m3/yr
+  sediment_vol: 1.39e+04 km3
+
+T= 0.3500 My
+  topogr.  :  max= 3004.6 m	min= -6.9 m	integr=1.91e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.61e+06 N/m2  min = -8.34e+04 N/m2   Total: +5.60e+16 N	Max at -500,100 km
+  load: +3.38e+17 N   restit_force: +5.60e+16 N
+  deflect. :  max= 43.2 m	min= -11.4 m	integr=1.06e+13 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 6.77e+02 kg/s  halite= 9.67e+02 kg/s   accum_gypsum= 8.80e+15 kg  accum_halite= 1.26e+16 kg
+  lake   1/1 : 2.50e+05 km3 3.47e+05 km2 1660 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   144.50 m3/s     0.00 kg/s @  240.0,20.0 km, 1594.7 m
+  topo_diff_eros_max=    -0.06 mm/yr	sedim_max:     1.37 mm/yr
+  eros_nosd: +1.21e+16 N	 sedim_inc: +1.21e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.10 mm/yr	min= -0.39 mm/yr	difference=-2.68e+00 m3/yr
+  sediment_vol: 1.58e+04 km3
+
+T= 0.4000 My
+  topogr.  :  max= 3004.9 m	min= -8.7 m	integr=1.91e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.56e+06 N/m2  min = -8.35e+04 N/m2   Total: +4.46e+16 N	Max at -500,80 km
+  load: +3.78e+17 N   restit_force: +4.46e+16 N
+  deflect. :  max= 48.2 m	min= -13.0 m	integr=1.19e+13 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 6.71e+02 kg/s  halite= 9.59e+02 kg/s   accum_gypsum= 9.86e+15 kg  accum_halite= 1.41e+16 kg
+  lake   1/1 : 2.52e+05 km3 3.47e+05 km2 1666 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   162.25 m3/s     0.00 kg/s @  240.0,0.0 km, 1595.5 m
+  topo_diff_eros_max=    -0.06 mm/yr	sedim_max:     1.35 mm/yr
+  eros_nosd: +1.20e+16 N	 sedim_inc: +1.20e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.10 mm/yr	min= -0.34 mm/yr	difference=2.13e+00 m3/yr
+  sediment_vol: 1.77e+04 km3
+
+T= 0.4500 My
+  topogr.  :  max= 3005.1 m	min= -9.5 m	integr=1.91e+15 m*m2
+  sea_level: 0.0 m
+  load  now:  max = +1.54e+06 N/m2  min = -8.36e+04 N/m2   Total: +5.58e+16 N	Max at -500,-120 km
+  load: +4.30e+17 N   restit_force: +5.58e+16 N
+  deflect. :  max= 53.8 m	min= -14.6 m	integr=1.35e+13 m*m2
+  precipit.:  max= 0.0 m/s	min= 0.0 m/s	integr=6.59e+03 m/s*m2
+  evaporat.:  max= 0.0 m/s	min= 0.0 m/s	integr=1.98e+04 m/s*m2
+  rain_now : +6.59e+03 m3/s  evap_wat: +6.59e+03 m3/s outp_water: +0.00e+00 m3/s undergr_water: +0.00e+00 m3/s
+  salt precip:  gypsum= 6.64e+02 kg/s  halite= 9.49e+02 kg/s   accum_gypsum= 1.09e+16 kg  accum_halite= 1.56e+16 kg
+  lake   1/1 : 2.55e+05 km3 3.47e+05 km2 1672 m -100,0     0 out Endorh -100,0   6593.9 m3/s
+  total_lake_area_nosea: 3.47e+11 km2
+  river_max:   164.78 m3/s     0.00 kg/s @  240.0,0.0 km, 1602.1 m
+  topo_diff_eros_max=    -0.07 mm/yr	sedim_max:     1.30 mm/yr
+  eros_nosd: +1.19e+16 N	 sedim_inc: +1.19e+16 N   outp_seds:   +0.00e+00 N  
+  eros-sed.:  max= 0.11 mm/yr	min= -0.32 mm/yr	difference=-2.35e+00 m3/yr
+  sediment_vol: 1.96e+04 km3
+
+T= 0.5000 My
+
+10 Blocks:
+No. Density Age  Volume  Surf.     Vel_x  Vel_y   Shft_x Shft_y erosL
+     kg/m3  My   1e3km3  1e3km2    km/My  km/My   km     km     [m] 
+ 9:  2000   0.45     1.9  425.6    0.0    0.0    0.0    0.0   1.0e+04  S
+ 8:  2000   0.40     1.9  421.2    0.0    0.0    0.0    0.0   1.0e+04  S
+ 7:  2000   0.35     1.9  415.6    0.0    0.0    0.0    0.0   1.0e+04  S
+ 6:  2000   0.30     1.9  412.4    0.0    0.0    0.0    0.0   1.0e+04  S
+ 5:  2000   0.25     1.9  404.4    0.0    0.0    0.0    0.0   1.0e+04  S
+ 4:  2000   0.20     2.0  398.8    0.0    0.0    0.0    0.0   1.0e+04  S
+ 3:  2000   0.15     2.0  394.8    0.0    0.0    0.0    0.0   1.0e+04  S
+ 2:  2000   0.10     2.0  390.8    0.0    0.0    0.0    0.0   1.0e+04  S
+ 1:  2000   0.05     2.0  385.2    0.0    0.0    0.0    0.0   1.0e+04  S
+ 0:  2000   0.00     2.1  379.6    0.0    0.0    0.0    0.0   1.0e+04  S  1st Block
+ -:  2850   0.00   -       -       0      0      0      0     1.0e+05  -  basement
+
+Final total sediment volume: 19.55 1e3 km3
+
+  2D prof. :  max =    2325.7 m     min =     -11.4 m   
+Time end: Mon Oct 12 15:45:35 2026
+

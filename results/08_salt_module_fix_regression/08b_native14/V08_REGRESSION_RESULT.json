@@ -1,0 +1,805 @@
+{
+  "tests": [
+    "ebro_orig_off",
+    "ebro_fixed_off",
+    "ebro_fixed_off_explicit",
+    "ebro_orig_on",
+    "ebro_fixed_on",
+    "ebro_orig_zero_ions",
+    "lake1_orig_off",
+    "lake1_fixed_off",
+    "lake1_orig_on",
+    "lake1_fixed_on",
+    "lake2_orig_off",
+    "lake2_fixed_off",
+    "lake2_orig_on",
+    "lake2_fixed_on"
+  ],
+  "test_count": 14,
+  "runs": {
+    "ebro_orig_off": {
+      "case": "ebro_orig_off",
+      "model": "Ebro",
+      "source_version": "original",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "Ebro_evol.SLV": "4132abcc226a871b17bc648dd576dc61c411e3a02bf6d533a97243ff1f6c5379",
+        "Ebro_evol.ZINI": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+        "Ebro_evol.INT": "6313a707f87e618264954fc6df61409b2f874a6ba5a22a2f6c9b5bfffdf72a59",
+        "Ebro_evol.PRFL": "13a410a93f06010d72a6195689cbbef1799df875d9f2708fef9a74b001276651",
+        "Ebro_evol.REC": "03bd8363e8a7f2e15780bef98c3ce0f326e018844eafc70a6708371179fac899",
+        "Ebro_evol1.UNIT": "f6fd992d7335736289a74de813a2f29c7886d330daeebb5af48e59bd617cd777",
+        "Ebro_evol3.UNIT": "4b2a8ea55c62857af478104f948c1419cce773760ade8d81a95af0e5614fd0e8",
+        "Ebro_evol4.UNIT": "45c10b12b14422941800ac53268487a40ddc3929961eb2abe35ac511e3ac4fd8",
+        "Ebro_evol5.UNIT": "93fe16562d8f26a432cc7c46ac859507b19289a983652f34c4149ef6f78a9ee4",
+        "Ebro_evol.INT2": "29cbe1996bac95a06dac03e6278576f558a76b908917f4959b58e90085fc399d",
+        "Ebro_evol2.UNIT": "6dbbbbfa65a5f3bf22e87304a75ad81f74fa989a63736f24fef1eb0b76dfef38",
+        "Ebro_evol.PRM": "24aeea2b07923251bac991ad7f488d909e34cbafdfa3e38c93bb428bb3de558e"
+      },
+      "actual_command": [
+        "Ebro_evol",
+        "-V1",
+        "-qplotting_mode=0",
+        "-tf-59"
+      ],
+      "rc": 0,
+      "seconds": 2.988,
+      "times_logged": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "max_topography_at_minus59_5_Ma": 9071.6,
+      "max_load_at_minus59_5_Pa": 195000000.0,
+      "logged_surface_native_nodes": 22880,
+      "expected_surface_native_nodes": 22880,
+      "native_surface_sha256": "913c988f8eafd72781568918ab7f33bc931d5425ec853d9763c17763df5f5f25",
+      "model_fields": {
+        "xyw": "913c988f8eafd72781568918ab7f33bc931d5425ec853d9763c17763df5f5f25",
+        "xyzt": "863742daeb90fda85785af286bcdf9e04adcb469d5aa16ad976bc17009ab6c48",
+        "lak": "5c06d31a87e5c835a4c24e8d055af1c03953b6c9a40979af7c25d34bdc4ab90f",
+        "st": "1d75a0c2bf2f0a44148274d965ffcbaf82bc207ef11965dc28a23de7556db02a",
+        "bas": "c32a9416591a790c32f85b6f9e4c47013b9d256deacdeb3abeb7b2075c3bdb99",
+        "hrz": "48a7094c628398795d45055c74be963ac814092e44fec85aa7623b74e765ba11"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "ebro_fixed_off": {
+      "case": "ebro_fixed_off",
+      "model": "Ebro",
+      "source_version": "fixed",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "Ebro_evol.SLV": "4132abcc226a871b17bc648dd576dc61c411e3a02bf6d533a97243ff1f6c5379",
+        "Ebro_evol.ZINI": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+        "Ebro_evol.INT": "6313a707f87e618264954fc6df61409b2f874a6ba5a22a2f6c9b5bfffdf72a59",
+        "Ebro_evol.PRFL": "13a410a93f06010d72a6195689cbbef1799df875d9f2708fef9a74b001276651",
+        "Ebro_evol.REC": "03bd8363e8a7f2e15780bef98c3ce0f326e018844eafc70a6708371179fac899",
+        "Ebro_evol1.UNIT": "f6fd992d7335736289a74de813a2f29c7886d330daeebb5af48e59bd617cd777",
+        "Ebro_evol3.UNIT": "4b2a8ea55c62857af478104f948c1419cce773760ade8d81a95af0e5614fd0e8",
+        "Ebro_evol4.UNIT": "45c10b12b14422941800ac53268487a40ddc3929961eb2abe35ac511e3ac4fd8",
+        "Ebro_evol5.UNIT": "93fe16562d8f26a432cc7c46ac859507b19289a983652f34c4149ef6f78a9ee4",
+        "Ebro_evol.INT2": "29cbe1996bac95a06dac03e6278576f558a76b908917f4959b58e90085fc399d",
+        "Ebro_evol2.UNIT": "6dbbbbfa65a5f3bf22e87304a75ad81f74fa989a63736f24fef1eb0b76dfef38",
+        "Ebro_evol.PRM": "24aeea2b07923251bac991ad7f488d909e34cbafdfa3e38c93bb428bb3de558e"
+      },
+      "actual_command": [
+        "Ebro_evol",
+        "-V1",
+        "-qplotting_mode=0",
+        "-tf-59"
+      ],
+      "rc": 0,
+      "seconds": 2.761,
+      "times_logged": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "max_topography_at_minus59_5_Ma": 1521.6,
+      "max_load_at_minus59_5_Pa": 28900000.0,
+      "logged_surface_native_nodes": 22880,
+      "expected_surface_native_nodes": 22880,
+      "native_surface_sha256": "84619433a5d201610bcd3a8645f270176345f905822fea8a603eb3710541ea98",
+      "model_fields": {
+        "xyw": "84619433a5d201610bcd3a8645f270176345f905822fea8a603eb3710541ea98",
+        "xyzt": "94b79a7c74ff7d7fba556f51c2606b147c9e274f2d9ae2cbd6954b1556fb1dea",
+        "lak": "e95a8215d588ffed5a361616a2717b78c4bb5c5f07fd2101ff028c2f90319b22",
+        "st": "2af88e244d4fd7172a89d8f569f6059620aed2bf91dc368881ca0eef044c3ed9",
+        "bas": "e6854614c9e41049a92018efa426f53a7b4f62118de1bf45718289c086659372",
+        "hrz": "c9f8f53c3a7875ff805a2f0a03e216d5c2ca822fb93f599b815df4cef6458214"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "ebro_fixed_off_explicit": {
+      "case": "ebro_fixed_off_explicit",
+      "model": "Ebro",
+      "source_version": "fixed",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "Ebro_evol.SLV": "4132abcc226a871b17bc648dd576dc61c411e3a02bf6d533a97243ff1f6c5379",
+        "Ebro_evol.ZINI": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+        "Ebro_evol.INT": "6313a707f87e618264954fc6df61409b2f874a6ba5a22a2f6c9b5bfffdf72a59",
+        "Ebro_evol.PRFL": "13a410a93f06010d72a6195689cbbef1799df875d9f2708fef9a74b001276651",
+        "Ebro_evol.REC": "03bd8363e8a7f2e15780bef98c3ce0f326e018844eafc70a6708371179fac899",
+        "Ebro_evol1.UNIT": "f6fd992d7335736289a74de813a2f29c7886d330daeebb5af48e59bd617cd777",
+        "Ebro_evol3.UNIT": "4b2a8ea55c62857af478104f948c1419cce773760ade8d81a95af0e5614fd0e8",
+        "Ebro_evol4.UNIT": "45c10b12b14422941800ac53268487a40ddc3929961eb2abe35ac511e3ac4fd8",
+        "Ebro_evol5.UNIT": "93fe16562d8f26a432cc7c46ac859507b19289a983652f34c4149ef6f78a9ee4",
+        "Ebro_evol.INT2": "29cbe1996bac95a06dac03e6278576f558a76b908917f4959b58e90085fc399d",
+        "Ebro_evol2.UNIT": "6dbbbbfa65a5f3bf22e87304a75ad81f74fa989a63736f24fef1eb0b76dfef38",
+        "Ebro_evol.PRM": "24aeea2b07923251bac991ad7f488d909e34cbafdfa3e38c93bb428bb3de558e"
+      },
+      "actual_command": [
+        "Ebro_evol",
+        "-V1",
+        "-qplotting_mode=0",
+        "-tf-59",
+        "-qsalt_model=0"
+      ],
+      "rc": 0,
+      "seconds": 2.77,
+      "times_logged": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "max_topography_at_minus59_5_Ma": 1521.6,
+      "max_load_at_minus59_5_Pa": 28900000.0,
+      "logged_surface_native_nodes": 22880,
+      "expected_surface_native_nodes": 22880,
+      "native_surface_sha256": "84619433a5d201610bcd3a8645f270176345f905822fea8a603eb3710541ea98",
+      "model_fields": {
+        "xyw": "84619433a5d201610bcd3a8645f270176345f905822fea8a603eb3710541ea98",
+        "xyzt": "94b79a7c74ff7d7fba556f51c2606b147c9e274f2d9ae2cbd6954b1556fb1dea",
+        "lak": "e95a8215d588ffed5a361616a2717b78c4bb5c5f07fd2101ff028c2f90319b22",
+        "st": "2af88e244d4fd7172a89d8f569f6059620aed2bf91dc368881ca0eef044c3ed9",
+        "bas": "e6854614c9e41049a92018efa426f53a7b4f62118de1bf45718289c086659372",
+        "hrz": "c9f8f53c3a7875ff805a2f0a03e216d5c2ca822fb93f599b815df4cef6458214"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "ebro_orig_on": {
+      "case": "ebro_orig_on",
+      "model": "Ebro",
+      "source_version": "original",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "Ebro_evol.SLV": "4132abcc226a871b17bc648dd576dc61c411e3a02bf6d533a97243ff1f6c5379",
+        "Ebro_evol.ZINI": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+        "Ebro_evol.INT": "6313a707f87e618264954fc6df61409b2f874a6ba5a22a2f6c9b5bfffdf72a59",
+        "Ebro_evol.PRFL": "13a410a93f06010d72a6195689cbbef1799df875d9f2708fef9a74b001276651",
+        "Ebro_evol.REC": "03bd8363e8a7f2e15780bef98c3ce0f326e018844eafc70a6708371179fac899",
+        "Ebro_evol1.UNIT": "f6fd992d7335736289a74de813a2f29c7886d330daeebb5af48e59bd617cd777",
+        "Ebro_evol3.UNIT": "4b2a8ea55c62857af478104f948c1419cce773760ade8d81a95af0e5614fd0e8",
+        "Ebro_evol4.UNIT": "45c10b12b14422941800ac53268487a40ddc3929961eb2abe35ac511e3ac4fd8",
+        "Ebro_evol5.UNIT": "93fe16562d8f26a432cc7c46ac859507b19289a983652f34c4149ef6f78a9ee4",
+        "Ebro_evol.INT2": "29cbe1996bac95a06dac03e6278576f558a76b908917f4959b58e90085fc399d",
+        "Ebro_evol2.UNIT": "6dbbbbfa65a5f3bf22e87304a75ad81f74fa989a63736f24fef1eb0b76dfef38",
+        "Ebro_evol.PRM": "24aeea2b07923251bac991ad7f488d909e34cbafdfa3e38c93bb428bb3de558e"
+      },
+      "actual_command": [
+        "Ebro_evol",
+        "-V1",
+        "-qplotting_mode=0",
+        "-tf-59",
+        "-qsalt_model=1"
+      ],
+      "rc": 0,
+      "seconds": 2.96,
+      "times_logged": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "max_topography_at_minus59_5_Ma": 9071.6,
+      "max_load_at_minus59_5_Pa": 195000000.0,
+      "logged_surface_native_nodes": 22880,
+      "expected_surface_native_nodes": 22880,
+      "native_surface_sha256": "913c988f8eafd72781568918ab7f33bc931d5425ec853d9763c17763df5f5f25",
+      "model_fields": {
+        "xyw": "913c988f8eafd72781568918ab7f33bc931d5425ec853d9763c17763df5f5f25",
+        "xyzt": "863742daeb90fda85785af286bcdf9e04adcb469d5aa16ad976bc17009ab6c48",
+        "lak": "5c06d31a87e5c835a4c24e8d055af1c03953b6c9a40979af7c25d34bdc4ab90f",
+        "st": "1d75a0c2bf2f0a44148274d965ffcbaf82bc207ef11965dc28a23de7556db02a",
+        "bas": "c32a9416591a790c32f85b6f9e4c47013b9d256deacdeb3abeb7b2075c3bdb99",
+        "hrz": "48a7094c628398795d45055c74be963ac814092e44fec85aa7623b74e765ba11"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "ebro_fixed_on": {
+      "case": "ebro_fixed_on",
+      "model": "Ebro",
+      "source_version": "fixed",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "Ebro_evol.SLV": "4132abcc226a871b17bc648dd576dc61c411e3a02bf6d533a97243ff1f6c5379",
+        "Ebro_evol.ZINI": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+        "Ebro_evol.INT": "6313a707f87e618264954fc6df61409b2f874a6ba5a22a2f6c9b5bfffdf72a59",
+        "Ebro_evol.PRFL": "13a410a93f06010d72a6195689cbbef1799df875d9f2708fef9a74b001276651",
+        "Ebro_evol.REC": "03bd8363e8a7f2e15780bef98c3ce0f326e018844eafc70a6708371179fac899",
+        "Ebro_evol1.UNIT": "f6fd992d7335736289a74de813a2f29c7886d330daeebb5af48e59bd617cd777",
+        "Ebro_evol3.UNIT": "4b2a8ea55c62857af478104f948c1419cce773760ade8d81a95af0e5614fd0e8",
+        "Ebro_evol4.UNIT": "45c10b12b14422941800ac53268487a40ddc3929961eb2abe35ac511e3ac4fd8",
+        "Ebro_evol5.UNIT": "93fe16562d8f26a432cc7c46ac859507b19289a983652f34c4149ef6f78a9ee4",
+        "Ebro_evol.INT2": "29cbe1996bac95a06dac03e6278576f558a76b908917f4959b58e90085fc399d",
+        "Ebro_evol2.UNIT": "6dbbbbfa65a5f3bf22e87304a75ad81f74fa989a63736f24fef1eb0b76dfef38",
+        "Ebro_evol.PRM": "24aeea2b07923251bac991ad7f488d909e34cbafdfa3e38c93bb428bb3de558e"
+      },
+      "actual_command": [
+        "Ebro_evol",
+        "-V1",
+        "-qplotting_mode=0",
+        "-tf-59",
+        "-qsalt_model=1"
+      ],
+      "rc": 0,
+      "seconds": 2.956,
+      "times_logged": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "max_topography_at_minus59_5_Ma": 9071.6,
+      "max_load_at_minus59_5_Pa": 195000000.0,
+      "logged_surface_native_nodes": 22880,
+      "expected_surface_native_nodes": 22880,
+      "native_surface_sha256": "913c988f8eafd72781568918ab7f33bc931d5425ec853d9763c17763df5f5f25",
+      "model_fields": {
+        "xyw": "913c988f8eafd72781568918ab7f33bc931d5425ec853d9763c17763df5f5f25",
+        "xyzt": "863742daeb90fda85785af286bcdf9e04adcb469d5aa16ad976bc17009ab6c48",
+        "lak": "5c06d31a87e5c835a4c24e8d055af1c03953b6c9a40979af7c25d34bdc4ab90f",
+        "st": "1d75a0c2bf2f0a44148274d965ffcbaf82bc207ef11965dc28a23de7556db02a",
+        "bas": "c32a9416591a790c32f85b6f9e4c47013b9d256deacdeb3abeb7b2075c3bdb99",
+        "hrz": "48a7094c628398795d45055c74be963ac814092e44fec85aa7623b74e765ba11"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "ebro_orig_zero_ions": {
+      "case": "ebro_orig_zero_ions",
+      "model": "Ebro",
+      "source_version": "original",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "Ebro_evol.SLV": "4132abcc226a871b17bc648dd576dc61c411e3a02bf6d533a97243ff1f6c5379",
+        "Ebro_evol.ZINI": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+        "Ebro_evol.INT": "6313a707f87e618264954fc6df61409b2f874a6ba5a22a2f6c9b5bfffdf72a59",
+        "Ebro_evol.PRFL": "13a410a93f06010d72a6195689cbbef1799df875d9f2708fef9a74b001276651",
+        "Ebro_evol.REC": "03bd8363e8a7f2e15780bef98c3ce0f326e018844eafc70a6708371179fac899",
+        "Ebro_evol1.UNIT": "f6fd992d7335736289a74de813a2f29c7886d330daeebb5af48e59bd617cd777",
+        "Ebro_evol3.UNIT": "4b2a8ea55c62857af478104f948c1419cce773760ade8d81a95af0e5614fd0e8",
+        "Ebro_evol4.UNIT": "45c10b12b14422941800ac53268487a40ddc3929961eb2abe35ac511e3ac4fd8",
+        "Ebro_evol5.UNIT": "93fe16562d8f26a432cc7c46ac859507b19289a983652f34c4149ef6f78a9ee4",
+        "Ebro_evol.INT2": "29cbe1996bac95a06dac03e6278576f558a76b908917f4959b58e90085fc399d",
+        "Ebro_evol2.UNIT": "6dbbbbfa65a5f3bf22e87304a75ad81f74fa989a63736f24fef1eb0b76dfef38",
+        "Ebro_evol.PRM": "24aeea2b07923251bac991ad7f488d909e34cbafdfa3e38c93bb428bb3de558e"
+      },
+      "actual_command": [
+        "Ebro_evol",
+        "-V1",
+        "-qplotting_mode=0",
+        "-tf-59",
+        "-qC_Ca_SEA=0",
+        "-qC_SO4_SEA=0",
+        "-qC_Na_SEA=0",
+        "-qC_Cl_SEA=0",
+        "-qC_Ca_RIV=0",
+        "-qC_SO4_RIV=0",
+        "-qC_Na_RIV=0",
+        "-qC_Cl_RIV=0"
+      ],
+      "rc": 0,
+      "seconds": 2.777,
+      "times_logged": [
+        -60.0,
+        -59.5,
+        -59.0
+      ],
+      "max_topography_at_minus59_5_Ma": 1521.6,
+      "max_load_at_minus59_5_Pa": 28900000.0,
+      "logged_surface_native_nodes": 22880,
+      "expected_surface_native_nodes": 22880,
+      "native_surface_sha256": "2b5422b4074dfeb1578d8d3698fd1a2d6105af70939871406df618135f007647",
+      "model_fields": {
+        "xyw": "2b5422b4074dfeb1578d8d3698fd1a2d6105af70939871406df618135f007647",
+        "xyzt": "94b79a7c74ff7d7fba556f51c2606b147c9e274f2d9ae2cbd6954b1556fb1dea",
+        "lak": "e95a8215d588ffed5a361616a2717b78c4bb5c5f07fd2101ff028c2f90319b22",
+        "st": "2af88e244d4fd7172a89d8f569f6059620aed2bf91dc368881ca0eef044c3ed9",
+        "bas": "e6854614c9e41049a92018efa426f53a7b4f62118de1bf45718289c086659372",
+        "hrz": "c9f8f53c3a7875ff805a2f0a03e216d5c2ca822fb93f599b815df4cef6458214"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "lake1_orig_off": {
+      "case": "lake1_orig_off",
+      "model": "1lake",
+      "source_version": "original",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+        "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+        "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+        "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+        "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+        "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+        "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+      },
+      "actual_command": [
+        "1lake",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "rc": 0,
+      "seconds": 1.578,
+      "times_logged": [
+        0.0,
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5
+      ],
+      "max_topography_at_minus59_5_Ma": null,
+      "max_load_at_minus59_5_Pa": null,
+      "logged_surface_native_nodes": 2601,
+      "expected_surface_native_nodes": 2601,
+      "native_surface_sha256": "cbec4985d81aa4ae53ff59fa5429eb0ea940c05396a7cbbfdc056da1bcdabd6e",
+      "model_fields": {
+        "xyw": "cbec4985d81aa4ae53ff59fa5429eb0ea940c05396a7cbbfdc056da1bcdabd6e",
+        "xyzt": "cb9a59ce04ea77ff2e102f518412d7d4cba7e4f3d37648e7658f29b85593f715",
+        "lak": "0ebfa7d0caa210daebc4cd32a0563f9ab026367b0af2a8151542ab8d432f4ea6",
+        "st": "90b48ffda42e2a6bec0019e7714408015d50e4ba9a7c7485cbdd27b86a889a8b",
+        "bas": "39c1c945d52c1c428529abb149830cf374a30c0d3503b462dfd738b77fb29cd2",
+        "hrz": "0d62452057077b93a776efc549ced2a3f214bec114177d583645ff36ea76b9ca"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "lake1_fixed_off": {
+      "case": "lake1_fixed_off",
+      "model": "1lake",
+      "source_version": "fixed",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+        "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+        "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+        "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+        "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+        "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+        "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+      },
+      "actual_command": [
+        "1lake",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "rc": 0,
+      "seconds": 0.931,
+      "times_logged": [
+        0.0,
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5
+      ],
+      "max_topography_at_minus59_5_Ma": null,
+      "max_load_at_minus59_5_Pa": null,
+      "logged_surface_native_nodes": 2601,
+      "expected_surface_native_nodes": 2601,
+      "native_surface_sha256": "912ce8d7ac2d7ce70496c62395b3f0c6ea585b88e2fdc3c38938aae79474b114",
+      "model_fields": {
+        "xyw": "912ce8d7ac2d7ce70496c62395b3f0c6ea585b88e2fdc3c38938aae79474b114",
+        "xyzt": "2478f67d4435f1a7503b0d9a6327a4bbcdc91a5832fd9931f9a50a5fafa2c3bf",
+        "lak": "6a96880377ac90ccc0648ff1e0987055f64fa3255c56a9c6c246f4698153ea98",
+        "st": "0b7d958f6ea85fc66193bfed21573957954dc9a0cfe7834aea47c5cdf404b646",
+        "bas": "463902633c14f3f9b8d0de0ff1d4ce36e3875738c8ba5e5db5948cace47327b2",
+        "hrz": "7b4b4ef263a7320ff97ba3e439663518e45fa7ed0881f349ca338c5ed61063c6"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "lake1_orig_on": {
+      "case": "lake1_orig_on",
+      "model": "1lake",
+      "source_version": "original",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+        "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+        "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+        "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+        "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+        "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+        "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+      },
+      "actual_command": [
+        "1lake",
+        "-V1",
+        "-qplotting_mode=0",
+        "-qsalt_model=1"
+      ],
+      "rc": 0,
+      "seconds": 1.566,
+      "times_logged": [
+        0.0,
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5
+      ],
+      "max_topography_at_minus59_5_Ma": null,
+      "max_load_at_minus59_5_Pa": null,
+      "logged_surface_native_nodes": 2601,
+      "expected_surface_native_nodes": 2601,
+      "native_surface_sha256": "cbec4985d81aa4ae53ff59fa5429eb0ea940c05396a7cbbfdc056da1bcdabd6e",
+      "model_fields": {
+        "xyw": "cbec4985d81aa4ae53ff59fa5429eb0ea940c05396a7cbbfdc056da1bcdabd6e",
+        "xyzt": "cb9a59ce04ea77ff2e102f518412d7d4cba7e4f3d37648e7658f29b85593f715",
+        "lak": "0ebfa7d0caa210daebc4cd32a0563f9ab026367b0af2a8151542ab8d432f4ea6",
+        "st": "90b48ffda42e2a6bec0019e7714408015d50e4ba9a7c7485cbdd27b86a889a8b",
+        "bas": "39c1c945d52c1c428529abb149830cf374a30c0d3503b462dfd738b77fb29cd2",
+        "hrz": "0d62452057077b93a776efc549ced2a3f214bec114177d583645ff36ea76b9ca"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "lake1_fixed_on": {
+      "case": "lake1_fixed_on",
+      "model": "1lake",
+      "source_version": "fixed",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+        "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+        "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+        "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+        "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+        "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+        "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+      },
+      "actual_command": [
+        "1lake",
+        "-V1",
+        "-qplotting_mode=0",
+        "-qsalt_model=1"
+      ],
+      "rc": 0,
+      "seconds": 1.556,
+      "times_logged": [
+        0.0,
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5
+      ],
+      "max_topography_at_minus59_5_Ma": null,
+      "max_load_at_minus59_5_Pa": null,
+      "logged_surface_native_nodes": 2601,
+      "expected_surface_native_nodes": 2601,
+      "native_surface_sha256": "cbec4985d81aa4ae53ff59fa5429eb0ea940c05396a7cbbfdc056da1bcdabd6e",
+      "model_fields": {
+        "xyw": "cbec4985d81aa4ae53ff59fa5429eb0ea940c05396a7cbbfdc056da1bcdabd6e",
+        "xyzt": "cb9a59ce04ea77ff2e102f518412d7d4cba7e4f3d37648e7658f29b85593f715",
+        "lak": "0ebfa7d0caa210daebc4cd32a0563f9ab026367b0af2a8151542ab8d432f4ea6",
+        "st": "90b48ffda42e2a6bec0019e7714408015d50e4ba9a7c7485cbdd27b86a889a8b",
+        "bas": "39c1c945d52c1c428529abb149830cf374a30c0d3503b462dfd738b77fb29cd2",
+        "hrz": "0d62452057077b93a776efc549ced2a3f214bec114177d583645ff36ea76b9ca"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "lake2_orig_off": {
+      "case": "lake2_orig_off",
+      "model": "2lakes",
+      "source_version": "original",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+        "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+        "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+        "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+        "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+        "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+        "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+      },
+      "actual_command": [
+        "2lakes",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "rc": 0,
+      "seconds": 5.817,
+      "times_logged": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0
+      ],
+      "max_topography_at_minus59_5_Ma": null,
+      "max_load_at_minus59_5_Pa": null,
+      "logged_surface_native_nodes": 6561,
+      "expected_surface_native_nodes": 6561,
+      "native_surface_sha256": "4f0dc29722a90f1316a9dd4a6330826ef7f412bf5bf1fd9f0fee44a22964ede1",
+      "model_fields": {
+        "xyw": "4f0dc29722a90f1316a9dd4a6330826ef7f412bf5bf1fd9f0fee44a22964ede1",
+        "xyzt": "77a9d8d35c18b6f215e533c9e9f5b2089c7c64cde815a51357dbdcb0eab7d6ca",
+        "lak": "4c606db0066971531e389e2b674e211918ef80e506ddfcbdc6fb858dd587b078",
+        "st": "f93630c2bf99e339676255d0436278f43bea001be511ec435bfb8b38e2adf759",
+        "bas": "f2ea60d5efcb8fa12673d1496185ce1e4d15ee9d9b92ee0b0c1299992daaff32",
+        "hrz": "50f5557b648b1bb3d7c38753567ae89402948e51678b6e8c0c05d618184b6235"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "lake2_fixed_off": {
+      "case": "lake2_fixed_off",
+      "model": "2lakes",
+      "source_version": "fixed",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+        "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+        "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+        "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+        "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+        "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+        "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+      },
+      "actual_command": [
+        "2lakes",
+        "-V1",
+        "-qplotting_mode=0"
+      ],
+      "rc": 0,
+      "seconds": 5.654,
+      "times_logged": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0
+      ],
+      "max_topography_at_minus59_5_Ma": null,
+      "max_load_at_minus59_5_Pa": null,
+      "logged_surface_native_nodes": 6561,
+      "expected_surface_native_nodes": 6561,
+      "native_surface_sha256": "f5df5aff2cdada087b5cc810b1f454342bb6c8aa3b176eb7cd11a4e5af4a5e3b",
+      "model_fields": {
+        "xyw": "f5df5aff2cdada087b5cc810b1f454342bb6c8aa3b176eb7cd11a4e5af4a5e3b",
+        "xyzt": "27844db9c56fe9f173ae09903194c28ed798620b594776ba26169dfccc8f5692",
+        "lak": "cd7808b906377c420c4a00e293218c93df8cb4a57000cc6d0ab2942ee789006b",
+        "st": "58c093078bb7791619b4ff2a8a41cc4a21b24e7c5b3ac71340374cc324045894",
+        "bas": "7d06a0f42e2c068ab658f043bf1ff513bf822ed1b81bf5832b4fca60ae592343",
+        "hrz": "dc4db1cdf437210433186eb7f248f8598b195f851bd77367ccd65f319e0ddfca"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "lake2_orig_on": {
+      "case": "lake2_orig_on",
+      "model": "2lakes",
+      "source_version": "original",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+        "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+        "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+        "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+        "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+        "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+        "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+      },
+      "actual_command": [
+        "2lakes",
+        "-V1",
+        "-qplotting_mode=0",
+        "-qsalt_model=1"
+      ],
+      "rc": 0,
+      "seconds": 5.719,
+      "times_logged": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0
+      ],
+      "max_topography_at_minus59_5_Ma": null,
+      "max_load_at_minus59_5_Pa": null,
+      "logged_surface_native_nodes": 6561,
+      "expected_surface_native_nodes": 6561,
+      "native_surface_sha256": "4f0dc29722a90f1316a9dd4a6330826ef7f412bf5bf1fd9f0fee44a22964ede1",
+      "model_fields": {
+        "xyw": "4f0dc29722a90f1316a9dd4a6330826ef7f412bf5bf1fd9f0fee44a22964ede1",
+        "xyzt": "77a9d8d35c18b6f215e533c9e9f5b2089c7c64cde815a51357dbdcb0eab7d6ca",
+        "lak": "4c606db0066971531e389e2b674e211918ef80e506ddfcbdc6fb858dd587b078",
+        "st": "f93630c2bf99e339676255d0436278f43bea001be511ec435bfb8b38e2adf759",
+        "bas": "f2ea60d5efcb8fa12673d1496185ce1e4d15ee9d9b92ee0b0c1299992daaff32",
+        "hrz": "50f5557b648b1bb3d7c38753567ae89402948e51678b6e8c0c05d618184b6235"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    },
+    "lake2_fixed_on": {
+      "case": "lake2_fixed_on",
+      "model": "2lakes",
+      "source_version": "fixed",
+      "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+      "full_input_hashes_original_unchanged": true,
+      "original_author_geological_input_hashes": {
+        "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+        "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+        "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+        "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+        "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+        "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+        "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+      },
+      "actual_command": [
+        "2lakes",
+        "-V1",
+        "-qplotting_mode=0",
+        "-qsalt_model=1"
+      ],
+      "rc": 0,
+      "seconds": 5.686,
+      "times_logged": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0
+      ],
+      "max_topography_at_minus59_5_Ma": null,
+      "max_load_at_minus59_5_Pa": null,
+      "logged_surface_native_nodes": 6561,
+      "expected_surface_native_nodes": 6561,
+      "native_surface_sha256": "4f0dc29722a90f1316a9dd4a6330826ef7f412bf5bf1fd9f0fee44a22964ede1",
+      "model_fields": {
+        "xyw": "4f0dc29722a90f1316a9dd4a6330826ef7f412bf5bf1fd9f0fee44a22964ede1",
+        "xyzt": "77a9d8d35c18b6f215e533c9e9f5b2089c7c64cde815a51357dbdcb0eab7d6ca",
+        "lak": "4c606db0066971531e389e2b674e211918ef80e506ddfcbdc6fb858dd587b078",
+        "st": "f93630c2bf99e339676255d0436278f43bea001be511ec435bfb8b38e2adf759",
+        "bas": "f2ea60d5efcb8fa12673d1496185ce1e4d15ee9d9b92ee0b0c1299992daaff32",
+        "hrz": "50f5557b648b1bb3d7c38753567ae89402948e51678b6e8c0c05d618184b6235"
+      },
+      "salt_invariant_status": 0,
+      "salt_invariant_sample": [],
+      "passed_basic": true,
+      "experiment_not_2016_equivalence_claim": true
+    }
+  },
+  "native_comparisons": {
+    "patch_off_matches_explicit_off": {
+      "a": "ebro_fixed_off",
+      "b": "ebro_fixed_off_explicit",
+      "surface_byte_identical": true,
+      "native_nonempty": true
+    },
+    "patch_on_identical_to_original_on_Ebro": {
+      "a": "ebro_orig_on",
+      "b": "ebro_fixed_on",
+      "surface_byte_identical": true,
+      "native_nonempty": true
+    },
+    "patch_on_identical_to_original_on_Lake1": {
+      "a": "lake1_orig_on",
+      "b": "lake1_fixed_on",
+      "surface_byte_identical": true,
+      "native_nonempty": true
+    },
+    "patch_on_identical_to_original_on_Lake2": {
+      "a": "lake2_orig_on",
+      "b": "lake2_fixed_on",
+      "surface_byte_identical": true,
+      "native_nonempty": true
+    },
+    "original_zero_ions_identical_to_fixed_off_Ebro": {
+      "a": "ebro_orig_zero_ions",
+      "b": "ebro_fixed_off",
+      "surface_byte_identical": false,
+      "native_nonempty": true
+    }
+  },
+  "failure_causes": [
+    "original_zero_ions_identical_to_fixed_off_Ebro"
+  ],
+  "strict_regression_pass": false,
+  "per_case_orig_input_geo_unchanged": true,
+  "pristine_source_separate_from_fixed": true,
+  "full_Ebro_60_Myr_NOT_completed_by_this_short_test": true
+}

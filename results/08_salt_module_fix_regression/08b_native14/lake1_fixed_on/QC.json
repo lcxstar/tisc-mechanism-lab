@@ -1,0 +1,54 @@
+{
+  "case": "lake1_fixed_on",
+  "model": "1lake",
+  "source_version": "fixed",
+  "upstream_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "full_input_hashes_original_unchanged": true,
+  "original_author_geological_input_hashes": {
+    "1lake.PRM": "3eb94cfade15541fad3cea0ee0a3a9d3dace96919e399e836ce0f397d0580953",
+    "2lakes.PRM": "1722b9b8f2d7ae4bc5e3e3284f8f07d5ef737ed4f601e6b50b456ff3f092c2fc",
+    "1lake.PRFL": "03acc92370a9bcbd46d37ad769c30c3272ee725398c1fa12354e9bf9eb25fdec",
+    "2lakes.ZINI": "8bfe5b1fc6ca3cbb1bc3c13a00f005898dc58dc80b28404a4c2bfb75058b8824",
+    "1lake.ZINI": "a698cf3b2adf3337ab800942356a1d7a1ff8580d09a63d52726c71072145be31",
+    "2lakes1.UNIT": "b10bd578629fd62a9fdb458c6961cc3b108ce7fcedf5ddcab7e2f83bc938731e",
+    "2lakes.SLV": "6d5b35a32a219831ab62be2c74b750c060af3ab76672a35d2b6aec5f34b16a75"
+  },
+  "actual_command": [
+    "1lake",
+    "-V1",
+    "-qplotting_mode=0",
+    "-qsalt_model=1"
+  ],
+  "rc": 0,
+  "seconds": 1.556,
+  "times_logged": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5
+  ],
+  "max_topography_at_minus59_5_Ma": null,
+  "max_load_at_minus59_5_Pa": null,
+  "logged_surface_native_nodes": 2601,
+  "expected_surface_native_nodes": 2601,
+  "native_surface_sha256": "cbec4985d81aa4ae53ff59fa5429eb0ea940c05396a7cbbfdc056da1bcdabd6e",
+  "model_fields": {
+    "xyw": "cbec4985d81aa4ae53ff59fa5429eb0ea940c05396a7cbbfdc056da1bcdabd6e",
+    "xyzt": "cb9a59ce04ea77ff2e102f518412d7d4cba7e4f3d37648e7658f29b85593f715",
+    "lak": "0ebfa7d0caa210daebc4cd32a0563f9ab026367b0af2a8151542ab8d432f4ea6",
+    "st": "90b48ffda42e2a6bec0019e7714408015d50e4ba9a7c7485cbdd27b86a889a8b",
+    "bas": "39c1c945d52c1c428529abb149830cf374a30c0d3503b462dfd738b77fb29cd2",
+    "hrz": "0d62452057077b93a776efc549ced2a3f214bec114177d583645ff36ea76b9ca"
+  },
+  "salt_invariant_status": 0,
+  "salt_invariant_sample": [],
+  "passed_basic": true,
+  "experiment_not_2016_equivalence_claim": true
+}
