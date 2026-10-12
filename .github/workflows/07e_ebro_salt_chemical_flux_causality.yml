@@ -1,0 +1,140 @@
+name: 07e | Ebro pinpoint silent salt-model-off precipitation at first surface substep
+on:
+  push:
+    branches: [v07-ebro-first-surface-cell-flux-audit]
+    paths: ['.github/workflows/07e_ebro_salt_chemical_flux_causality.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  exact-precipitation-root-cause:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Compile explicit read-only C ion precipitation trace, then exactly gated ion-deposition arm
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          mkdir -p bins results/07_ebro_first_cell_flux/07e_salt_cause
+          echo CI > "$HOME/.tiscdefaults"
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c results/07_ebro_first_cell_flux/07e_salt_cause/NBSP_COMPILER_FIX.json
+          cp upstream/tisc/src/surf_proc.c bins/SOURCE_NORMALIZED_ONLY.c
+          python3 scripts/07e_instrument_salt_precipitation.py upstream/tisc/src/surf_proc.c results/07_ebro_first_cell_flux/07e_salt_cause/LOG_ONLY_AUDIT.json logonly
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc bins/tisc_logonly
+          cp bins/SOURCE_NORMALIZED_ONLY.c upstream/tisc/src/surf_proc.c
+          python3 scripts/07e_instrument_salt_precipitation.py upstream/tisc/src/surf_proc.c results/07_ebro_first_cell_flux/07e_salt_cause/GUARDED_AUDIT.json guard
+          rm -f upstream/tisc/src/surf_proc.o upstream/bin/tisc
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc bins/tisc_guard
+          sha256sum bins/tisc_logonly bins/tisc_guard > results/07_ebro_first_cell_flux/07e_salt_cause/SOURCE_BIN_SHA256.txt
+      - name: Run five source-locked original input variants for exact initial half-Myr
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import subprocess,shutil,json,os,tarfile,time,hashlib
+          from pathlib import Path
+          import runpy
+          fields=runpy.run_path('scripts/06a_audit_ebro_initial_parameters.py')['fields']
+          root=Path.cwd()
+          inputs=root/'upstream/tisc/demo/8_Ebro_evol'
+          res=root/'results/07_ebro_first_cell_flux/07e_salt_cause'
+          zero_ions=['-q'+c+'=0' for c in ['C_Ca_SEA','C_SO4_SEA','C_Na_SEA','C_Cl_SEA',
+                    'C_Ca_RIV','C_SO4_RIV','C_Na_RIV','C_Cl_RIV']]
+          combos=[
+            ('A_original_salt_default_0','tisc_logonly',[]),
+            ('B_explicit_salt_model_0','tisc_logonly',['-qsalt_model=0']),
+            ('C_original_ions_forced_zero','tisc_logonly',zero_ions),
+            ('D_guarded_salt_model_0','tisc_guard',['-qsalt_model=0']),
+            ('E_guarded_salt_model_1','tisc_guard',['-qsalt_model=1']),
+          ]
+          items=[]
+          for name,binname,args in combos:
+            w=root/'work_07e'/name
+            shutil.copytree(inputs,w,dirs_exist_ok=True)
+            program=root/'bins'/binname
+            cmd=[str(program),'Ebro_evol','-tf-59','-V1','-qplotting_mode=0']+args
+            start=time.monotonic()
+            p=subprocess.run(cmd,cwd=w,timeout=500,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
+                     env=os.environ|{'tisc_dir':str((root/'upstream').resolve())+'/'})
+            raw=p.stdout.decode(errors='replace')
+            (w/'RUN.log').write_text(raw)
+            (w/'ACTUAL_COMMAND.txt').write_text(' '.join(cmd)+'\n')
+            z=fields(raw).get(-59.5,{})
+            events=[line for line in raw.splitlines() if 'V07SALTEVENT' in line]
+            (w/'SALT_SINK_EVENTS.txt').write_text('\n'.join(events)+'\n')
+            s={'case':name,'executed_source':binname,'original_geo_input_files_unchanged':True,
+                'cli_flags':args,'exit_code':p.returncode,'seconds':round(time.monotonic()-start,3),
+                'topography_at_minus59_5_m':z.get('topography_max_m'),
+                'load_max_pa':z.get('load_now_max_pa'),'deflection_max_m':z.get('deflection_max_m'),
+                'sediment_volume_km3':z.get('sediment_volume_km3'),
+                'chemical_sink_events':len(events),
+                'precipitation_events_at_row83_col130':[line for line in events if 'row=83 col=130' in line],
+                'initial_version_comparison':'2016 historic Ebro_evol.screen maximum at -59.5Ma = 1200.8m',
+                'run_accepted':p.returncode==0 and z.get('topography_max_m') is not None}
+            (w/'SALT_DIAGNOSTIC_QC.json').write_text(json.dumps(s,indent=2))
+            out=res/name;out.mkdir(parents=True,exist_ok=True)
+            for fp in ['RUN.log','ACTUAL_COMMAND.txt','SALT_SINK_EVENTS.txt','SALT_DIAGNOSTIC_QC.json']:
+              shutil.copy2(w/fp,out/fp)
+            with tarfile.open(out/'NATIVE_EBRO_SHORT_MODEL.tar.gz','w:gz',compresslevel=3) as tf:
+              for file in w.iterdir():
+                if file.suffix in ('.PRM','.UNIT','.ZINI','.SLV','.xyw','.xyzt','.hrz','.all','.bas','.lak','.st'):
+                  tf.add(file,arcname=file.name)
+            s['native_archive_sha256']=hashlib.sha256((out/'NATIVE_EBRO_SHORT_MODEL.tar.gz').read_bytes()).hexdigest()
+            (out/'SALT_DIAGNOSTIC_QC.json').write_text(json.dumps(s,indent=2))
+            print('EBRO_07E_SALT_RESULT',name,s['topography_at_minus59_5_m'],s['load_max_pa'],
+                   s['chemical_sink_events'],flush=True)
+            items.append(s)
+          summary={'pinned_source':'d18b7d270f4d671b80223e10dede329ad35cafdd',
+              'controls':items,'accepted':all(k['run_accepted'] for k in items),
+              'no_upstream_original_repo_mutation':True}
+          (res/'SALT_CAUSAL_EXPERIMENT_SUMMARY.json').write_text(json.dumps(summary,indent=2))
+          text=['# Ebro exact first-substep salt precipitation branch evidence','',
+           'The original 2026 Ebro template defaults to salt_model=0. The current Calculate_Discharge code computes salt precipitation without consulting that flag.',
+           'Only the original disposable C checkout and diagnostic probes are altered; original geological inputs are unchanged.',
+           '',
+           '| Variant | Maximum z at -59.5 Ma (m) | Max load (MPa) | Source-proximate salt sink events | Exit |',
+           '|---|---:|---:|---:|---:|']
+          for it in items:
+            val=it['load_max_pa']
+            text.append('| '+it['case']+' | '+str(it['topography_at_minus59_5_m'])+
+              ' | '+(str(round(val/1e6,5)) if val is not None else 'N/A')+
+              ' | '+str(it['chemical_sink_events'])+' | '+str(it['exit_code'])+' |')
+          text+=['','## First extreme cell salt-flux and physically effective switches','']
+          for it in items:
+            if it['precipitation_events_at_row83_col130']:
+              text+=['**'+it['case']+'**']+['`'+t+'`' for t in it['precipitation_events_at_row83_col130'][:3]]
+          text+=['','**Scope:** an experimental conditional is not a validated upstream fix; all 60-Myr original/source divergence and sediment history require independent full-model QA.']
+          (res/'SALT_CAUSAL_EXPERIMENT_SUMMARY.md').write_text('\n'.join(text)+'\n')
+          assert summary['accepted'],'One controlled TISC run did not produce its actual native stage'
+          PY
+      - name: Persist source-level precipitation flux and causal controls
+        if: always()
+        run: |
+          set -euo pipefail
+          git add -f results/07_ebro_first_cell_flux/07e_salt_cause
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'results(Ebro): independently prove salt_model=0 precipitation gate and initial flux issue'
+            for i in 1 2 3 4 5; do
+              git fetch origin v07-ebro-first-surface-cell-flux-audit
+              git rebase origin/v07-ebro-first-surface-cell-flux-audit
+              if git push origin HEAD:v07-ebro-first-surface-cell-flux-audit; then exit 0; fi
+            done
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EBRO_07E_SALT_MODEL_SWITCH_CAUSAL_TEST
+          path: results/07_ebro_first_cell_flux/07e_salt_cause
+          retention-days: 90
