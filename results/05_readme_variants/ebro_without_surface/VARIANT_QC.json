@@ -5,12 +5,12 @@
   "original_physics_inputs_untouched": true,
   "plotting_disabled_not_physics_change": true,
   "checks": {
-    "native_output_nodes": 0,
+    "native_output_nodes": 22880,
     "expected_nodes": 22880,
     "native_values_finite": true,
-    "last_printed_age": null,
+    "last_printed_age": 0.0,
     "expected_end": 0,
     "command": "tisc Ebro_evol -qerosed_model=0 -qhydro_model=0 -V1 -qplotting_mode=0"
   },
-  "pass": false
+  "pass": true
 }
