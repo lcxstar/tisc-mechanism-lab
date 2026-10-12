@@ -23,6 +23,7 @@ ap.add_argument('--out',type=Path,required=True)
 ap.add_argument('--work',type=Path,required=True)
 ap.add_argument('--parser',type=Path,required=True)
 ap.add_argument('--timeout-seconds',type=int,default=4900)
+ap.add_argument('--extra-cli',action='append',default=[],help='TISC CLI override, preserved verbatim in command and QC')
 a=ap.parse_args()
 a.out.mkdir(parents=True,exist_ok=True)
 src=(a.old_root if a.source=='old2017' else a.new_root).resolve()
@@ -35,7 +36,7 @@ fileexts={'.PRM','.UNIT','.ZINI','.SLV','.INT','.INT2','.PRFL','.REC','.EET'}
 input_checksums={f.name:sha(f) for f in inp.iterdir() if f.is_file() and f.suffix in fileexts}
 assert input_checksums and input_checksums=={f.name:sha(f) for f in a.work.iterdir() if f.is_file() and f.suffix in fileexts}
 args=['-P0','-V1'] if a.source=='old2017' else ['-V1','-qplotting_mode=0']
-cmd=[str(exe),'Ebro_evol']+args
+cmd=[str(exe),'Ebro_evol']+args+a.extra_cli
 (a.work/'ACTUAL_COMMAND.txt').write_text(' '.join(cmd)+'\n')
 beg=time.monotonic()
 try:
@@ -77,6 +78,7 @@ qc={
  'original_demo_file_hashes':input_checksums,
  'original_author_model_files_changed':False,
  'actual_command':cmd,
+ 'experimental_cli_overrides':a.extra_cli,
  'binary_sha256':sha(exe),
  'process_exit_code':rc,
  'full_times':ages,
