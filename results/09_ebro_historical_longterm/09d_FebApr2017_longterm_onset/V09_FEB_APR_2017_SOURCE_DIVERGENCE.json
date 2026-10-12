@@ -1,0 +1,578 @@
+{
+  "time_intersection_count": 121,
+  "models": [
+    "screen2016",
+    "feb2017",
+    "apr2017",
+    "modern_fixed"
+  ],
+  "full_native_time_series_not_original_2016_binary": true,
+  "metric_label_semantics_may_have_evolved": true,
+  "rms_global": {
+    "feb2017": {
+      "topography_max_m": 3937.0123347850968,
+      "topography_min_m": 278.60455742264276,
+      "deflection_max_m": 209.20442196107427,
+      "deflection_min_m": 171.88065993736524,
+      "load_now_max_pa": 14690922.996442223,
+      "load_now_total_N": 2.9933000993675776e+16,
+      "sediment_volume_km3": 21727.3745921284,
+      "sediment_increment_N": 1.632473629419477e+16,
+      "export_sediment_N": 1.6545811277581204e+16
+    },
+    "apr2017": {
+      "topography_max_m": 3937.0123347850968,
+      "topography_min_m": 278.60455742264276,
+      "deflection_max_m": 209.20442196107427,
+      "deflection_min_m": 171.88065993736524,
+      "load_now_max_pa": 14690922.996442223,
+      "load_now_total_N": 2.9933000993675776e+16,
+      "sediment_volume_km3": 21727.3745921284,
+      "sediment_increment_N": 1.632473629419477e+16,
+      "export_sediment_N": 1.6545811277581204e+16
+    },
+    "modern_fixed": {
+      "topography_max_m": 2536.8097680781398,
+      "topography_min_m": 548.5586939122072,
+      "deflection_max_m": 215.44294941766253,
+      "deflection_min_m": 125.2122211931984,
+      "load_now_max_pa": 13368417.566611769,
+      "load_now_total_N": 7.425820362732984e+16,
+      "sediment_volume_km3": 30977.345552839095,
+      "sediment_increment_N": 3.047110789597801e+16,
+      "export_sediment_N": 2.9601217795894816e+16
+    }
+  },
+  "first_divergence_absolute_thresholds": {
+    "feb2017": {
+      "maxTopo_abs_m": {
+        "50": -57.5,
+        "200": -55.0,
+        "500": -53.5,
+        "1000": -51.0,
+        "3000": -37.0
+      },
+      "maxFlexure_abs_m": {
+        "50": -51.5,
+        "200": -44.0,
+        "500": null,
+        "1000": null,
+        "3000": null
+      },
+      "sediment_vol_abs_km3": {
+        "1000": -58.0,
+        "10000": -49.5,
+        "30000": -16.0,
+        "100000": null
+      },
+      "load_max_abs_MPa": {
+        "1000000.0": -57.5,
+        "10000000.0": -55.5,
+        "100000000.0": null
+      }
+    },
+    "apr2017": {
+      "maxTopo_abs_m": {
+        "50": -57.5,
+        "200": -55.0,
+        "500": -53.5,
+        "1000": -51.0,
+        "3000": -37.0
+      },
+      "maxFlexure_abs_m": {
+        "50": -51.5,
+        "200": -44.0,
+        "500": null,
+        "1000": null,
+        "3000": null
+      },
+      "sediment_vol_abs_km3": {
+        "1000": -58.0,
+        "10000": -49.5,
+        "30000": -16.0,
+        "100000": null
+      },
+      "load_max_abs_MPa": {
+        "1000000.0": -57.5,
+        "10000000.0": -55.5,
+        "100000000.0": null
+      }
+    },
+    "modern_fixed": {
+      "maxTopo_abs_m": {
+        "50": -57.5,
+        "200": -53.5,
+        "500": -46.5,
+        "1000": -42.0,
+        "3000": -30.0
+      },
+      "maxFlexure_abs_m": {
+        "50": -52.5,
+        "200": -33.0,
+        "500": null,
+        "1000": null,
+        "3000": null
+      },
+      "sediment_vol_abs_km3": {
+        "1000": -55.5,
+        "10000": -46.5,
+        "30000": -41.0,
+        "100000": null
+      },
+      "load_max_abs_MPa": {
+        "1000000.0": -55.0,
+        "10000000.0": -49.0,
+        "100000000.0": null
+      }
+    }
+  },
+  "age_snapshots": {
+    "-60": {
+      "topography_max_m": {
+        "screen2016": 1200.8,
+        "feb2017": 1201.4,
+        "apr2017": 1201.4,
+        "modern_fixed": 1201.4
+      },
+      "deflection_max_m": {
+        "screen2016": null,
+        "feb2017": null,
+        "apr2017": null,
+        "modern_fixed": null
+      },
+      "sediment_volume_km3": {
+        "screen2016": 1450.0,
+        "feb2017": 1570.0,
+        "apr2017": 1570.0,
+        "modern_fixed": 1450.0
+      },
+      "load_now_max_pa": {
+        "screen2016": null,
+        "feb2017": null,
+        "apr2017": null,
+        "modern_fixed": null
+      }
+    },
+    "-59.5": {
+      "topography_max_m": {
+        "screen2016": 1200.8,
+        "feb2017": 1190.9,
+        "apr2017": 1190.9,
+        "modern_fixed": 1197.9
+      },
+      "deflection_max_m": {
+        "screen2016": 10.7,
+        "feb2017": 11.7,
+        "apr2017": 11.7,
+        "modern_fixed": 10.3
+      },
+      "sediment_volume_km3": {
+        "screen2016": 2820.0,
+        "feb2017": 2930.0,
+        "apr2017": 2930.0,
+        "modern_fixed": 2830.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 3500000.0,
+        "feb2017": 4210000.0,
+        "apr2017": 4210000.0,
+        "modern_fixed": 2580000.0
+      }
+    },
+    "-55": {
+      "topography_max_m": {
+        "screen2016": 2316.0,
+        "feb2017": 2034.7,
+        "apr2017": 2034.7,
+        "modern_fixed": 2255.9
+      },
+      "deflection_max_m": {
+        "screen2016": 2159.9,
+        "feb2017": 2148.1,
+        "apr2017": 2148.1,
+        "modern_fixed": 2192.0
+      },
+      "sediment_volume_km3": {
+        "screen2016": 20200.0,
+        "feb2017": 23800.0,
+        "apr2017": 23800.0,
+        "modern_fixed": 18600.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 20600000.0,
+        "feb2017": 21300000.0,
+        "apr2017": 21300000.0,
+        "modern_fixed": 24000000.0
+      }
+    },
+    "-50": {
+      "topography_max_m": {
+        "screen2016": 3284.2,
+        "feb2017": 2027.9,
+        "apr2017": 2027.9,
+        "modern_fixed": 2837.2
+      },
+      "deflection_max_m": {
+        "screen2016": 2995.0,
+        "feb2017": 2924.1,
+        "apr2017": 2924.1,
+        "modern_fixed": 3065.2
+      },
+      "sediment_volume_km3": {
+        "screen2016": 50800.0,
+        "feb2017": 60600.0,
+        "apr2017": 60600.0,
+        "modern_fixed": 45800.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 119000000.0,
+        "feb2017": 118000000.0,
+        "apr2017": 118000000.0,
+        "modern_fixed": 118000000.0
+      }
+    },
+    "-48": {
+      "topography_max_m": {
+        "screen2016": 3696.4,
+        "feb2017": 2607.3,
+        "apr2017": 2607.3,
+        "modern_fixed": 3433.6
+      },
+      "deflection_max_m": {
+        "screen2016": 3920.7,
+        "feb2017": 3812.4,
+        "apr2017": 3812.4,
+        "modern_fixed": 4010.4
+      },
+      "sediment_volume_km3": {
+        "screen2016": 75600.0,
+        "feb2017": 90500.0,
+        "apr2017": 90500.0,
+        "modern_fixed": 66700.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 5090000.0,
+        "feb2017": 21500000.0,
+        "apr2017": 21500000.0,
+        "modern_fixed": 7500000.0
+      }
+    },
+    "-45": {
+      "topography_max_m": {
+        "screen2016": 4072.1,
+        "feb2017": 2607.3,
+        "apr2017": 2607.3,
+        "modern_fixed": 3701.7
+      },
+      "deflection_max_m": {
+        "screen2016": 4667.4,
+        "feb2017": 4475.3,
+        "apr2017": 4475.3,
+        "modern_fixed": 4777.2
+      },
+      "sediment_volume_km3": {
+        "screen2016": 109000.0,
+        "feb2017": 124000.0,
+        "apr2017": 124000.0,
+        "modern_fixed": 94700.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 7110000.0,
+        "feb2017": 11300000.0,
+        "apr2017": 11300000.0,
+        "modern_fixed": 9640000.0
+      }
+    },
+    "-40": {
+      "topography_max_m": {
+        "screen2016": 5300.6,
+        "feb2017": 2787.0,
+        "apr2017": 2787.0,
+        "modern_fixed": 3835.4
+      },
+      "deflection_max_m": {
+        "screen2016": 5481.9,
+        "feb2017": 5190.0,
+        "apr2017": 5190.0,
+        "modern_fixed": 5634.4
+      },
+      "sediment_volume_km3": {
+        "screen2016": 178000.0,
+        "feb2017": 194000.0,
+        "apr2017": 194000.0,
+        "modern_fixed": 145000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 17100000.0,
+        "feb2017": 20200000.0,
+        "apr2017": 20200000.0,
+        "modern_fixed": 16900000.0
+      }
+    },
+    "-35": {
+      "topography_max_m": {
+        "screen2016": 6581.5,
+        "feb2017": 3246.7,
+        "apr2017": 3246.7,
+        "modern_fixed": 4175.3
+      },
+      "deflection_max_m": {
+        "screen2016": 6503.9,
+        "feb2017": 6210.0,
+        "apr2017": 6210.0,
+        "modern_fixed": 6658.1
+      },
+      "sediment_volume_km3": {
+        "screen2016": 258000.0,
+        "feb2017": 277000.0,
+        "apr2017": 277000.0,
+        "modern_fixed": 205000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 35800000.0,
+        "feb2017": 41300000.0,
+        "apr2017": 41300000.0,
+        "modern_fixed": 44300000.0
+      }
+    },
+    "-30": {
+      "topography_max_m": {
+        "screen2016": 8505.0,
+        "feb2017": 3157.2,
+        "apr2017": 3157.2,
+        "modern_fixed": 5465.0
+      },
+      "deflection_max_m": {
+        "screen2016": 8231.2,
+        "feb2017": 7983.0,
+        "apr2017": 7983.0,
+        "modern_fixed": 8445.5
+      },
+      "sediment_volume_km3": {
+        "screen2016": 361000.0,
+        "feb2017": 382000.0,
+        "apr2017": 382000.0,
+        "modern_fixed": 288000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 105000000.0,
+        "feb2017": 143000000.0,
+        "apr2017": 143000000.0,
+        "modern_fixed": 107000000.0
+      }
+    },
+    "-23.5": {
+      "topography_max_m": {
+        "screen2016": 9365.5,
+        "feb2017": 2804.4,
+        "apr2017": 2804.4,
+        "modern_fixed": 4639.7
+      },
+      "deflection_max_m": {
+        "screen2016": 7328.6,
+        "feb2017": 7040.7,
+        "apr2017": 7040.7,
+        "modern_fixed": 7586.2
+      },
+      "sediment_volume_km3": {
+        "screen2016": 402000.0,
+        "feb2017": 418000.0,
+        "apr2017": 418000.0,
+        "modern_fixed": 371000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 14900000.0,
+        "feb2017": 10900000.0,
+        "apr2017": 10900000.0,
+        "modern_fixed": 10500000.0
+      }
+    },
+    "-20": {
+      "topography_max_m": {
+        "screen2016": 5734.9,
+        "feb2017": 3945.1,
+        "apr2017": 3945.1,
+        "modern_fixed": 5759.4
+      },
+      "deflection_max_m": {
+        "screen2016": 6853.1,
+        "feb2017": 6720.4,
+        "apr2017": 6720.4,
+        "modern_fixed": 7156.7
+      },
+      "sediment_volume_km3": {
+        "screen2016": 409000.0,
+        "feb2017": 430000.0,
+        "apr2017": 430000.0,
+        "modern_fixed": 398000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 83900000.0,
+        "feb2017": 77200000.0,
+        "apr2017": 77200000.0,
+        "modern_fixed": 82300000.0
+      }
+    },
+    "-15": {
+      "topography_max_m": {
+        "screen2016": 6629.9,
+        "feb2017": 2418.9,
+        "apr2017": 2418.9,
+        "modern_fixed": 4188.7
+      },
+      "deflection_max_m": {
+        "screen2016": 6539.3,
+        "feb2017": 6391.7,
+        "apr2017": 6391.7,
+        "modern_fixed": 6897.6
+      },
+      "sediment_volume_km3": {
+        "screen2016": 417000.0,
+        "feb2017": 450000.0,
+        "apr2017": 450000.0,
+        "modern_fixed": 414000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 72100000.0,
+        "feb2017": 74800000.0,
+        "apr2017": 74800000.0,
+        "modern_fixed": 71200000.0
+      }
+    },
+    "-12.5": {
+      "topography_max_m": {
+        "screen2016": 6828.0,
+        "feb2017": 2254.7,
+        "apr2017": 2254.7,
+        "modern_fixed": 3808.5
+      },
+      "deflection_max_m": {
+        "screen2016": 6377.6,
+        "feb2017": 6214.1,
+        "apr2017": 6214.1,
+        "modern_fixed": 6715.1
+      },
+      "sediment_volume_km3": {
+        "screen2016": 420000.0,
+        "feb2017": 457000.0,
+        "apr2017": 457000.0,
+        "modern_fixed": 415000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 45100000.0,
+        "feb2017": 45000000.0,
+        "apr2017": 45000000.0,
+        "modern_fixed": 41600000.0
+      }
+    },
+    "-10": {
+      "topography_max_m": {
+        "screen2016": 7002.9,
+        "feb2017": 2222.5,
+        "apr2017": 2222.5,
+        "modern_fixed": 3652.4
+      },
+      "deflection_max_m": {
+        "screen2016": 6224.8,
+        "feb2017": 6047.1,
+        "apr2017": 6047.1,
+        "modern_fixed": 6527.2
+      },
+      "sediment_volume_km3": {
+        "screen2016": 429000.0,
+        "feb2017": 462000.0,
+        "apr2017": 462000.0,
+        "modern_fixed": 419000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 41600000.0,
+        "feb2017": 70000000.0,
+        "apr2017": 70000000.0,
+        "modern_fixed": 24100000.0
+      }
+    },
+    "-8": {
+      "topography_max_m": {
+        "screen2016": 7129.3,
+        "feb2017": 2909.2,
+        "apr2017": 2909.2,
+        "modern_fixed": 3723.2
+      },
+      "deflection_max_m": {
+        "screen2016": 6109.5,
+        "feb2017": 5920.6,
+        "apr2017": 5920.6,
+        "modern_fixed": 6384.2
+      },
+      "sediment_volume_km3": {
+        "screen2016": 437000.0,
+        "feb2017": 467000.0,
+        "apr2017": 467000.0,
+        "modern_fixed": 423000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 47100000.0,
+        "feb2017": 50800000.0,
+        "apr2017": 50800000.0,
+        "modern_fixed": 43500000.0
+      }
+    },
+    "-5": {
+      "topography_max_m": {
+        "screen2016": 7337.0,
+        "feb2017": 2146.9,
+        "apr2017": 2146.9,
+        "modern_fixed": 3604.6
+      },
+      "deflection_max_m": {
+        "screen2016": 5954.4,
+        "feb2017": 5754.8,
+        "apr2017": 5754.8,
+        "modern_fixed": 6172.2
+      },
+      "sediment_volume_km3": {
+        "screen2016": 446000.0,
+        "feb2017": 471000.0,
+        "apr2017": 471000.0,
+        "modern_fixed": 420000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 17200000.0,
+        "feb2017": 18400000.0,
+        "apr2017": 18400000.0,
+        "modern_fixed": 12500000.0
+      }
+    },
+    "-0.5": {
+      "topography_max_m": {
+        "screen2016": 7537.1,
+        "feb2017": 1872.9,
+        "apr2017": 1872.9,
+        "modern_fixed": 3127.9
+      },
+      "deflection_max_m": {
+        "screen2016": 5701.6,
+        "feb2017": 5441.6,
+        "apr2017": 5441.6,
+        "modern_fixed": 5867.6
+      },
+      "sediment_volume_km3": {
+        "screen2016": 463000.0,
+        "feb2017": 488000.0,
+        "apr2017": 488000.0,
+        "modern_fixed": 439000.0
+      },
+      "load_now_max_pa": {
+        "screen2016": 14500000.0,
+        "feb2017": 7840000.0,
+        "apr2017": 7840000.0,
+        "modern_fixed": 9020000.0
+      }
+    }
+  },
+  "evidence_limits": [
+    "global maxima occur at non-identical cells; maxima differences do not prove same-cell process",
+    "Ebro 2016 screen is a historical output without original executable",
+    "the 2017 Feb Git snapshot is closest available to 2016; it is not proven to be exact 2016 code"
+  ]
+}
