@@ -5,11 +5,11 @@
 | Diagnostic at final native 0 Ma | Value |
 |---|---:|
 | Grid pairs | 5720 |
-| RMS terrain change (m) | 111.34317891183235 |
-| Max positive delta (m) | 1129.1299999999999 |
-| Max negative delta (m) | -1134.15 |
-| Cells changed more than 100m | 210 |
-| Cells changed more than 1000m | 32 |
+| RMS terrain change (m) | 676.7536585934208 |
+| Max positive delta (m) | 1967.1 |
+| Max negative delta (m) | -4868.2 |
+| Cells changed more than 100m | 3762 |
+| Cells changed more than 1000m | 438 |
 
 This is **not** a location-by-location comparison to the archived 2016 author screen. The 2016 native spatial grid was not preserved. These experiments identify the spatial signature of changing the 2017 source to 2026 salt-fixed C source on exactly the same archived 2017 geological input. Runtime inherited defaults may also differ.
 
