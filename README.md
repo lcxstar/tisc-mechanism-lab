@@ -1,3 +1,18 @@
+# Ebro Initial-Condition and Version Audit — completed first-step forensic matrix
+
+**Outcome (12 October 2026):** The historical 2016 Ebro result at -59.5 Ma is 1200.8 m maximum surface elevation. The original 2017 source with its 2017 104×55 example produces **1190.9 m**, while the 2026 current source with the 2026 208×110 example produces **9071.6 m**. Direct 2017-versus-2026 **source × input cross-tests (5/5)** prove a major interaction, not an individual Te or density-default error. The first-stage early-window numerical anomaly can be suppressed by returning to 104×55, reducing erosion timestep to 0.005 Myr, or disabling hydro transport, but **the precise faulty transport/localization mechanism and full 60-Myr 2016 historical equality are still unproven**.
+
+- [**Complete evidence-based V06 scientific audit**](docs/06_EBRO_INITIAL_CONDITION_VERSION_AUDIT_FINAL_20261012.md)
+- [2017 vs 2026 pinned source × old/new input factorial, 5 native runs](results/06_ebro_initial_version_audit/06e_source_input_factorial/FACTORIAL_SUMMARY.md)
+- [2017 real TISC source early author-screen reproduction, build+native log](results/06_ebro_initial_version_audit/06c_2017_historical_solver/ORIGINAL_2017_REPLAY_QC.json)
+- [First-step full historical 2016 vs 2026 actual pressure/load/flexure diagnostics](results/06_ebro_initial_version_audit/06a_historical_vs_current/FIRST_FIVE_TIMES_STEPWISE_2016_VS_2026.csv)
+- [11 resolution/time/surface-process trials; includes one preserved segmentation-fault negative control](results/06_ebro_initial_version_audit/06d_surface_grid_timestep/INTERVENTION_SUMMARY.md)
+- [2017/2026 factorial GitHub Actions — 5/5 successful](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38242086249)
+
+Original v04 seven complete demos and v05 author-readme continuation examples remain unchanged and archived. No Junggar evolution simulation has resumed.
+
+---
+
 # Original author's TISC demo README — command completion / v05
 
 **v04 stable** has fully archived all seven original project forward models (4–9, with both lake cases), along with prior 1–3 flexure. **v05** extends to the author's additional documented CLI flags, true binary restarts, and native PDF/PNG output.
