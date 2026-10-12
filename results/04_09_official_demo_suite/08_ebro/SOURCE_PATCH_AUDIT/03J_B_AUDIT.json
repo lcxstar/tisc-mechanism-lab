@@ -1,0 +1,13 @@
+{
+  "patch": "03j-B proof-gated zero-evaporation lake-input fastpath",
+  "baseline": "03g + 03j-A",
+  "pinned_upstream": "danigeos/tisc@d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "before_sha256": "27b83c5daec4c2857d50e512fba681774f3a6f1279fa42b4ba927af7d558f420",
+  "after_sha256": "c62eb59b7b5270b74be43d704f0507d469be4bd069b842b92addcfecb8c84e07",
+  "nonzero_evap_inflow_sum": "identical original helper",
+  "zero_evap_shortcut": "only if ALL initial grid terms >=0, permeability=0 and no later negative discharge has occurred",
+  "invariant_invalidated_on_negative": "permanent fallback to original helper",
+  "changes_physical_parameters": false,
+  "generic_incremental_lake_inflow_cache": false,
+  "requires_forward_output_equivalence_tests": true
+}

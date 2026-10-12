@@ -1,0 +1,164 @@
+{
+  "case": "08_ebro",
+  "author_demo_folder": "tisc/demo/8_Ebro_evol",
+  "original_upstream_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "source_variant": "audited_03t_optimized",
+  "model_input_hashes_unchanged": true,
+  "plotting_override_only": true,
+  "physical_model_inputs_changed": false,
+  "input_Nx": 208,
+  "input_Ny": 110,
+  "grid_nodes_expected": 22880,
+  "initial_surface_base_elevation_m": 0.0,
+  "time_ini_Myr": -60.0,
+  "time_final_Myr": -0.0,
+  "actual_command": "tisc Ebro_evol -V1 -qplotting_mode=0",
+  "process_exit_code": 0,
+  "T_times_from_run_log": 121,
+  "last_logged_time_Myr": 0.0,
+  "native_xyw_nodes": 22880,
+  "native_xyw_finite": true,
+  "native_xyw_min_topography_m": -8964.7,
+  "native_xyw_max_topography_m": 3057.4,
+  "native_final_outputs_present": {
+    "xyw": true,
+    "xyzt": true,
+    "hrz": true,
+    "bas": true,
+    "lak": true,
+    "st": true
+  },
+  "output_inventory": [
+    {
+      "name": ".gmtcommands4",
+      "bytes": 252
+    },
+    {
+      "name": "ACTUAL_COMMAND.txt",
+      "bytes": 37
+    },
+    {
+      "name": "AUTHOR_COMMIT.txt",
+      "bytes": 41
+    },
+    {
+      "name": "EXECUTION_SOURCE_SHA256.txt",
+      "bytes": 84
+    },
+    {
+      "name": "EXIT_CODE.txt",
+      "bytes": 2
+    },
+    {
+      "name": "Ebro_evol.INT",
+      "bytes": 119
+    },
+    {
+      "name": "Ebro_evol.INT2",
+      "bytes": 59
+    },
+    {
+      "name": "Ebro_evol.PRFL",
+      "bytes": 182
+    },
+    {
+      "name": "Ebro_evol.PRM",
+      "bytes": 1226
+    },
+    {
+      "name": "Ebro_evol.REC",
+      "bytes": 164
+    },
+    {
+      "name": "Ebro_evol.SLV",
+      "bytes": 310
+    },
+    {
+      "name": "Ebro_evol.ZINI",
+      "bytes": 434
+    },
+    {
+      "name": "Ebro_evol.all",
+      "bytes": 14692902
+    },
+    {
+      "name": "Ebro_evol.bas",
+      "bytes": 1798857
+    },
+    {
+      "name": "Ebro_evol.hrz",
+      "bytes": 6826233
+    },
+    {
+      "name": "Ebro_evol.lak",
+      "bytes": 96507
+    },
+    {
+      "name": "Ebro_evol.pfl",
+      "bytes": 317957
+    },
+    {
+      "name": "Ebro_evol.screen",
+      "bytes": 127948
+    },
+    {
+      "name": "Ebro_evol.st",
+      "bytes": 793893
+    },
+    {
+      "name": "Ebro_evol.xyw",
+      "bytes": 2932671
+    },
+    {
+      "name": "Ebro_evol.xyzt",
+      "bytes": 809225
+    },
+    {
+      "name": "Ebro_evol1.UNIT",
+      "bytes": 329
+    },
+    {
+      "name": "Ebro_evol2.UNIT",
+      "bytes": 440
+    },
+    {
+      "name": "Ebro_evol3.UNIT",
+      "bytes": 587
+    },
+    {
+      "name": "Ebro_evol4.UNIT",
+      "bytes": 340
+    },
+    {
+      "name": "Ebro_evol5.UNIT",
+      "bytes": 407
+    },
+    {
+      "name": "ORIGINAL_INPUT_MANIFEST.json",
+      "bytes": 1332
+    },
+    {
+      "name": "RUN.log",
+      "bytes": 490653
+    },
+    {
+      "name": "WALL_SECONDS.txt",
+      "bytes": 7
+    },
+    {
+      "name": "tisc.gmt.eros-sed.job",
+      "bytes": 5803
+    },
+    {
+      "name": "tisc.gmt.job",
+      "bytes": 7888
+    },
+    {
+      "name": "tisc.gmt.time-graphs.job",
+      "bytes": 5403
+    }
+  ],
+  "upstream_native_input_manifest_sha256": "55cc4da67fa24b4419e1e1cc24716a091c598c040cb1a86aa4884d520931affc",
+  "interpretation": "A numerical reproduction of author-provided demo inputs, not independently verified physical geology.",
+  "checks_pass": true
+}

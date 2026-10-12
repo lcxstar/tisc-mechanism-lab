@@ -1,0 +1,85 @@
+--- normalized-author/surf_proc.c
++++ 03g-performance-derivative/surf_proc.c
+@@ -7,6 +7,15 @@
+ 
+ #include "tisc.h"
+ #include "tisclib.h"
++#include <limits.h>
++#include <string.h>
++
++/* TISC LAB 03g isolated performance optimization; NOT original upstream. */
++static unsigned int *tisc_fast_lake_marks = NULL;
++static unsigned int tisc_fast_lake_generation = 0;
++static int tisc_fast_merge_target = -1;
++/* End 03g helper globals. */
++
+ 
+ #define	NDERS   		8	/*Number of derivatives or sorrounding nodes at every node*/
+ 
+@@ -2489,17 +2498,28 @@
+ 
+ 	il = fabs((float) i_lake);
+ 
+-	for (i=0; i<Lake[il].n; i++) 
+-		if (row==Lake[il].row[i] && col==Lake[il].col[i]) {
+-		  	PRINT_ERROR("[%d][%d] tried to repeat lake node.", row, col);
++	/* 03g: constant-time exact duplicate check only for an active merge. */
++	if (tisc_fast_merge_target == il) {
++		const size_t tisc_index = (size_t)row*(size_t)Nx+(size_t)col;
++		if (tisc_fast_lake_marks[tisc_index] == tisc_fast_lake_generation) {
++			PRINT_ERROR("[%d][%d] tried to repeat lake node.", row, col);
+ 			return(0);
+ 		}
++	} else {
++		for (i=0; i<Lake[il].n; i++) 
++			if (row==Lake[il].row[i] && col==Lake[il].col[i]) {
++		  		PRINT_ERROR("[%d][%d] tried to repeat lake node.", row, col);
++				return(0);
++			}
++	}
+ 
+ 	Lake[il].n++;
+ 	Lake[il].row = realloc(Lake[il].row, Lake[il].n*sizeof(int));
+ 	Lake[il].col = realloc(Lake[il].col, Lake[il].n*sizeof(int));
+ 	Lake[il].row[Lake[il].n-1] = row;
+ 	Lake[il].col[Lake[il].n-1] = col;
++	if (tisc_fast_merge_target == il)
++		tisc_fast_lake_marks[(size_t)row*(size_t)Nx+(size_t)col] = tisc_fast_lake_generation;
+ 
+ 	/*
+ 	  Add information to the drainage grid.
+@@ -3246,6 +3266,25 @@
+ 
+ 	PRINT_DEBUGPLUS("Unifying lakes %d (%d nodes, %d exits) and %d (%d nodes, %d exits, this lake will be deleted) out of %d.", i_lake, Lake[il].n, Lake[il].n_sd, i_lake_to_delete, Lake[ild].n, Lake[ild].n_sd, nlakes);
+ 
++	/* 03g: stamp destination membership before append/merge. */
++	if (tisc_fast_lake_marks == NULL) {
++		tisc_fast_lake_marks = calloc((size_t)Nx*(size_t)Ny, sizeof(*tisc_fast_lake_marks));
++	}
++	if (tisc_fast_lake_marks != NULL) {
++		if (tisc_fast_lake_generation == UINT_MAX) {
++			memset(tisc_fast_lake_marks, 0, (size_t)Nx*(size_t)Ny*sizeof(*tisc_fast_lake_marks));
++			tisc_fast_lake_generation = 0;
++		}
++		tisc_fast_lake_generation++;
++		for (i=0; i<Lake[il].n; i++)
++			tisc_fast_lake_marks[(size_t)Lake[il].row[i]*(size_t)Nx+
++				(size_t)Lake[il].col[i]] = tisc_fast_lake_generation;
++		tisc_fast_merge_target = il;
++	} else {
++		/* Allocation failure: fall back to original exact linear scan. */
++		tisc_fast_merge_target = -1;
++	}
++
+ 	/*Changes the associated drainage lake signal*/
+ 	for (i=0; i<Lake[ild].n; i++) {
+ 		drainage[Lake[ild].row[i]][Lake[ild].col[i]].lake = i_lake;
+@@ -3253,6 +3292,8 @@
+ 	}
+ 	for (i=0; i<Lake[ild].n_sd; i++) Add_Outlet_To_Lake(Lake[ild].row_sd[i], Lake[ild].col_sd[i], drainage[Lake[ild].row_sd[i]][Lake[ild].col_sd[i]].dr_row, drainage[Lake[ild].row_sd[i]][Lake[ild].col_sd[i]].dr_col, i_lake);
+ 	
++	/* Deallocation renumbers lake IDs: discard temporary merge target first. */
++	tisc_fast_merge_target = -1;
+ 	Deallocate_Lake(ild);
+ 
+ 	return (1);
