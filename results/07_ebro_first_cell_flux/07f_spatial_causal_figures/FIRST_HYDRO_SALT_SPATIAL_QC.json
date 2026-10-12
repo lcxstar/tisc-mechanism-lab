@@ -1,0 +1,15 @@
+{
+  "first_stable_phase": "after_custom_node_defs",
+  "first_abnormal_phase": "after_routing",
+  "source_C": "Calculate_Discharge",
+  "row": 83,
+  "col": 130,
+  "x_km": 396.938,
+  "y_km": 119.266063,
+  "delta_topography_m": 7401.098653,
+  "delta_Dq_MPa": 160.885264,
+  "n_cells_above_100m_chemical_height_change": 21,
+  "not_WGS84_geographic_coordinates": true,
+  "no_numeric_interpolation": true,
+  "source_2017_old_solver_does_not_have_salt_chemistry": true
+}
