@@ -2,7 +2,7 @@ name: 09h | Ebro final source-version native 104x55 matched-grid topography PDF
 on:
   push:
     branches: [v09-ebro-historical-longterm-diagnostics]
-    paths: ['.github/workflows/09h_match_final_source_topography.yml']
+    paths: ['.github/workflows/09h_match_final_source_topography.yml', 'scripts/09h_match_original_grid_topography_diff.py']
   workflow_dispatch:
 permissions:
   contents: write
