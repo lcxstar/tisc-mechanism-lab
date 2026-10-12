@@ -1,0 +1,147 @@
+name: 08c | Ebro full 60-Myr salt-fixed original-input re-run (audited 03t variant)
+on:
+  push:
+    branches: [v08-salt-module-fix-regression]
+    paths: ['.github/workflows/08c_full_ebro_saltfixed_60Myr.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  full-60Myr-author-Ebro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Rebuild separately audited efficient 03t solver and apply only salt-mode repair on top
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          python3 -m pip install -q numpy
+          echo CI > "$HOME/.tiscdefaults"
+          mkdir -p source_audit results/08_salt_module_fix_regression/08c_full_ebro_60Myr
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c source_audit/NBSP.json
+          python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c source_audit
+          python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c source_audit
+          python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c source_audit
+          python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c source_audit
+          python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c source_audit
+          python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c source_audit
+          python3 scripts/08a_patch_salt_module_mode.py upstream/tisc/src/surf_proc.c source_audit
+          make -C upstream/tisc/src tisc
+          sha256sum upstream/bin/tisc upstream/tisc/src/surf_proc.c > source_audit/FULL_FIXED_SOLVER_SHA256.txt
+          cp source_audit/* results/08_salt_module_fix_regression/08c_full_ebro_60Myr/
+      - name: Execute complete unmodified author -60 to 0 Ma 208x110 original inputs
+        run: |
+          set -euo pipefail
+          cp -a upstream/tisc/demo/8_Ebro_evol/. ebro_full/
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          d=results/08_salt_module_fix_regression/08c_full_ebro_60Myr
+          (
+            cd ebro_full
+            echo "tisc Ebro_evol -V1 -qplotting_mode=0; normalized+audited_03t+V08_salt_gate; salt_model inherited 0" > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -f '%e' -o WALL_SECONDS.txt timeout -k 15s 6600 \
+              "$tisc_dir/bin/tisc" Ebro_evol -V1 -qplotting_mode=0 > RUN.log 2>&1
+            ec=$?
+            set -e
+            echo "$ec" > EXIT_CODE.txt
+            grep -aE '^T=' RUN.log | tail -n 6 || true
+            echo "FULL_EBRO_FIXED_EXIT:$ec"
+          )
+          cp ebro_full/RUN.log ebro_full/EXIT_CODE.txt ebro_full/WALL_SECONDS.txt ebro_full/ACTUAL_COMMAND.txt "$d/"
+      - name: Scientific QC with 2016 original history and original 03t baseline (never claim equality)
+        if: always()
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,tarfile,math,hashlib,csv,runpy
+          from pathlib import Path
+          import numpy as np
+          f=runpy.run_path('scripts/06a_audit_ebro_initial_parameters.py')['fields']
+          d=Path('results/08_salt_module_fix_regression/08c_full_ebro_60Myr')
+          raw=Path('ebro_full')
+          historic=f(Path('upstream/tisc/demo/8_Ebro_evol/Ebro_evol.screen').read_text(errors='replace'))
+          modern=f((d/'RUN.log').read_text(errors='replace'))
+          tarname=Path('results/04_09_official_demo_suite/08_ebro/08_ebro_NATIVE_RAW.tar.gz')
+          with tarfile.open(tarname,'r:gz') as tar:
+              original=f(tar.extractfile('RUN.log').read().decode(errors='replace'))
+          ages=sorted(historic)
+          cols=['age_Ma','2016_author_topo_max_m','V04_uncorrected_03t_topo_max_m',
+                'V08_fixed_03t_topo_max_m','V08_minus_2016_m','V08_minus_V04_m',
+                '2016_author_sediment_km3','V08_fixed_sediment_km3']
+          rows=[]
+          for age in ages:
+              h=historic.get(age,{});o=original.get(age,{});n=modern.get(age,{})
+              get=lambda a,k:a.get(k)
+              z=get(n,'topography_max_m');zh=get(h,'topography_max_m');zo=get(o,'topography_max_m')
+              rows.append([age,zh,zo,z,(z-zh if z is not None and zh is not None else ''),
+                           (z-zo if z is not None and zo is not None else ''),
+                           get(h,'sediment_volume_km3'),get(n,'sediment_volume_km3')])
+          with (d/'FULL60_AUTHOR2016_AND_ORIGINAL_V04_COMPARISON.csv').open('w',newline='') as io:
+              w=csv.writer(io);w.writerow(cols);w.writerows(rows)
+          native=raw/'Ebro_evol.xyw'
+          nodes=[]
+          if native.exists():
+              for line in native.read_text(errors='replace').splitlines():
+                  try:
+                      a=list(map(float,line.strip().split()[:3]))
+                      if len(a)==3 and all(map(math.isfinite,a)):nodes.append(a)
+                  except ValueError:pass
+          exitcode=int((d/'EXIT_CODE.txt').read_text()) if (d/'EXIT_CODE.txt').exists() else None
+          passall=bool(exitcode==0 and len(modern)==121 and
+                       any(abs(t)<1e-6 for t in modern) and len(nodes)==22880)
+          s={'status':'FULL_60MYR_EXECUTION_PASS' if passall else 'FULL_60MYR_EXECUTION_FAIL',
+             'source_variant':'original pinned 2026 + explicit previous 03t performance/ledger/slope patches + V08 salt gate',
+             'not_bitwise_original_2026_source':True,
+             'native_author_inputs_modified':False,
+             'temporal_interval_Myr':[-60,0],
+             'actual_exit_code':exitcode,'recorded_time_stages':len(modern),
+             'expected_input_nodes':22880,'final_native_nodes':len(nodes),
+             'historic_time_stages':len(historic),
+             'first_fixed_at_minus59_5':modern.get(-59.5,{}),
+             'old_2016_at_minus59_5':historic.get(-59.5,{}),
+             'original_uncorrected_03t_at_minus59_5':original.get(-59.5,{}),
+             'historical_exact_match_claimed':False,
+             'original_2017_source_code_not_mixed_with_2026':True,
+             'baseline_history_file':str(tarname),
+             'salt_chemistry_by_default_disabled':True}
+          (d/'FULL60_SALT_FIXED_QC.json').write_text(json.dumps(s,indent=2))
+          tarout=d/'FULL60_NATIVE_FIXED_ORIGINAL_INPUTS.tar.gz'
+          if raw.exists():
+            with tarfile.open(tarout,'w:gz',compresslevel=4) as tar:
+              for p in sorted(raw.iterdir()):
+                if p.is_file() and (p.suffix in ('.PRM','.UNIT','.ZINI','.SLV','.INT','.INT2','.REC','.PRFL','.hrz','.xyw','.xyzt','.lak','.st','.bas') or p.name in ('RUN.log','ACTUAL_COMMAND.txt','EXIT_CODE.txt','WALL_SECONDS.txt')):
+                    tar.add(p,arcname=p.name)
+            (d/'FULL60_ARCHIVE_SHA256.txt').write_text(hashlib.sha256(tarout.read_bytes()).hexdigest()+'  FULL60_NATIVE_FIXED_ORIGINAL_INPUTS.tar.gz\n')
+          print('V08_FULL60_QC',json.dumps(s)[:3000])
+          if not passall:raise SystemExit(1)
+          PY
+      - name: Permanently preserve even partial model logs, inputs, source patches and QC
+        if: always()
+        run: |
+          set -euo pipefail
+          git add -f results/08_salt_module_fix_regression/08c_full_ebro_60Myr
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'results(V08): full 60Myr original-input Ebro corrected salt-gate simulation and 2016 comparison'
+            for i in 1 2 3 4 5 6; do
+              git fetch origin v08-salt-module-fix-regression
+              git rebase origin/v08-salt-module-fix-regression
+              if git push origin HEAD:v08-salt-module-fix-regression; then exit 0; fi
+            done
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: V08_EBRO_FULL60_SALT_FIXED_ORIGINAL_GEOLOGY
+          path: results/08_salt_module_fix_regression/08c_full_ebro_60Myr
+          retention-days: 90
