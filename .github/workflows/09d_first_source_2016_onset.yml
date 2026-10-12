@@ -1,0 +1,42 @@
+name: 09d | Ebro historical 2016 vs exact first Feb and Apr 2017 C longterm divergence
+on:
+  push:
+    branches: [v09-ebro-historical-longterm-diagnostics]
+    paths: ['.github/workflows/09d_first_source_2016_onset.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  first-historic-divergence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: 1a32399e6842c32be7e01f7cc2ed8cfcb162c40d
+          path: first_upload
+      - name: Compare 121 archived stage metrics on same old geology with first complete upstream source
+        run: |
+          set -euo pipefail
+          python3 scripts/09d_compare_original_feb_apr_2017_logs.py \
+            --screen first_upload/demo/8_Ebro_evol/Ebro_evol.screen \
+            --feb-run results/09_ebro_historical_longterm/09c_first_Feb2017_source/RUN.log \
+            --apr-run results/09_ebro_historical_longterm/09a_full_2x2/old2017__old2017/RUN.log \
+            --modern-run results/09_ebro_historical_longterm/09a_full_2x2/new2026__old2017/RUN.log \
+            --parser scripts/06a_audit_ebro_initial_parameters.py \
+            --out results/09_ebro_historical_longterm/09d_FebApr2017_longterm_onset
+      - name: Permanently save original Feb vs Apr 60Myr stage-onset QC and causal constraints
+        run: |
+          set -euo pipefail
+          git add -f results/09_ebro_historical_longterm/09d_FebApr2017_longterm_onset
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qc(V09): earliest source full60 2016 history onset, flexure vs topography vs sediment'
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            git fetch origin v09-ebro-historical-longterm-diagnostics
+            git rebase origin/v09-ebro-historical-longterm-diagnostics
+            if git push origin HEAD:v09-ebro-historical-longterm-diagnostics; then exit 0; fi
+          done
+          exit 1
