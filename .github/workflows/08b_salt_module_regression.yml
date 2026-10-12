@@ -1,0 +1,69 @@
+name: 08b | TISC original Ebro + lakes corrected salt-mode regression (14 runs)
+on:
+  push:
+    branches: [v08-salt-module-fix-regression]
+    paths: ['.github/workflows/08b_salt_module_regression.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native-14-cases:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Compile original and source-minimal mode-fixed versions independently
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          python3 -m pip install -q numpy
+          echo CI > "$HOME/.tiscdefaults"
+          mkdir -p compiled audit results/08_salt_module_fix_regression/08b_native14
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c audit/NBSP_COMPILER_NORMALIZATION.json
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc compiled/TISC_ORIGINAL_NBSP
+          python3 scripts/08a_patch_salt_module_mode.py upstream/tisc/src/surf_proc.c audit
+          rm -f upstream/tisc/src/surf_proc.o upstream/bin/tisc
+          make -C upstream/tisc/src tisc
+          cp upstream/bin/tisc compiled/TISC_SALT_FIXED
+          sha256sum compiled/* > audit/ORIG_AND_FIXED_BINARY_SHA256.txt
+          cp audit/* results/08_salt_module_fix_regression/08b_native14/
+      - name: Run fourteen isolated actual author-demo numeric original vs repaired models
+        run: |
+          set -euo pipefail
+          python3 scripts/08b_regress_original_salt_modes.py \
+            --upstream upstream \
+            --orig-exe compiled/TISC_ORIGINAL_NBSP \
+            --fixed-exe compiled/TISC_SALT_FIXED \
+            --audit-parser scripts/06a_audit_ebro_initial_parameters.py \
+            --work salt_regression_work \
+            --out results/08_salt_module_fix_regression/08b_native14
+      - name: Preserve source diff, source origin manifest, every native short run, pass/fail QC
+        if: always()
+        run: |
+          set -euo pipefail
+          git add -f results/08_salt_module_fix_regression/08b_native14
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'results(V08): original Ebro and lakes 14-case native salt off/on regression'
+            for i in 1 2 3 4 5 6; do
+              git fetch origin v08-salt-module-fix-regression
+              git rebase origin/v08-salt-module-fix-regression
+              if git push origin HEAD:v08-salt-module-fix-regression; then exit 0; fi
+            done
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: V08_NATIVE_14_SOURCE_SALT_REGRESSIONS
+          path: results/08_salt_module_fix_regression/08b_native14/
+          retention-days: 90
