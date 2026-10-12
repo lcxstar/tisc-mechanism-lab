@@ -1,5 +1,7 @@
 # TISC Mechanism Lab
 
+> **Project status, 12 October 2026:** Junggar-specific forward tuning is paused. The active task is to reproduce and archive the **original author's supplied TISC demo suite**. The latest numerical laboratory, including successfully replicated full 401×401 `6_tectonics` with explicitly audited code optimizations, is preserved in [v04-official-demo-completion](https://github.com/lcxstar/tisc-mechanism-lab/tree/v04-official-demo-completion). The original 04–09 demo sweep is being independently audited in [GitHub Actions](https://github.com/lcxstar/tisc-mechanism-lab/actions/workflows/04_09_author_demo_suite.yml). The earlier 03f/03b text below is historical, **not a current completion-status claim**. Do not interpret optimized execution as an unchanged upstream binary.
+
 Independent, **public and reproducible** numerical experiments for learning the actual behavior of the [TISC](https://github.com/danigeos/tisc) program before applying it to tectonic–sedimentary evolution of the Junggar Basin or the North Tianshan.
 
 ## Current milestone — 03f, lake merge bottleneck quantitatively isolated
