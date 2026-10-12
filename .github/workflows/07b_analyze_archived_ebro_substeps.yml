@@ -1,0 +1,45 @@
+name: 07b | Analyze archived native Ebro first 10 erosion substeps
+on:
+  push:
+    branches: [v07-ebro-first-surface-cell-flux-audit]
+    paths: ['.github/workflows/07b_analyze_archived_ebro_substeps.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  locate-raw-native-cell:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install plotting numerics, preserve original TISC archive without rerunning
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q numpy matplotlib
+          test -s results/07_ebro_first_cell_flux/07a_native_substep/CELL_SUBSTEPS.csv.gz
+          test "$(cat results/07_ebro_first_cell_flux/07a_native_substep/EXIT_CODE.txt)" = "0"
+          (cd results/07_ebro_first_cell_flux/07a_native_substep && sha256sum -c SCIENCE_ARTIFACT_SHA256.txt)
+      - name: Diagnose first unstable grid cell from raw after-increment, routing and transport snapshots
+        run: |
+          python3 scripts/07b_analyze_ebro_cell_flux.py \
+            --csv results/07_ebro_first_cell_flux/07a_native_substep/CELL_SUBSTEPS.csv.gz \
+            --out results/07_ebro_first_cell_flux/07a_native_substep
+      - name: Commit coordinate-specific flux tables, locality maps and technical report
+        run: |
+          set -euo pipefail
+          git add -f results/07_ebro_first_cell_flux/07a_native_substep
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qc(Ebro): first anomalous erosion substep exact grid cell and native river mass-flux evidence'
+          for i in 1 2 3 4 5 6; do
+            git fetch origin v07-ebro-first-surface-cell-flux-audit
+            git rebase origin/v07-ebro-first-surface-cell-flux-audit
+            if git push origin HEAD:v07-ebro-first-surface-cell-flux-audit; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EBRO_07B_FIRST_ANOMALOUS_CELL_SPATIAL_DATA
+          path: results/07_ebro_first_cell_flux/07a_native_substep/
+          retention-days: 90
