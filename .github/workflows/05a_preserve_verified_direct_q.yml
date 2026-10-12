@@ -1,0 +1,47 @@
+name: 05 | Recover verified direct-Q author references from action artifact
+on:
+  push:
+    branches: [v05-author-readme-command-variants]
+    paths: ['.github/workflows/05a_preserve_verified_direct_q.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  preserve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: AUTHOR_REMAINING_standalone_Q_all_modes
+          repository: lcxstar/tisc-mechanism-lab
+          run-id: 38229891354
+          github-token: ${{ github.token }}
+          path: results/05_readme_variants/standalone_Q_all_modes
+      - name: Check original author's 3 independent elastic reference values
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          f=Path('results/05_readme_variants/standalone_Q_all_modes')
+          q=json.loads((f/'VARIANT_QC.json').read_text())
+          assert q['pass'] and q['source_kind']=='normalized_upstream'
+          for n,v in [(11,675.1),(51,711.0),(101,712.2)]:
+            assert abs(q['checks'][str(n)]['mode2_center_m']-v)<1e-3
+          assert q['checks']['11']['max_mode1_vs_mode2_grid_difference_m']==0
+          assert (f/'NATIVE_ORIGINAL_VARIANT.tar.gz').stat().st_size>1000
+          print('PASS author N11 dual inputs, N51 and N101 original loads')
+          PY
+      - name: Retry atomic commit of verified QC and original output
+        run: |
+          set -euo pipefail
+          git add -f results/05_readme_variants/standalone_Q_all_modes
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'results(author): archive exact original dual load N11 and 51/101 reference'
+          for i in 1 2 3 4 5 6; do
+            git fetch origin v05-author-readme-command-variants
+            git rebase origin/v05-author-readme-command-variants
+            if git push origin HEAD:v05-author-readme-command-variants; then exit 0; fi
+          done
+          exit 1
