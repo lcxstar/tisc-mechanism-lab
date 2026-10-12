@@ -1,0 +1,39 @@
+{
+  "original_author_option": "-qerosed_model=0 -qhydro_model=0",
+  "full_source": "author input 208x110 original -60--0Ma, audited 03t executable",
+  "reduced_source": "identical original file inputs and executable, CLI disables hydrology and surface transport",
+  "time_matched": 121,
+  "original_age_Ma": -60.0,
+  "end_age_Ma": 0.0,
+  "no_claim_of_historical_2016_agreement": true,
+  "field_comparisons": {
+    "surface_max_m": {
+      "matched": 120,
+      "mean_difference": -3447.015,
+      "maximum_abs_difference": 7869.700000000001,
+      "last_comparable_full": 3081.7,
+      "last_comparable_no_surface": 1201.9
+    },
+    "surface_min_m": {
+      "matched": 120,
+      "mean_difference": 5740.079166666666,
+      "maximum_abs_difference": 9527.2,
+      "last_comparable_full": -8973.8,
+      "last_comparable_no_surface": 152.5
+    },
+    "sediment_vol_km3": {
+      "matched": 0,
+      "mean_difference": null,
+      "maximum_abs_difference": null,
+      "last_comparable_full": 520000.0,
+      "last_comparable_no_surface": null
+    },
+    "main_lake_vol_km3": {
+      "matched": 0,
+      "mean_difference": null,
+      "maximum_abs_difference": null,
+      "last_comparable_full": 2.85,
+      "last_comparable_no_surface": null
+    }
+  }
+}
