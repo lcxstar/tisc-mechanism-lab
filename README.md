@@ -1,10 +1,10 @@
 # TISC Mechanism Lab
 
-> **Project status, 12 October 2026:** Junggar-specific forward tuning is paused. The active task is to reproduce and archive the **original author's supplied TISC demo suite**. The latest numerical laboratory, including successfully replicated full 401×401 `6_tectonics` with explicitly audited code optimizations, is preserved in [v04-official-demo-completion](https://github.com/lcxstar/tisc-mechanism-lab/tree/v04-official-demo-completion). The original 04–09 demo sweep is being independently audited in [GitHub Actions](https://github.com/lcxstar/tisc-mechanism-lab/actions/workflows/04_09_author_demo_suite.yml). The earlier 03f/03b text below is historical, **not a current completion-status claim**. Do not interpret optimized execution as an unchanged upstream binary.
+> **Updated completion, 12 October 2026:** All **seven** original TISC demo setups 4–9, including both 5_lakes cases, completed their author-specified full-time forward runs; the 1–3 flexure checks were already accepted. [View full permanent 7/7 archive, native results and QC](https://github.com/lcxstar/tisc-mechanism-lab/blob/v04-official-demo-completion/results/04_09_official_demo_suite/OFFICIAL_DEMO_STATUS.md). [Read source and scientific audit](https://github.com/lcxstar/tisc-mechanism-lab/blob/v04-official-demo-completion/docs/04_OFFICIAL_AUTHOR_DEMO_COMPLETE_REPRODUCTION.md). Caveat: the current 60–0 Ma Ebro simulation **does not agree quantitatively with the author's 2016 saved run**; this was confirmed with a separate compile-normalized original-source short test. Full run completion therefore does not establish historical numerical equality. Junggar geological evolution and drainage tuning are paused. The old 03f narrative below is retained as historical progress, not the present status.
 
 Independent, **public and reproducible** numerical experiments for learning the actual behavior of the [TISC](https://github.com/danigeos/tisc) program before applying it to tectonic–sedimentary evolution of the Junggar Basin or the North Tianshan.
 
-## Current milestone — 03f, lake merge bottleneck quantitatively isolated
+## Historical milestone — 03f, lake merge bottleneck (superseded by complete later 03t–04 suite)
 
 **11 October 2026:** Official static flexure and Te experiments are validated. Four 81x81 tectonic control cases run to 15 Myr, but their sediment-export mass balance is not validated. The original coupled 401x401 case is still **NOT reproduced**.
 
