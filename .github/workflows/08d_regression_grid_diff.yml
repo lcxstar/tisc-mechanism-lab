@@ -1,0 +1,35 @@
+name: 08d | Numeric grid residual diagnostics for V08 regression
+on:
+  push:
+    branches: [v08-salt-module-fix-regression]
+    paths: ['.github/workflows/08d_regression_grid_diff.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check original 14 native archives and compute numeric residuals
+        run: |
+          set -euo pipefail
+          python3 -m pip install -q numpy
+          test -s results/08_salt_module_fix_regression/08b_native14/V08_REGRESSION_RESULT.json
+          python3 scripts/08d_compare_saved_native_grid_diffs.py \
+            --input results/08_salt_module_fix_regression/08b_native14 \
+            --out results/08_salt_module_fix_regression/08d_native_numeric_comparison
+      - name: Preserve numeric residual evidence
+        run: |
+          set -euo pipefail
+          git add -f results/08_salt_module_fix_regression/08d_native_numeric_comparison
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qc(V08): evaluate native physical field RMS residual after corrected no-ion salt-off model'
+          for i in 1 2 3 4 5; do
+            git fetch origin v08-salt-module-fix-regression
+            git rebase origin/v08-salt-module-fix-regression
+            if git push origin HEAD:v08-salt-module-fix-regression; then exit 0; fi
+          done
+          exit 1
