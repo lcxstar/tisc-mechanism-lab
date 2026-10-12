@@ -1,0 +1,4 @@
+strength,west_original_main_outlet,east_original_main_outlet,largest_lake_outlet_mirror_equal,largest_lake_members_mirror_equal,west_lake_count,east_lake_count,changed_reflected_downstream_nodes,changed_reflected_node_types,reflected_topography_RMS_m,reflected_sediment_thickness_RMS_m,reflected_true_flexure_w_RMS_m,west_deposition_km3,east_deposition_km3,max_corrected_mass_residual_pct,reflected_pointer_mismatch_nodes
+ULP1,"(11,20)","(29,20)",true,true,3,3,2,0,7.054896494263478e-7,0,0,0.01039999999999992,0.01039999999999992,2.3806459709841255e-6,"(20,0);(20,40)"
+0p1m,"(11,20)","(29,20)",true,true,3,3,2,0,1.9512195107348283e-7,0,0,0.008899999999999877,0.008899999999999877,1.1300021773339056e-6,"(20,0);(20,40)"
+1m,"(11,20)","(29,20)",true,true,3,3,2,0,7.616280817053825e-7,0,0,0.008999999999999883,0.008999999999999885,1.6986153951290027e-6,"(20,0);(20,40)"
