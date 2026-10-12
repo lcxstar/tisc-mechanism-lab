@@ -1,0 +1,358 @@
+{
+  "sources": [
+    "Author archived 2016",
+    "Original Feb-2017 C",
+    "Original Apr-2017 C",
+    "2026 salt-fixed + old input"
+  ],
+  "same_old_2017_original_input_sha": true,
+  "ages_in_intersection": 121,
+  "stage_values": {
+    "-59.5": {
+      "max_topography_m": {
+        "historical": 1200.8,
+        "Feb2017": 1190.9,
+        "absolute_difference": -9.899999999999864,
+        "relative_difference_percent": -0.8244503664223738
+      },
+      "topography_area_integral_m3": {
+        "historical": 123000000000000.0,
+        "Feb2017": 123000000000000.0,
+        "absolute_difference": 0.0,
+        "relative_difference_percent": 0.0
+      },
+      "max_deflection_m": {
+        "historical": 10.7,
+        "Feb2017": 11.7,
+        "absolute_difference": 1.0,
+        "relative_difference_percent": 9.345794392523365
+      },
+      "maximum_precipitation_myr": {
+        "historical": 0.4,
+        "Feb2017": 0.4,
+        "absolute_difference": 0.0,
+        "relative_difference_percent": 0.0
+      },
+      "precipitation_area_integral": {
+        "historical": 97500000000.0,
+        "Feb2017": 97500000000.0,
+        "absolute_difference": 0.0,
+        "relative_difference_percent": 0.0
+      },
+      "sediment_vol_km3": {
+        "historical": 2820.0,
+        "Feb2017": 2930.0,
+        "absolute_difference": 110.0,
+        "relative_difference_percent": 3.900709219858156
+      }
+    },
+    "-55": {
+      "max_topography_m": {
+        "historical": 2316.0,
+        "Feb2017": 2034.7,
+        "absolute_difference": -281.29999999999995,
+        "relative_difference_percent": -12.145941278065628
+      },
+      "topography_area_integral_m3": {
+        "historical": 127000000000000.0,
+        "Feb2017": 129000000000000.0,
+        "absolute_difference": 2000000000000.0,
+        "relative_difference_percent": 1.5748031496062993
+      },
+      "max_deflection_m": {
+        "historical": 2159.9,
+        "Feb2017": 2148.1,
+        "absolute_difference": -11.800000000000182,
+        "relative_difference_percent": -0.5463215889624604
+      },
+      "maximum_precipitation_myr": {
+        "historical": 0.7,
+        "Feb2017": 0.6,
+        "absolute_difference": -0.09999999999999998,
+        "relative_difference_percent": -14.285714285714285
+      },
+      "precipitation_area_integral": {
+        "historical": 105000000000.0,
+        "Feb2017": 105000000000.0,
+        "absolute_difference": 0.0,
+        "relative_difference_percent": 0.0
+      },
+      "sediment_vol_km3": {
+        "historical": 20200.0,
+        "Feb2017": 23800.0,
+        "absolute_difference": 3600.0,
+        "relative_difference_percent": 17.821782178217823
+      }
+    },
+    "-50": {
+      "max_topography_m": {
+        "historical": 3284.2,
+        "Feb2017": 2027.9,
+        "absolute_difference": -1256.2999999999997,
+        "relative_difference_percent": -38.25284696425308
+      },
+      "topography_area_integral_m3": {
+        "historical": 133000000000000.0,
+        "Feb2017": 137000000000000.0,
+        "absolute_difference": 4000000000000.0,
+        "relative_difference_percent": 3.007518796992481
+      },
+      "max_deflection_m": {
+        "historical": 2995.0,
+        "Feb2017": 2924.1,
+        "absolute_difference": -70.90000000000009,
+        "relative_difference_percent": -2.367278797996664
+      },
+      "maximum_precipitation_myr": {
+        "historical": 0.9,
+        "Feb2017": 0.9,
+        "absolute_difference": 0.0,
+        "relative_difference_percent": 0.0
+      },
+      "precipitation_area_integral": {
+        "historical": 111000000000.0,
+        "Feb2017": 111000000000.0,
+        "absolute_difference": 0.0,
+        "relative_difference_percent": 0.0
+      },
+      "sediment_vol_km3": {
+        "historical": 50800.0,
+        "Feb2017": 60600.0,
+        "absolute_difference": 9800.0,
+        "relative_difference_percent": 19.291338582677167
+      }
+    },
+    "-40": {
+      "max_topography_m": {
+        "historical": 5300.6,
+        "Feb2017": 2787.0,
+        "absolute_difference": -2513.6000000000004,
+        "relative_difference_percent": -47.42104667396144
+      },
+      "topography_area_integral_m3": {
+        "historical": 162000000000000.0,
+        "Feb2017": 170000000000000.0,
+        "absolute_difference": 8000000000000.0,
+        "relative_difference_percent": 4.938271604938271
+      },
+      "max_deflection_m": {
+        "historical": 5481.9,
+        "Feb2017": 5190.0,
+        "absolute_difference": -291.89999999999964,
+        "relative_difference_percent": -5.324796147321178
+      },
+      "maximum_precipitation_myr": {
+        "historical": 1.3,
+        "Feb2017": 0.7,
+        "absolute_difference": -0.6000000000000001,
+        "relative_difference_percent": -46.15384615384616
+      },
+      "precipitation_area_integral": {
+        "historical": 119000000000.0,
+        "Feb2017": 119000000000.0,
+        "absolute_difference": 0.0,
+        "relative_difference_percent": 0.0
+      },
+      "sediment_vol_km3": {
+        "historical": 178000.0,
+        "Feb2017": 194000.0,
+        "absolute_difference": 16000.0,
+        "relative_difference_percent": 8.98876404494382
+      }
+    },
+    "-35": {
+      "max_topography_m": {
+        "historical": 6581.5,
+        "Feb2017": 3246.7,
+        "absolute_difference": -3334.8,
+        "relative_difference_percent": -50.66930031147915
+      },
+      "topography_area_integral_m3": {
+        "historical": 201000000000000.0,
+        "Feb2017": 211000000000000.0,
+        "absolute_difference": 10000000000000.0,
+        "relative_difference_percent": 4.975124378109452
+      },
+      "max_deflection_m": {
+        "historical": 6503.9,
+        "Feb2017": 6210.0,
+        "absolute_difference": -293.89999999999964,
+        "relative_difference_percent": -4.518827165239313
+      },
+      "maximum_precipitation_myr": {
+        "historical": 1.5,
+        "Feb2017": 0.8,
+        "absolute_difference": -0.7,
+        "relative_difference_percent": -46.666666666666664
+      },
+      "precipitation_area_integral": {
+        "historical": 126000000000.0,
+        "Feb2017": 127000000000.0,
+        "absolute_difference": 1000000000.0,
+        "relative_difference_percent": 0.7936507936507936
+      },
+      "sediment_vol_km3": {
+        "historical": 258000.0,
+        "Feb2017": 277000.0,
+        "absolute_difference": 19000.0,
+        "relative_difference_percent": 7.364341085271318
+      }
+    },
+    "-30": {
+      "max_topography_m": {
+        "historical": 8505.0,
+        "Feb2017": 3157.2,
+        "absolute_difference": -5347.8,
+        "relative_difference_percent": -62.87830687830688
+      },
+      "topography_area_integral_m3": {
+        "historical": 244000000000000.0,
+        "Feb2017": 251000000000000.0,
+        "absolute_difference": 7000000000000.0,
+        "relative_difference_percent": 2.8688524590163933
+      },
+      "max_deflection_m": {
+        "historical": 8231.2,
+        "Feb2017": 7983.0,
+        "absolute_difference": -248.20000000000073,
+        "relative_difference_percent": -3.015356205656535
+      },
+      "maximum_precipitation_myr": {
+        "historical": 1.9,
+        "Feb2017": 1.3,
+        "absolute_difference": -0.5999999999999999,
+        "relative_difference_percent": -31.578947368421048
+      },
+      "precipitation_area_integral": {
+        "historical": 135000000000.0,
+        "Feb2017": 136000000000.0,
+        "absolute_difference": 1000000000.0,
+        "relative_difference_percent": 0.7407407407407407
+      },
+      "sediment_vol_km3": {
+        "historical": 361000.0,
+        "Feb2017": 382000.0,
+        "absolute_difference": 21000.0,
+        "relative_difference_percent": 5.8171745152354575
+      }
+    },
+    "-20": {
+      "max_topography_m": {
+        "historical": 5734.9,
+        "Feb2017": 3945.1,
+        "absolute_difference": -1789.7999999999997,
+        "relative_difference_percent": -31.208913843310256
+      },
+      "topography_area_integral_m3": {
+        "historical": 230000000000000.0,
+        "Feb2017": 241000000000000.0,
+        "absolute_difference": 11000000000000.0,
+        "relative_difference_percent": 4.782608695652174
+      },
+      "max_deflection_m": {
+        "historical": 6853.1,
+        "Feb2017": 6720.4,
+        "absolute_difference": -132.70000000000073,
+        "relative_difference_percent": -1.936349973004928
+      },
+      "maximum_precipitation_myr": {
+        "historical": 1.4,
+        "Feb2017": 0.9,
+        "absolute_difference": -0.4999999999999999,
+        "relative_difference_percent": -35.71428571428571
+      },
+      "precipitation_area_integral": {
+        "historical": 140000000000.0,
+        "Feb2017": 137000000000.0,
+        "absolute_difference": -3000000000.0,
+        "relative_difference_percent": -2.142857142857143
+      },
+      "sediment_vol_km3": {
+        "historical": 409000.0,
+        "Feb2017": 430000.0,
+        "absolute_difference": 21000.0,
+        "relative_difference_percent": 5.134474327628362
+      }
+    },
+    "-10": {
+      "max_topography_m": {
+        "historical": 7002.9,
+        "Feb2017": 2222.5,
+        "absolute_difference": -4780.4,
+        "relative_difference_percent": -68.26314812434848
+      },
+      "topography_area_integral_m3": {
+        "historical": 118000000000000.0,
+        "Feb2017": 129000000000000.0,
+        "absolute_difference": 11000000000000.0,
+        "relative_difference_percent": 9.322033898305085
+      },
+      "max_deflection_m": {
+        "historical": 6224.8,
+        "Feb2017": 6047.1,
+        "absolute_difference": -177.69999999999982,
+        "relative_difference_percent": -2.854710191492093
+      },
+      "maximum_precipitation_myr": {
+        "historical": 1.6,
+        "Feb2017": 0.6,
+        "absolute_difference": -1.0,
+        "relative_difference_percent": -62.5
+      },
+      "precipitation_area_integral": {
+        "historical": 131000000000.0,
+        "Feb2017": 130000000000.0,
+        "absolute_difference": -1000000000.0,
+        "relative_difference_percent": -0.7633587786259542
+      },
+      "sediment_vol_km3": {
+        "historical": 429000.0,
+        "Feb2017": 462000.0,
+        "absolute_difference": 33000.0,
+        "relative_difference_percent": 7.6923076923076925
+      }
+    },
+    "-0.5": {
+      "max_topography_m": {
+        "historical": 7537.1,
+        "Feb2017": 1872.9,
+        "absolute_difference": -5664.200000000001,
+        "relative_difference_percent": -75.15092011516367
+      },
+      "topography_area_integral_m3": {
+        "historical": 126000000000000.0,
+        "Feb2017": 127000000000000.0,
+        "absolute_difference": 1000000000000.0,
+        "relative_difference_percent": 0.7936507936507936
+      },
+      "max_deflection_m": {
+        "historical": 5701.6,
+        "Feb2017": 5441.6,
+        "absolute_difference": -260.0,
+        "relative_difference_percent": -4.56012347411253
+      },
+      "maximum_precipitation_myr": {
+        "historical": 1.7,
+        "Feb2017": 0.6,
+        "absolute_difference": -1.1,
+        "relative_difference_percent": -64.70588235294119
+      },
+      "precipitation_area_integral": {
+        "historical": 126000000000.0,
+        "Feb2017": 123000000000.0,
+        "absolute_difference": -3000000000.0,
+        "relative_difference_percent": -2.380952380952381
+      },
+      "sediment_vol_km3": {
+        "historical": 463000.0,
+        "Feb2017": 488000.0,
+        "absolute_difference": 25000.0,
+        "relative_difference_percent": 5.399568034557236
+      }
+    }
+  },
+  "area_integral_is_signed_height_times_cell_area": true,
+  "maxima_are_location_mismatched": true,
+  "model_rain_units_in_2016_Feb2017_identical": true,
+  "2016_original_binary_available": false
+}
