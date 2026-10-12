@@ -2,7 +2,7 @@ name: 08c | Ebro full 60-Myr salt-fixed original-input re-run (audited 03t varia
 on:
   push:
     branches: [v08-salt-module-fix-regression]
-    paths: ['.github/workflows/08c_full_ebro_saltfixed_60Myr.yml']
+    paths: ['.github/workflows/08c_full_ebro_saltfixed_60Myr.yml', 'scripts/08a_patch_salt_module_mode.py']
   workflow_dispatch:
 permissions:
   contents: write
@@ -40,6 +40,7 @@ jobs:
       - name: Execute complete unmodified author -60 to 0 Ma 208x110 original inputs
         run: |
           set -euo pipefail
+          mkdir -p ebro_full
           cp -a upstream/tisc/demo/8_Ebro_evol/. ebro_full/
           export tisc_dir="$GITHUB_WORKSPACE/upstream/"
           d=results/08_salt_module_fix_regression/08c_full_ebro_60Myr
