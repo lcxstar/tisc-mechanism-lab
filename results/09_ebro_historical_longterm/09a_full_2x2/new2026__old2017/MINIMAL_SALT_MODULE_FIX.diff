@@ -1,0 +1,42 @@
+--- pinned_upstream_normalized/surf_proc.c
++++ v08_experimental_fixed/surf_proc.c
+@@ -22,6 +22,7 @@
+ extern float C_Ca_RIV, C_SO4_RIV, C_Na_RIV, C_Cl_RIV;
+ extern float GYPSUM_PRECIP_CN, HALITE_PRECIP_CN;
+ 
++extern int salt_model;
+ /*Declaration of functions at libreria.c*/
+ float 	**alloc_matrix  (int num_fil, int num_col);
+ int 	free_matrix 	(float **matrix, int num_fil);
+@@ -594,13 +595,13 @@
+ 				}
+ 			}
+ 
+-			if (precip_Gypsum_flux > 0 || precip_Halite_flux > 0) {
++			if (salt_model && (precip_Gypsum_flux > 0 || precip_Halite_flux > 0)) {
+ 				float vol_rate_gypsum = precip_Gypsum_flux / 2300.0;
+ 				float vol_rate_halite = precip_Halite_flux / 2160.0;
+ 				float dh_gypsum = vol_rate_gypsum * dt_st / (cfg->dx * cfg->dy);
+ 				float dh_halite = vol_rate_halite * dt_st / (cfg->dx * cfg->dy);
+ 				float dh_salt = dh_gypsum + dh_halite;
+-				if (precip_Gypsum_flux > 0 || precip_Halite_flux > 0) {
++				if (salt_model && (precip_Gypsum_flux > 0 || precip_Halite_flux > 0)) {
+ 					gypsum_flux_grid[row][col] += precip_Gypsum_flux;
+ 					halite_flux_grid[row][col] += precip_Halite_flux;
+ 					ctx->total_precip_gypsum_rate += precip_Gypsum_flux;
+@@ -671,6 +672,7 @@
+ 	}
+ 	
+ 	/* Distribute salt deposition */
++	if (salt_model) {  /* 2026 Ebro V08: no salt material updates when mode is off */
+ 	float *lake_gypsum_flux = calloc(nlakes + 1, sizeof(float));
+ 	float *lake_halite_flux = calloc(nlakes + 1, sizeof(float));
+ 
+@@ -741,6 +743,7 @@
+ 
+ 	free(lake_gypsum_flux);
+ 	free(lake_halite_flux);
++	} /* end physically active salt precipitation */
+ 	free_matrix(gypsum_flux_grid, cfg->Ny);
+ 	free_matrix(halite_flux_grid, cfg->Ny);
+ 
