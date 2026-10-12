@@ -2,7 +2,7 @@
 """Exact same-geometry 104x55 Ebro modern-minus-2017 final surface difference.
 
 Both models ran all -60..0 Myr with untouched byte-identical original old
-PRM/UNIT/ZINI geometry; native .xyw XY+surface third column are aligned by
+PRM/UNIT/ZINI geometry; native .xyw columns 1-2 XY and 6 topography are aligned by
 coordinate, not index. The author 2016 spatial snapshot is unavailable.
 """
 from pathlib import Path
@@ -27,8 +27,8 @@ def native(p):
   out=[]
   for line in s.splitlines():
    q=line.split()
-   if len(q)<3:continue
-   try:row=list(map(float,q[:3]))
+   if len(q)<6:continue
+   try:row=[float(q[0]),float(q[1]),float(q[5])]
    except ValueError:continue
    if all(math.isfinite(x) for x in row):out.append(row)
   return np.asarray(out)
@@ -54,6 +54,9 @@ xunits='km' if max(abs(extent[0]),abs(extent[1]))<3000 else 'm'
 imax=np.argmax(dz);imin=np.argmin(dz)
 record={'comparison':'new2026_source_V08_salt_fixed__old2017_input MINUS old2017_source__old2017_input',
  'both_original_geological_input_SHA_identical':True,'same_coordinate_pairs':104*55,
+ 'xyw_native_columns':{'1':'x_km','2':'y_km','3':'water_discharge_m3s','4':'sediment_flux_kg_s','5':'river_or_lake_type','6':'topography_m'},
+ 'actual_topography_column_1_based':6,
+ 'previous_third_column_water_maps_SUPERSEDED':True,
  'max_positive_delta_m':float(dz[imax]),'positive_site_original_native_x':float(coords[imax,0]),'positive_site_original_native_y':float(coords[imax,1]),
  'max_negative_delta_m':float(dz[imin]),'negative_site_original_native_x':float(coords[imin,0]),'negative_site_original_native_y':float(coords[imin,1]),
  'mean_delta_m':float(dz.mean()),'median_delta_m':float(np.median(dz)),
