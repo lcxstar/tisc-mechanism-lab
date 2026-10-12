@@ -1,0 +1,69 @@
+--- 03j-A/surf_proc.c
++++ 03j-B/surf_proc.c
+@@ -426,6 +426,17 @@
+ 	unsigned int *tisc_03ja_stamps=calloc(tisc_03ja_cap,sizeof(unsigned int));
+ 	unsigned int tisc_03ja_gen=1;
+ 	tisc_03ja_cache_hits=tisc_03ja_cache_misses=tisc_03ja_cache_invalidations=0;
++	unsigned long long tisc_03jb_predicate_skips=0, tisc_03jb_predicate_fallbacks=0;
++	int tisc_03jb_safe=(permeability==0);
++	if (tisc_03jb_safe) {
++		for (int rr=0; rr<cfg->Ny && tisc_03jb_safe; rr++)
++			for (int cc=0; cc<cfg->Nx; cc++) {
++				if (!isfinite(precipitation[rr][cc]) || precipitation[rr][cc]<0 ||
++				    !isfinite(drainage[rr][cc].discharge) || drainage[rr][cc].discharge<0) {
++					tisc_03jb_safe=0; break;
++				}
++			}
++	}
+ 	/*
+ 	  This loop starts from the highest cell and 
+ 	  descends node by node transferring water to 
+@@ -447,7 +458,13 @@
+ 			if (il) {
+ 				float lake_evap=0;
+ 				lake_evap=tisc_03ja_lake_evap(il, tisc_03ja_cache, tisc_03ja_stamps, tisc_03ja_gen, tisc_03ja_cap);
+-				if (Lake_Input_Discharge(cfg, il)<lake_evap && Lake[il].n>1) {
++				/* 03j-B: every term in input-sum is nonnegative while invariant holds.
++				 * If evaporation is EXACTLY zero, deletion inequality is false.
++				 * For any other value, original summation is evaluated unchanged. */
++				int tisc_03jb_definitely_no_delete=(tisc_03jb_safe && lake_evap==0);
++				if (tisc_03jb_definitely_no_delete) tisc_03jb_predicate_skips++;
++				else tisc_03jb_predicate_fallbacks++;
++				if (!tisc_03jb_definitely_no_delete && Lake_Input_Discharge(cfg, il)<lake_evap && Lake[il].n>1) {
+ 					PRINT_DEBUGPLUS("Deletion attempt for [%d][%d] from lake %d ; lake_inp:%f ; evap:%f ; lakenodes:%d", row,col, il, Lake_Input_Discharge(cfg, il), lake_evap, Lake[il].n);
+ 					
+ 					Attempt_Delete_Node_From_Lake (cfg, ctx, row,col);
+@@ -707,7 +724,23 @@
+ 			drainage[row][col].C_Ca = final_C_Ca;
+ 			drainage[row][col].C_SO4 = final_C_SO4;
+ 			drainage[row][col].C_Na = final_C_Na;
+-			drainage[row][col].C_Cl = final_C_Cl;
++				drainage[row][col].C_Cl = final_C_Cl;
++			/* Check every possible flow write destination before next node.
++			 * Once violated, original path is permanently restored. */
++			if (tisc_03jb_safe) {
++				if (!isfinite(drainage[row][col].discharge) || drainage[row][col].discharge<0)
++					tisc_03jb_safe=0;
++				if (IN_DOMAIN(drow,dcol)) {
++					if (!isfinite(drainage[drow][dcol].discharge) || drainage[drow][dcol].discharge<0)
++						tisc_03jb_safe=0;
++					if (drainage[drow][dcol].type=='L' &&
++					    IN_DOMAIN(drainage[drow][dcol].dr_row, drainage[drow][dcol].dr_col)) {
++						int r2=drainage[drow][dcol].dr_row, c2=drainage[drow][dcol].dr_col;
++						if (!isfinite(drainage[r2][c2].discharge) || drainage[r2][c2].discharge<0)
++							tisc_03jb_safe=0;
++					}
++				}
++			}
+ 	}
+ 	
+ 	/* Distribute salt deposition */
+@@ -850,6 +883,8 @@
+ 		}
+ 	}
+ 
++	fprintf(stderr,"\nTISC_03J_B zero_evap_proven_skips=%llu original_predicate_fallbacks=%llu nonnegative_invariant_at_end=%d grid=%d\n",
++		tisc_03jb_predicate_skips,tisc_03jb_predicate_fallbacks,tisc_03jb_safe,Nx*Ny);
+ 	fprintf(stderr,"\nTISC_03J_A hits=%llu misses=%llu invalidations=%llu grid=%d\n",
+ 		tisc_03ja_cache_hits,tisc_03ja_cache_misses,tisc_03ja_cache_invalidations,Nx*Ny);
+ 	fflush(stderr);
