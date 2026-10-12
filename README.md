@@ -1,3 +1,18 @@
+# V07 — Ebro first erosion-substep numerical spike causally resolved
+
+**12 October 2026:** The 7401.1 m sudden height addition in the first -60 to -59.95 Ma surface substep has been localized to original 2026 `Calculate_Discharge()` and confirmed to be **gypsum/halite precipitation despite salt_model=0**. We used original 208×110 Ebro author files and a diagnostic-only original-source build (only two compiler NBSPs normalized), then separately verified the salt switch with five source/ion counterfactuals. **Source-level chemical flux at row83 col130 was 67.66 kg/s gypsum + 95.58 kg/s halite**. No Junggar model changes.
+
+- [**V07 completed causal scientific audit, scripts and limitations**](docs/07_EBRO_FIRST_SUBSTEP_SALT_DEPOSITION_ROOT_CAUSE_20261012.md)
+- [Actual five salt-switch / ion controls, source-level mass flow and full logs](results/07_ebro_first_cell_flux/07e_salt_cause/SALT_CAUSAL_EXPERIMENT_SUMMARY.md)
+- [First exact hydrology function boundary and growing cells](results/07_ebro_first_cell_flux/07c_function_source/FUNCTION_STAGE_CAUSAL_LOCALIZATION.md)
+- [First ten substep native grid snapshots, per-cell routing and raw mass fields](results/07_ebro_first_cell_flux/07a_native_substep/FIRST_UNSTABLE_CELL_REPORT.md)
+- [Spatial maps and QGIS-usable LOCAL model XY GeoJSON](results/07_ebro_first_cell_flux/)
+- [Original conditional bypass proved by successful 07e GitHub workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38245090977)
+
+**Still unresolved:** guarding the two salt-deposition loops reduces the first-step Ebro maximum from 9071.6m to **1521.6m**, which remains different from author 2016 **1200.8m**, and full 60-Myr equality is untested. This experimental patch is **not an upstream production release**.
+
+---
+
 # Ebro Initial-Condition and Version Audit — completed first-step forensic matrix
 
 **Outcome (12 October 2026):** The historical 2016 Ebro result at -59.5 Ma is 1200.8 m maximum surface elevation. The original 2017 source with its 2017 104×55 example produces **1190.9 m**, while the 2026 current source with the 2026 208×110 example produces **9071.6 m**. Direct 2017-versus-2026 **source × input cross-tests (5/5)** prove a major interaction, not an individual Te or density-default error. The first-stage early-window numerical anomaly can be suppressed by returning to 104×55, reducing erosion timestep to 0.005 Myr, or disabling hydro transport, but **the precise faulty transport/localization mechanism and full 60-Myr 2016 historical equality are still unproven**.
