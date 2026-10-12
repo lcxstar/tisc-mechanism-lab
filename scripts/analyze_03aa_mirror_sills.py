@@ -92,12 +92,18 @@ for strength in ("ULP1","0p1m","1m"):
     assert {mirror(k) for k in keys} == set(ea["xyw"])
     dif_top, dif_sed, dif_w = [], [], []
     different_down, different_class = 0,0
+    mismatched_downstream_nodes = []
     for k in keys:
         vk, ve = wa["xyw"][k], ea["xyw"][mirror(k)]
         dif_top.append(vk["topo"]-ve["topo"])
         dif_sed.append(wa["sed"][k]-ea["sed"][mirror(k)])
         dif_w.append(wa["flex"][k]-ea["flex"][mirror(k)])
-        different_down += mirror_pointer(vk["down"]) != ve["down"]
+        if mirror_pointer(vk["down"]) != ve["down"]:
+            different_down += 1
+            mismatched_downstream_nodes.append(dict(west_node=k, mirrored_east_node=mirror(k),
+                west_class=vk["kind"],east_class=ve["kind"],
+                expected_east_destination=mirror_pointer(vk["down"]),
+                actual_east_destination=ve["down"]))
         different_class += vk["kind"] != ve["kind"]
     wout = wa["lake"]["outlets"]
     eout = ea["lake"]["outlets"]
@@ -110,6 +116,7 @@ for strength in ("ULP1","0p1m","1m"):
         actual_main_lake_members_mirror_equal=mirrored_wmembers==ea["lake"]["members"],
         west_lake_count=wa["n_lakes"],east_lake_count=ea["n_lakes"],
         changed_reflected_downstream_nodes=different_down,
+        exact_reflected_downstream_mismatches=str(mismatched_downstream_nodes),
         changed_reflected_node_types=different_class,
         reflected_topography_RMS_m=rms(dif_top),
         reflected_sediment_thickness_RMS_m=rms(dif_sed),
