@@ -1,0 +1,169 @@
+name: 05 | Remaining original author README flexure, river and Ebro options
+on:
+  push:
+    branches: [v05-author-readme-command-variants]
+    paths: ['.github/workflows/05_author_readme_small_variants.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  author-remaining:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - case: standalone_Q_all_modes
+            demo: root
+            mode: normalized_upstream
+          - case: flex_project_T5000
+            demo: 3_flexure
+            mode: normalized_upstream
+          - case: conic_island_tf10
+            demo: 4_river_transport
+            mode: audited_03t
+          - case: ebro_without_surface
+            demo: 8_Ebro_evol
+            mode: audited_03t
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Pin source, install compiler, and build exact declared variant
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time
+          echo CI > "$HOME/.tiscdefaults"
+          mkdir -p "working/${{ matrix.case }}" "variant_results/${{ matrix.case }}"
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c variant_results/${{ matrix.case }}/NBSP.json
+          if [ "${{ matrix.mode }}" = "audited_03t" ]; then
+            python3 scripts/patch_fast_lake_membership.py upstream/tisc/src/surf_proc.c "variant_results/${{ matrix.case }}"
+            python3 scripts/patch_03j_evap_cache.py upstream/tisc/src/surf_proc.c "variant_results/${{ matrix.case }}"
+            python3 scripts/patch_03j_zero_evap_fastpath.py upstream/tisc/src/surf_proc.c "variant_results/${{ matrix.case }}"
+            python3 scripts/patch_03k_nonnegative_incision_slope.py upstream/tisc/src/surf_proc.c "variant_results/${{ matrix.case }}"
+            python3 scripts/profile_03s_double_ledger.py upstream/tisc/src/surf_proc.c "variant_results/${{ matrix.case }}"
+            python3 scripts/patch_03t_correct_sediment_balance.py upstream/tisc/src/surf_proc.c "variant_results/${{ matrix.case }}"
+          fi
+          make -C upstream/tisc/src tisc
+          sha256sum upstream/bin/tisc > variant_results/${{ matrix.case }}/BIN_SHA256.txt
+          if [ "${{ matrix.demo }}" = root ]; then
+            cp upstream/tisc/demo/1st_example_load.xyp upstream/tisc/demo/2nd_example_load.xyp working/${{ matrix.case }}/
+          else
+            cp -a upstream/tisc/demo/${{ matrix.demo }}/. working/${{ matrix.case }}/
+          fi
+          find working/${{ matrix.case }} -maxdepth 1 -type f \( -name '*.PRM' -o -name '*.UNIT' -o -name '*.ZINI' -o -name '*.xyp' -o -name '*.SLV' \) -exec sha256sum {} \; > variant_results/${{ matrix.case }}/AUTHOR_INPUT_SHA256.txt
+      - name: Execute documented remaining CLI commands on original inputs
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd working/${{ matrix.case }}
+          if [ "${{ matrix.case }}" = standalone_Q_all_modes ]; then
+            for n in 11 51 101; do
+              echo "tisc -Q1st_example_load.xyp -N$n -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=0" > "MODE1_N$n.cmd"
+              tisc -Q1st_example_load.xyp -N$n -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=0 > "MODE1_N$n.log" 2>&1
+              echo "tisc -Q2nd_example_load.xyp -N$n -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4" > "MODE2_N$n.cmd"
+              tisc -Q2nd_example_load.xyp -N$n -D-2.5e5/2.5e5/-2.5e5/2.5e5 -qmode_interp=4 > "MODE2_N$n.log" 2>&1
+            done
+          elif [ "${{ matrix.case }}" = flex_project_T5000 ]; then
+            echo 'tisc flex -T5000 -V1 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s 4800 tisc flex -T5000 -V1 -qplotting_mode=0 > RUN.log 2>&1
+          elif [ "${{ matrix.case }}" = conic_island_tf10 ]; then
+            echo 'tisc conic_island -tf10 -V1 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s 4800 tisc conic_island -tf10 -V1 -qplotting_mode=0 > RUN.log 2>&1
+          elif [ "${{ matrix.case }}" = ebro_without_surface ]; then
+            echo 'tisc Ebro_evol -qerosed_model=0 -qhydro_model=0 -V1 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 15s 4800 tisc Ebro_evol -qerosed_model=0 -qhydro_model=0 -V1 -qplotting_mode=0 > RUN.log 2>&1
+          fi
+      - name: Inspect physical-output grids, reference magnitudes and keep negative cases visible
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json,math,shutil,tarfile
+          from pathlib import Path
+          d=Path('working/${{ matrix.case }}');o=Path('variant_results/${{ matrix.case }}')
+          result={'case':'${{ matrix.case }}','author_source_commit':'d18b7d270f4d671b80223e10dede329ad35cafdd',
+                  'source_kind':'${{ matrix.mode }}','original_physics_inputs_untouched':True,
+                  'plotting_disabled_not_physics_change':True,
+                  'checks':{},'pass':False}
+          if '${{ matrix.case }}'=='standalone_Q_all_modes':
+            def coords(path):
+              data={}
+              for line in path.read_text(errors='replace').splitlines():
+                v=line.strip().split()
+                if len(v)!=4:continue
+                try: vals=[float(x) for x in v]
+                except ValueError:continue
+                if all(math.isfinite(x) for x in vals):data[(vals[0],vals[1])]=vals[2]
+              return data
+            refs={11:675.1,51:711,101:712.2}
+            passed=True
+            for n,r in refs.items():
+              a=coords(d/f'MODE1_N{n}.log');b=coords(d/f'MODE2_N{n}.log')
+              assert len(a)==n*n and len(b)==n*n, 'Missing direct load grid'
+              assert (0.0,0.0) in a and (0.0,0.0) in b
+              observed=abs(b[(0.,0.)]);delta=max(abs(a[k]-b[k]) for k in a)
+              result['checks'][str(n)]={'expected_center_m':r,'mode2_center_m':observed,
+                  'mode1_center_m':abs(a[(0.,0.)]),'max_mode1_vs_mode2_grid_difference_m':delta}
+              passed &=abs(observed-r)<3 and delta<3
+            result['pass']=passed
+          else:
+            prefix={'flex_project_T5000':'flex','conic_island_tf10':'conic_island',
+                    'ebro_without_surface':'Ebro_evol'}['${{ matrix.case }}']
+            xyw=d/(prefix+'.xyw')
+            n=0;finite=True
+            if xyw.exists():
+              for line in xyw.read_text(errors='replace').splitlines():
+                z=line.split()
+                if len(z)>=8 and not line.startswith('#'):
+                  try:v=(float(z[0]),float(z[1]),float(z[5]))
+                  except ValueError:continue
+                  n+=1;finite &= all(math.isfinite(x) for x in v)
+            expected={'flex_project_T5000':141*141,'conic_island_tf10':101*101,
+                      'ebro_without_surface':208*110}['${{ matrix.case }}']
+            log=(d/'RUN.log').read_text(errors='replace') if (d/'RUN.log').exists() else ''
+            ages=[]
+            import re
+            ages=[float(m) for m in re.findall(r'(?m)^\\s*T=\\s*([-+0-9.eE]+)\\s*My',log)]
+            target={'flex_project_T5000':9,'conic_island_tf10':10,'ebro_without_surface':0}['${{ matrix.case }}']
+            last=ages[-1] if ages else None
+            result['checks']={'native_output_nodes':n,'expected_nodes':expected,'native_values_finite':finite,
+                              'last_printed_age':last,'expected_end':target,
+                              'command':(d/'ACTUAL_COMMAND.txt').read_text().strip() if (d/'ACTUAL_COMMAND.txt').exists() else None}
+            result['pass']=bool(n==expected and finite and last is not None and abs(last-target)<.51)
+          (o/'VARIANT_QC.json').write_text(json.dumps(result,indent=2))
+          with tarfile.open(o/'NATIVE_ORIGINAL_VARIANT.tar.gz','w:gz',compresslevel=4) as tf:
+            for f in sorted(d.iterdir()):
+              if f.is_file() and (f.suffix.upper() in {'.PRM','.UNIT','.ZINI','.SLV','.XYW','.HRZ','.XYZT','.LAK','.BAS','.ST','.LOG','.CMD','.TXT'}):
+                tf.add(f,arcname=f.name)
+          print('AUTHOR_EXTRA_CLI_QC',json.dumps(result))
+          if not result['pass']:raise SystemExit('Author remaining readme variant did not satisfy output reference QC')
+          PY
+      - name: Persist numerical results on public branch
+        if: always()
+        run: |
+          set -euo pipefail
+          dest="results/05_readme_variants/${{ matrix.case }}"
+          mkdir -p "$dest"
+          cp -a variant_results/${{ matrix.case }}/. "$dest/"
+          git add -f "$dest"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m "results(author): preserve supplementary README command ${{ matrix.case }}"
+            git pull --rebase origin v05-author-readme-command-variants
+            git push origin HEAD:v05-author-readme-command-variants
+          fi
+      - name: Durable artifact fall-back, including failed examples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'AUTHOR_REMAINING_${{ matrix.case }}'
+          path: variant_results/${{ matrix.case }}/
+          retention-days: 90
