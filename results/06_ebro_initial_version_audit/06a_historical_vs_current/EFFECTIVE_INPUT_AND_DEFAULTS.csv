@@ -1,0 +1,33 @@
+key,value_in_author_demo_prm,2026_template_default,effective_2026_value_source,effective_2026_value,explicit_or_default
+version,TISC_2016-08-30,TISC_2026-03-22_factorized_stable,explicit demo PRM,TISC_2016-08-30,True
+Nx,208,51,explicit demo PRM,208,True
+Ny,110,51,explicit demo PRM,110,True
+Timeini,-60,0,explicit demo PRM,-60,True
+Timefinal,-0,10,explicit demo PRM,-0,True
+dt,.5,.5,explicit demo PRM,.5,True
+dt_eros,.05,.001,explicit demo PRM,.05,True
+random_topo,5,0,explicit demo PRM,5,True
+isost_model,1,1,explicit demo PRM,1,True
+Te,,15000,inherited current source template,15000,False
+densmantle,3250,,explicit demo PRM,3250,True
+densasthen,,3200,inherited current source template,3200,False
+denscrust,2800,2850,explicit demo PRM,2800,True
+denssedim,2150,1900,explicit demo PRM,2150,True
+rain,200,500,explicit demo PRM,200,True
+Krain,200,0,explicit demo PRM,200,True
+CXrain,0,0e3,explicit demo PRM,0,True
+CYrain,,00e3,inherited current source template,00e3,False
+hydro_model,1,0,explicit demo PRM,1,True
+evaporation,1400,00,explicit demo PRM,1400,True
+erosed_model,2,0,explicit demo PRM,2,True
+K_river_cap,60,500,explicit demo PRM,60,True
+erodability,140e3,1e-7,explicit demo PRM (legacy alias),140e3,True
+erodibility,,1e-7,inherited current source template,1e-7,False
+erodability_sed,60e3,1e-6,explicit demo PRM (legacy alias),60e3,True
+erodibility_sed,,1e-6,inherited current source template,1e-6,False
+l_fluv_sedim,20e3,10e3,explicit demo PRM,20e3,True
+UNIT_1,"{""time_load"": ""-60"", ""time_stop"": ""-28"", ""vel_x"": ""0"", ""vel_y"": ""-3.2"", ""fault_load"": ""1"", ""cut_all"": ""1"", ""dens_load"": null}",,Ebro_evol1.UNIT,,True
+UNIT_2,"{""time_load"": ""-58"", ""time_stop"": ""-26"", ""vel_x"": ""0"", ""vel_y"": "".60"", ""fault_load"": ""1"", ""cut_all"": ""1"", ""dens_load"": null}",,Ebro_evol2.UNIT,,True
+UNIT_3,"{""time_load"": ""-48"", ""time_stop"": ""-19"", ""vel_x"": ""0"", ""vel_y"": ""1.2"", ""fault_load"": ""1"", ""cut_all"": ""1"", ""dens_load"": null}",,Ebro_evol3.UNIT,,True
+UNIT_4,"{""time_load"": ""-45"", ""time_stop"": ""-28"", ""vel_x"": ""0"", ""vel_y"": ""-3.5"", ""fault_load"": ""1"", ""cut_all"": ""1"", ""dens_load"": null}",,Ebro_evol4.UNIT,,True
+UNIT_5,"{""time_load"": ""-23.5"", ""time_stop"": ""-8"", ""vel_x"": ""9"", ""vel_y"": ""-9"", ""fault_load"": ""1"", ""cut_all"": ""1"", ""dens_load"": ""2700""}",,Ebro_evol5.UNIT,,True

@@ -1,0 +1,28 @@
+{
+  "author_old_version": "TISC_2016-08-30",
+  "current_template_version": "TISC_2026-03-22_factorized_stable",
+  "current_demo_Prm_version": "TISC_2016-08-30",
+  "grid": "208x110",
+  "historical_log_times": 121,
+  "current_run_times": 121,
+  "author_zini_sha256": "ed9693d9954e20a4dd147d60e514b9db1f6615f4e1148c1a2418b9faf155b642",
+  "no_EET_file_in_source": true,
+  "Te_in_Ebro_PRM": null,
+  "current_inherited_Te_m": "15000",
+  "densmantle_explicit": "3250",
+  "densasthen_explicit": null,
+  "densasthen_inherited_default": "3200",
+  "first_timestep_historic_load_N": -4210000000000000.0,
+  "first_timestep_modern_load_N": 1.06e+17,
+  "first_timestep_historic_deflection_max_m": 10.7,
+  "first_timestep_modern_deflection_max_m": 60.3,
+  "first_timestep_historic_topography_max_m": 1200.8,
+  "first_timestep_modern_topography_max_m": 9071.6,
+  "version_or_input_caused_firststep_divergence_proven": false,
+  "report_sources": [
+    "Ebro_evol.screen historical version",
+    "v04/08_ebro/08_ebro_NATIVE_RAW.tar.gz / RUN.log",
+    "original GitHub Ebro PRM UNIT ZINI",
+    "2026 template.PRM"
+  ]
+}
