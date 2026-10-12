@@ -1,0 +1,36 @@
+name: 05 | Compare author's Ebro without erosion/hydrology to full model
+on:
+  push:
+    branches: [v05-author-readme-command-variants]
+    paths:
+      - '.github/workflows/05_ebro_surface_off_comparison.yml'
+      - 'scripts/compare_ebro_surface_off_option.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare preserved native time histories of same-physics model
+        run: |
+          set -euo pipefail
+          python3 scripts/compare_ebro_surface_off_option.py \
+            --baseline results/04_09_official_demo_suite/08_ebro/08_ebro_NATIVE_RAW.tar.gz \
+            --no-surface results/05_readme_variants/ebro_without_surface/NATIVE_ORIGINAL_VARIANT.tar.gz \
+            --out results/05_readme_variants/ebro_surface_process_isolation
+      - name: Preserve results
+        run: |
+          set -euo pipefail
+          git add -f results/05_readme_variants/ebro_surface_process_isolation
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qc(author): confirm and quantify full Ebro versus no surface process case'
+          for try in 1 2 3 4 5; do
+            git fetch origin v05-author-readme-command-variants
+            git rebase origin/v05-author-readme-command-variants
+            if git push origin HEAD:v05-author-readme-command-variants; then exit 0; fi
+          done
+          exit 1
