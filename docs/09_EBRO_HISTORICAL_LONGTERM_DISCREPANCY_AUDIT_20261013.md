@@ -106,3 +106,18 @@ V09 将问题区分为三项。其一，2016 历史日志与最早可公开编�
 重要限制是，历史 `Ebro_evol.screen` 只有逐时期文字摘要，缺失 2016 年逐网格结果和精确 C 源码，因此无法声称已经证明某一个局部函数是 2016–2017 长期差异的最终原因。历史 2016 年最终最大高程也不是独立地质观测值，不应该人为调参去拟合它。
 
 **本研究仅围绕作者埃布罗程序版本开展。准噶尔盆地演化模型继续保持暂停。**
+
+## 8. V09h 同一 104×55 网格的真实地形空间差异，以及原生字段更正
+
+对两个已经完成整个 -60–0 Ma 模拟的结果，选用完全相同的 2017 年地质输入，逐一配对 **5720 个真实原生空间网格节点**，直接比较 2017 年源码与 2026 年最小盐修复源码的**最终地形高程**。这里使用 `.xyw` 的**第 6 列 `topo[m]`**，绝不能取第 3 列。原 TISC 源码 `write_file_drainage()` 明确指出第 3 列是水流量 `water(m3/s)`，第 4 列是输沙通量 `sed[kg/s]`，第 5 列是节点类型。
+
+- 两种源码之间，5720 个配对单元的真实地形高程差 RMS 为 **676.75 m**。
+- 有 **438 个网格**的高程差绝对值超过 **1000 m**。
+- 最大正差为 **+1967.10 m**，最大负差为 **-4868.20 m**，平均差 **-167.83 m**，中位差 **-52.95 m**。
+- 模型坐标为 TISC 本地 km 单位，这不是现代地理坐标 CRS。源版本变化也可能包含不同的默认参数值，因此这张差值图描述的是**源码及其运行环境的整体影响**，不是单一函数的贡献。
+
+[09h 修正后真实第 6 列地形差值 PDF](../results/09_ebro_historical_longterm/09h_matched_native_spatial_response/MATCHED_104x55_TERRAIN_SOURCE_DIFFERENCE.pdf) · [全部 5720 个真实地形差值 CSV](../results/09_ebro_historical_longterm/09h_matched_native_spatial_response/MATCHED_104x55_FINAL_DELTATOPO_XYZ.csv) · [09h 正式更正 QC](../results/09_ebro_historical_longterm/09h_matched_native_spatial_response/MATCHED_2017_VS_2026_FINAL_GRID_QC.json)
+
+**重要数据处理纠错。** 09h 的第一轮脚本和更早 V08 的 08d/08e 曾错误地将 `.xyw` 第 3 列水流量当作地形高程。那部分旧图和“地形 RMS”的表述已失效；09h 已按第 6 列重新运行并替换输出。V08 亦在原分支完成单独 [08i 真实物理列复核](https://github.com/lcxstar/tisc-mechanism-lab/blob/v08-salt-module-fix-regression/results/08_salt_module_fix_regression/08i_corrected_native_xyw/V08_CORRECTED_XYW_COLUMN_MAPPING_REPORT.md)，证实修复关闭盐类模式与原始零离子输入的全部 22,880 个**真实地形节点**的高程数值差为零。错误来自后处理列映射，未改变任何已运行的模型计算。
+
+这张空间差值图只对应**2017 vs 2026 源码对比**，不包含原作者 2016 年缺失的空间快照，因此不能据此确定 2016 年历史最大峰值出自该图中的哪一个网格。
