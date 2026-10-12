@@ -1,3 +1,21 @@
+# V08 — TISC salt_model switch repaired and independently validated
+
+**Final: PASS 14/14 (12 October 2026).** The original 2026 solver applies gypsum and halite sedimentation even when salt_model=0. A minimal guarded fix eliminates the spurious first Ebro 7.4-km salt thickness, while salt_model=1 reproduces the original source **byte-for-byte** on Ebro, 1lake, and 2lakes. The repaired original-input Ebro also completed its **full -60 to 0 Ma model** (121 printed ages, 208×110 grid), on the explicitly identified audited 03t+V08 solver variant. **Full equality with the archived 2016 Ebro history remains false.**
+
+- [**Complete Chinese/English scientific report and exact limitations**](docs/08_TISC_SALT_MODULE_FIX_FULL_REGRESSION_20261012.md)
+- [**Final 14/14 PASS scientific acceptance and native input SHA256**](results/08_salt_module_fix_regression/08e_final_scientific_acceptance/V08_SALT_MODULE_FINAL_ACCEPTANCE.md)
+- [Minimal C patch against pinned original upstream source](scripts/08a_patch_salt_module_mode.py)
+- [Original actual per-case source diff](results/08_salt_module_fix_regression/08b_native14/MINIMAL_SALT_MODULE_FIX.diff)
+- [All 14 original C source regression runs, original input, native outputs, logs](results/08_salt_module_fix_regression/08b_native14/)
+- [Completed corrected full 60-Myr Ebro, raw native outputs and 2016 reference comparison](results/08_salt_module_fix_regression/08c_full_ebro_60Myr/)
+- [Independent full 22,880-node numerical evidence](results/08_salt_module_fix_regression/08d_native_numeric_comparison/NUMERIC_NATIVE_GRID_COMPARISON.md)
+- [Successfully executed 60-Myr corrected workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38272458498)
+- [Final fully green corrected scientific QC workflow](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/38273630389)
+
+**Preservation:** Original author input files, source patches, execution logs, final native grids and portable archives permanently in the public v08 branch. The original author's GitHub repository and the separately paused Junggar evolution simulation remain unchanged.
+
+---
+
 # V07 — Ebro first erosion-substep numerical spike causally resolved
 
 **12 October 2026:** The 7401.1 m sudden height addition in the first -60 to -59.95 Ma surface substep has been localized to original 2026 `Calculate_Discharge()` and confirmed to be **gypsum/halite precipitation despite salt_model=0**. We used original 208×110 Ebro author files and a diagnostic-only original-source build (only two compiler NBSPs normalized), then separately verified the salt switch with five source/ion counterfactuals. **Source-level chemical flux at row83 col130 was 67.66 kg/s gypsum + 95.58 kg/s halite**. No Junggar model changes.
