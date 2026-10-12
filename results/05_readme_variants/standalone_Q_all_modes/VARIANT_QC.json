@@ -1,0 +1,31 @@
+{
+  "case": "standalone_Q_all_modes",
+  "author_source_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "source_kind": "normalized_upstream",
+  "original_physics_inputs_untouched": true,
+  "plotting_disabled_not_physics_change": true,
+  "checks": {
+    "11": {
+      "expected_center_m": 675.1,
+      "mode2_center_m": 675.1,
+      "mode1_center_m": 675.1,
+      "max_mode1_vs_mode2_grid_difference_m": 0.0,
+      "mode1_not_documented_for_this_grid": false
+    },
+    "51": {
+      "expected_center_m": 711,
+      "mode2_center_m": 711.0,
+      "mode1_center_m": null,
+      "max_mode1_vs_mode2_grid_difference_m": null,
+      "mode1_not_documented_for_this_grid": true
+    },
+    "101": {
+      "expected_center_m": 712.2,
+      "mode2_center_m": 712.2,
+      "mode1_center_m": null,
+      "max_mode1_vs_mode2_grid_difference_m": null,
+      "mode1_not_documented_for_this_grid": true
+    }
+  },
+  "pass": true
+}
