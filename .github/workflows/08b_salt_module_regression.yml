@@ -2,7 +2,7 @@ name: 08b | TISC original Ebro + lakes corrected salt-mode regression (14 runs)
 on:
   push:
     branches: [v08-salt-module-fix-regression]
-    paths: ['.github/workflows/08b_salt_module_regression.yml']
+    paths: ['.github/workflows/08b_salt_module_regression.yml', 'scripts/08a_patch_salt_module_mode.py']
   workflow_dispatch:
 permissions:
   contents: write
