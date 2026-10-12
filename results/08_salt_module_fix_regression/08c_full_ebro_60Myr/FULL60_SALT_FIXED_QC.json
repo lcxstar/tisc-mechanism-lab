@@ -1,0 +1,61 @@
+{
+  "status": "FULL_60MYR_EXECUTION_PASS",
+  "source_variant": "original pinned 2026 + explicit previous 03t performance/ledger/slope patches + V08 salt gate",
+  "not_bitwise_original_2026_source": true,
+  "native_author_inputs_modified": false,
+  "temporal_interval_Myr": [
+    -60,
+    0
+  ],
+  "actual_exit_code": 0,
+  "recorded_time_stages": 121,
+  "expected_input_nodes": 22880,
+  "final_native_nodes": 22880,
+  "historic_time_stages": 121,
+  "first_fixed_at_minus59_5": {
+    "topography_max_m": 1521.6,
+    "topography_min_m": 152.6,
+    "load_now_max_pa": 28900000.0,
+    "load_now_min_pa": -3370000.0,
+    "load_now_total_N": -1.4e+16,
+    "deflection_max_m": 13.3,
+    "deflection_min_m": -13.0,
+    "rain_integrated": 3040.0,
+    "sediment_volume_km3": 1820.0,
+    "erosion_without_sediment_N": 3.26e+16,
+    "sediment_increment_N": 1.47e+16,
+    "export_sediment_N": 1.79e+16
+  },
+  "old_2016_at_minus59_5": {
+    "topography_max_m": 1200.8,
+    "topography_min_m": 152.5,
+    "load_now_max_pa": 3500000.0,
+    "load_now_min_pa": -1300000.0,
+    "load_now_total_N": -4210000000000000.0,
+    "deflection_max_m": 10.7,
+    "deflection_min_m": -12.0,
+    "rain_integrated": 97500000000.0,
+    "sediment_volume_km3": 2820.0,
+    "erosion_without_sediment_N": 3.2e+16,
+    "sediment_increment_N": 2.48e+16,
+    "export_sediment_N": 7210000000000000.0
+  },
+  "original_uncorrected_03t_at_minus59_5": {
+    "topography_max_m": 9071.6,
+    "topography_min_m": 152.6,
+    "load_now_max_pa": 195000000.0,
+    "load_now_min_pa": -3370000.0,
+    "load_now_total_N": 1.06e+17,
+    "deflection_max_m": 60.3,
+    "deflection_min_m": -14.1,
+    "rain_integrated": 3060.0,
+    "sediment_volume_km3": 7780.0,
+    "erosion_without_sediment_N": 3.32e+16,
+    "sediment_increment_N": 1.46e+16,
+    "export_sediment_N": 1.86e+16
+  },
+  "historical_exact_match_claimed": false,
+  "original_2017_source_code_not_mixed_with_2026": true,
+  "baseline_history_file": "results/04_09_official_demo_suite/08_ebro/08_ebro_NATIVE_RAW.tar.gz",
+  "salt_chemistry_by_default_disabled": true
+}

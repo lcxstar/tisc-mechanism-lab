@@ -1,0 +1,18 @@
+{
+  "original_upstream_commit": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "scope": "TISC 2026 src/surf_proc.c, inside original Calculate_Discharge() ONLY",
+  "author_original_demo_files_modified": false,
+  "bytewise_original_src_sha256_after_NBSP_compiler_normalization": "9bb7b336889d3bd3c589612d125a008357879293abff82e6a7a89c6475314f36",
+  "fixed_src_sha256": "f772cb1a6346b6bd1fbfc8796f681bcae3b81de14bf5ec0f847fd78fb4790264",
+  "changes": [
+    "add explicit extern salt_model declaration",
+    "when disabled gate the 2 source precipitation flux/counter accumulations",
+    "when disabled gate entire direct & lake precipitation deposition and isostatic load contributions"
+  ],
+  "enabled_mode_numeric_expression_order_preserved": true,
+  "hydrological_routing_and_flushing_outside_chemical_guard": true,
+  "chemical_tracer_transport_still_computed_if_disabled": true,
+  "chemistry_inactive_has_no_physical_terrain_or_load_effect_from_this_function": true,
+  "upstream_authors_repo_changed": false,
+  "warning": "Experimentally validated patch, not upstream release or 2016 equivalence proof."
+}

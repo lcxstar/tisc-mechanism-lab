@@ -1,0 +1,37 @@
+--- 03j-optimized/surf_proc.c
++++ 03k-physical-correction/surf_proc.c
+@@ -1464,6 +1464,7 @@
+ 	float	d_mass; 	/*Increment of suspended mass in this cell (positive means erosion).*/
+ 
+ 	PRINT_DEBUG("Calculating fluvial_transport");
++	unsigned long long tisc_03k_guard_hits=0;
+ 	/*
+ 	  This bucle starts from the top point and
+ 	  descends transferring the eroded mass
+@@ -1642,10 +1643,16 @@
+ 						/*bedrock channel incision*/
+ 						ERODED_ERODIBILITY;
+ 						float dh;
++						/* 03k EXPERIMENTAL domain guard: uphill/negative slope => zero incision. */
++						double tisc_03k_incision_slope=(double)slope;
++						if (slope<0.0f) {
++							tisc_03k_incision_slope=0.0;
++							tisc_03k_guard_hits++;
++						}
+ 							dh = erodibility_aux/secsperyr * pow(1020*g, a)
+ 								* pow((double).05/Kw, (double) 3*a/5)
+ 								* pow((double)drainage[row][col].discharge, (double)spl_m) 
+-								* pow((double)slope,						(double)spl_n)
++								* pow(tisc_03k_incision_slope,						(double)spl_n)
+ 								* dt_st;
+ 						if (transp_capacity_eq) dh *= (transp_capacity_eq-drainage[row][col].masstr)/transp_capacity_eq;
+ 						d_mass = THICK2SEDMASS(cfg, dh);
+@@ -1886,6 +1893,8 @@
+ 		}
+ 	}
+ 	free(processed);
++	fprintf(stderr,"\nTISC_03K_GUARD negative_incision_slopes=%llu grid=%d substep=%d\n",tisc_03k_guard_hits,Nx*Ny,tisc_03k_guard_hits>0?1:0);
++	fflush(stderr);
+ 	return(1);
+ }
+ 
