@@ -1,0 +1,26 @@
+{
+  "case": "C_original_ions_forced_zero",
+  "executed_source": "tisc_logonly",
+  "original_geo_input_files_unchanged": true,
+  "cli_flags": [
+    "-qC_Ca_SEA=0",
+    "-qC_SO4_SEA=0",
+    "-qC_Na_SEA=0",
+    "-qC_Cl_SEA=0",
+    "-qC_Ca_RIV=0",
+    "-qC_SO4_RIV=0",
+    "-qC_Na_RIV=0",
+    "-qC_Cl_RIV=0"
+  ],
+  "exit_code": 0,
+  "seconds": 2.684,
+  "topography_at_minus59_5_m": 1521.6,
+  "load_max_pa": 28900000.0,
+  "deflection_max_m": 13.3,
+  "sediment_volume_km3": 1820.0,
+  "chemical_sink_events": 0,
+  "precipitation_events_at_row83_col130": [],
+  "initial_version_comparison": "2016 historic Ebro_evol.screen maximum at -59.5Ma = 1200.8m",
+  "run_accepted": true,
+  "native_archive_sha256": "0e9670676b3ec471356576e8c85b81fa5cdebc16fce9d5dd6ca951dfb48ae243"
+}

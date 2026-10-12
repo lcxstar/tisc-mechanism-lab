@@ -1,0 +1,9 @@
+{
+  "source_original_sha256": "8f7035e48f39ad01f5c4e01382ab51a1d07d7f3c21b029c8ea5cea6d2143ef4f",
+  "source_modified_sha256": "79b74e71c58c65b19bacd3608f95571b7b38a02e3e7e0133af05d0a83975fad0",
+  "mode": "guard",
+  "instrumentation": "Read-only source-proximate gypsum/halite flux, height and timestep logging at 2 sink branches.",
+  "physics_delta": "only if(salt_model) gate enclosing salt-deposition loops while retaining chemical transport",
+  "original_TISC_PRM_UNIT_ZINI_files_changed": false,
+  "not_proposed_upstream_fix_without_full_validation": true
+}

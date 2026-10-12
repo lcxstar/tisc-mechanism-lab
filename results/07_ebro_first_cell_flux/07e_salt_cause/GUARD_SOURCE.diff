@@ -1,0 +1,46 @@
+--- pinned_normalized_upstream_surf_proc.c
++++ diagnostic_guard_surf_proc.c
+@@ -22,6 +22,7 @@
+ extern float C_Ca_RIV, C_SO4_RIV, C_Na_RIV, C_Cl_RIV;
+ extern float GYPSUM_PRECIP_CN, HALITE_PRECIP_CN;
+ 
++extern int salt_model;
+ /*Declaration of functions at libreria.c*/
+ float 	**alloc_matrix  (int num_fil, int num_col);
+ int 	free_matrix 	(float **matrix, int num_fil);
+@@ -673,6 +674,7 @@
+ 	/* Distribute salt deposition */
+ 	float *lake_gypsum_flux = calloc(nlakes + 1, sizeof(float));
+ 	float *lake_halite_flux = calloc(nlakes + 1, sizeof(float));
++    if (salt_model) { /* V07 TEST: obey declared 0 default salt switch */
+ 
+ 	for (int r = 0; r < cfg->Ny; r++) {
+ 		for (int c = 0; c < cfg->Nx; c++) {
+@@ -694,6 +696,9 @@
+ 						}
+ 						Blocks[ctx->numBlocks-1].thick[r][c] += dh_salt;
+ 					}
++                    if ((r==83 && c==130) || dh_salt > 50.0f)
++                        fprintf(stderr,"V07SALTEVENT branch=direct salt_model=%d row=%d col=%d precip_gypsum_kg_s=%.9g precip_halite_kg_s=%.9g rise_m=%.9g dt_sec=%.9g\n",
++                            salt_model,r,c,gypsum_flux_grid[r][c],halite_flux_grid[r][c],dh_salt,dt_st);
+ 					ctx->topo[r][c] += dh_salt;
+ 					float avg_dens = 2200.0;
+ 					if (vol_rate_gypsum + vol_rate_halite > 0) {
+@@ -732,6 +737,9 @@
+ 						}
+ 						Blocks[ctx->numBlocks-1].thick[r][c] += dh_salt;
+ 					}
++                    if ((r==83 && c==130) || dh_salt > 50.0f)
++                        fprintf(stderr,"V07SALTEVENT branch=lake salt_model=%d row=%d col=%d precip_gypsum_kg_s=%.9g precip_halite_kg_s=%.9g rise_m=%.9g dt_sec=%.9g\n",
++                            salt_model,r,c,per_node_gypsum_flux,per_node_halite_flux,dh_salt,dt_st);
+ 					ctx->topo[r][c] += dh_salt;
+ 					Dq[r][c] += dh_salt * g * (avg_dens - cfg->densenv);
+ 				}
+@@ -739,6 +747,7 @@
+ 		}
+ 	}
+ 
++    } /* V07 TEST: end opt-in salt precipitation */
+ 	free(lake_gypsum_flux);
+ 	free(lake_halite_flux);
+ 	free_matrix(gypsum_flux_grid, cfg->Ny);

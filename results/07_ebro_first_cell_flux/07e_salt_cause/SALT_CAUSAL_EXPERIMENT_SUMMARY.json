@@ -1,0 +1,113 @@
+{
+  "pinned_source": "d18b7d270f4d671b80223e10dede329ad35cafdd",
+  "controls": [
+    {
+      "case": "A_original_salt_default_0",
+      "executed_source": "tisc_logonly",
+      "original_geo_input_files_unchanged": true,
+      "cli_flags": [],
+      "exit_code": 0,
+      "seconds": 2.882,
+      "topography_at_minus59_5_m": 9071.6,
+      "load_max_pa": 195000000.0,
+      "deflection_max_m": 60.3,
+      "sediment_volume_km3": 7780.0,
+      "chemical_sink_events": 557,
+      "precipitation_events_at_row83_col130": [
+        "V07SALTEVENT branch=direct salt_model=0 row=83 col=130 precip_gypsum_kg_s=67.6605072 precip_halite_kg_s=95.584877 rise_m=7401.09863 dt_sec=1.57783674e+12"
+      ],
+      "initial_version_comparison": "2016 historic Ebro_evol.screen maximum at -59.5Ma = 1200.8m",
+      "run_accepted": true,
+      "native_archive_sha256": "bf9be47957b6553974adb1d156969bcfc408444c8382a12daf0dc32cce4b1ba5"
+    },
+    {
+      "case": "B_explicit_salt_model_0",
+      "executed_source": "tisc_logonly",
+      "original_geo_input_files_unchanged": true,
+      "cli_flags": [
+        "-qsalt_model=0"
+      ],
+      "exit_code": 0,
+      "seconds": 2.876,
+      "topography_at_minus59_5_m": 9071.6,
+      "load_max_pa": 195000000.0,
+      "deflection_max_m": 60.3,
+      "sediment_volume_km3": 7780.0,
+      "chemical_sink_events": 557,
+      "precipitation_events_at_row83_col130": [
+        "V07SALTEVENT branch=direct salt_model=0 row=83 col=130 precip_gypsum_kg_s=67.6605072 precip_halite_kg_s=95.584877 rise_m=7401.09863 dt_sec=1.57783674e+12"
+      ],
+      "initial_version_comparison": "2016 historic Ebro_evol.screen maximum at -59.5Ma = 1200.8m",
+      "run_accepted": true,
+      "native_archive_sha256": "514d69b0d338e23ac0996cfb9925e2442351636f022650f98b9497aa6559ea0b"
+    },
+    {
+      "case": "C_original_ions_forced_zero",
+      "executed_source": "tisc_logonly",
+      "original_geo_input_files_unchanged": true,
+      "cli_flags": [
+        "-qC_Ca_SEA=0",
+        "-qC_SO4_SEA=0",
+        "-qC_Na_SEA=0",
+        "-qC_Cl_SEA=0",
+        "-qC_Ca_RIV=0",
+        "-qC_SO4_RIV=0",
+        "-qC_Na_RIV=0",
+        "-qC_Cl_RIV=0"
+      ],
+      "exit_code": 0,
+      "seconds": 2.684,
+      "topography_at_minus59_5_m": 1521.6,
+      "load_max_pa": 28900000.0,
+      "deflection_max_m": 13.3,
+      "sediment_volume_km3": 1820.0,
+      "chemical_sink_events": 0,
+      "precipitation_events_at_row83_col130": [],
+      "initial_version_comparison": "2016 historic Ebro_evol.screen maximum at -59.5Ma = 1200.8m",
+      "run_accepted": true,
+      "native_archive_sha256": "0e9670676b3ec471356576e8c85b81fa5cdebc16fce9d5dd6ca951dfb48ae243"
+    },
+    {
+      "case": "D_guarded_salt_model_0",
+      "executed_source": "tisc_guard",
+      "original_geo_input_files_unchanged": true,
+      "cli_flags": [
+        "-qsalt_model=0"
+      ],
+      "exit_code": 0,
+      "seconds": 2.708,
+      "topography_at_minus59_5_m": 1521.6,
+      "load_max_pa": 28900000.0,
+      "deflection_max_m": 13.3,
+      "sediment_volume_km3": 1820.0,
+      "chemical_sink_events": 0,
+      "precipitation_events_at_row83_col130": [],
+      "initial_version_comparison": "2016 historic Ebro_evol.screen maximum at -59.5Ma = 1200.8m",
+      "run_accepted": true,
+      "native_archive_sha256": "8b7be9b4db4653bcd88c1279925027e3e2446649c7acb6ddcaf4b0415f949b6a"
+    },
+    {
+      "case": "E_guarded_salt_model_1",
+      "executed_source": "tisc_guard",
+      "original_geo_input_files_unchanged": true,
+      "cli_flags": [
+        "-qsalt_model=1"
+      ],
+      "exit_code": 0,
+      "seconds": 2.879,
+      "topography_at_minus59_5_m": 9071.6,
+      "load_max_pa": 195000000.0,
+      "deflection_max_m": 60.3,
+      "sediment_volume_km3": 7780.0,
+      "chemical_sink_events": 557,
+      "precipitation_events_at_row83_col130": [
+        "V07SALTEVENT branch=direct salt_model=1 row=83 col=130 precip_gypsum_kg_s=67.6605072 precip_halite_kg_s=95.584877 rise_m=7401.09863 dt_sec=1.57783674e+12"
+      ],
+      "initial_version_comparison": "2016 historic Ebro_evol.screen maximum at -59.5Ma = 1200.8m",
+      "run_accepted": true,
+      "native_archive_sha256": "492ca2cbd3f21b6c24e25d70262495d012749eef33cc3ab00c1da7778b3d56fe"
+    }
+  ],
+  "accepted": true,
+  "no_upstream_original_repo_mutation": true
+}

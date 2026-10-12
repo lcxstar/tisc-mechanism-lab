@@ -1,0 +1,1 @@
+/home/runner/work/tisc-mechanism-lab/tisc-mechanism-lab/bins/tisc_logonly Ebro_evol -tf-59 -V1 -qplotting_mode=0 -qC_Ca_SEA=0 -qC_SO4_SEA=0 -qC_Na_SEA=0 -qC_Cl_SEA=0 -qC_Ca_RIV=0 -qC_SO4_RIV=0 -qC_Na_RIV=0 -qC_Cl_RIV=0

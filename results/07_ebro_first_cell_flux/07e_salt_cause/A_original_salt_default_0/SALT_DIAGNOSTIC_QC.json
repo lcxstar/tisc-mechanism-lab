@@ -1,0 +1,19 @@
+{
+  "case": "A_original_salt_default_0",
+  "executed_source": "tisc_logonly",
+  "original_geo_input_files_unchanged": true,
+  "cli_flags": [],
+  "exit_code": 0,
+  "seconds": 2.882,
+  "topography_at_minus59_5_m": 9071.6,
+  "load_max_pa": 195000000.0,
+  "deflection_max_m": 60.3,
+  "sediment_volume_km3": 7780.0,
+  "chemical_sink_events": 557,
+  "precipitation_events_at_row83_col130": [
+    "V07SALTEVENT branch=direct salt_model=0 row=83 col=130 precip_gypsum_kg_s=67.6605072 precip_halite_kg_s=95.584877 rise_m=7401.09863 dt_sec=1.57783674e+12"
+  ],
+  "initial_version_comparison": "2016 historic Ebro_evol.screen maximum at -59.5Ma = 1200.8m",
+  "run_accepted": true,
+  "native_archive_sha256": "bf9be47957b6553974adb1d156969bcfc408444c8382a12daf0dc32cce4b1ba5"
+}
