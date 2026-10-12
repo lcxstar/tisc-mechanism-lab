@@ -1,0 +1,42 @@
+name: 05 | Plot 7 original author native fields as PDF and PNG
+on:
+  push:
+    branches: [v05-author-readme-command-variants]
+    paths:
+      - '.github/workflows/05_author_demo_figure_archiver.yml'
+      - 'scripts/plot_author_demo_final_fields.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native scientific plotting
+        run: python3 -m pip install -q numpy matplotlib
+      - name: Convert source-preserved raw TISC native outputs to standard plots
+        run: |
+          set -euo pipefail
+          python3 scripts/plot_author_demo_final_fields.py \
+            --input results/04_09_official_demo_suite \
+            --out results/05_readme_variants/author_native_figures
+      - name: Archive seven full-resolution plots and source metadata permanently
+        run: |
+          set -euo pipefail
+          git add -f results/05_readme_variants/author_native_figures
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --cached --quiet; then
+            git commit -m 'figures(author): preserve 7 native final topographies in PNG and vector PDF'
+            git pull --rebase origin v05-author-readme-command-variants
+            git push origin HEAD:v05-author-readme-command-variants
+          fi
+      - name: Preserve visual output artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ALL_7_AUTHOR_DEMO_FINAL_TOPOGRAPHY_PNG_PDF
+          path: results/05_readme_variants/author_native_figures/
+          retention-days: 90
