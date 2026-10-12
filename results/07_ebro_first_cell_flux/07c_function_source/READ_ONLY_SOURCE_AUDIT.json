@@ -1,0 +1,22 @@
+{
+  "instrument_type": "READ_ONLY diagnostics except allocating memory and writing diagnostic CSV",
+  "source": "surf_proc.c",
+  "original_sha256": "8f7035e48f39ad01f5c4e01382ab51a1d07d7f3c21b029c8ea5cea6d2143ef4f",
+  "patched_sha256": "cadc3c5aafe2ce28eb60aec52c11ef60d10aa108321e3213fd69f7586ff7275f",
+  "original_anchor_requirements": 8,
+  "snapshot_phases": [
+    "after_increment",
+    "after_routing",
+    "after_transport"
+  ],
+  "capture": "first main tectonic 0.5 Myr only; 3 maps each erosion transport substep; all 22880 cells",
+  "per_cell_columns": [
+    "elevation",
+    "drainage receiver",
+    "water discharge",
+    "sediment transported mass flux",
+    "eroded and deposited material mass during substep",
+    "sediment/isostatic load increment Dq",
+    "lake/type"
+  ]
+}

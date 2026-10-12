@@ -1,0 +1,17 @@
+{
+  "source": "pinned 2026 modern TISC original; NBSP compile normalization and V07a read-only instrumentation",
+  "new_incremental_instrumentation": "Five stage boundaries inside each surface substep, saves only first substep complete native cell map",
+  "stages": [
+    "after_increment",
+    "after_sort_topography",
+    "after_define_drainage",
+    "after_rain_evap",
+    "after_ice_water",
+    "after_custom_node_defs",
+    "after_routing",
+    "after_transport"
+  ],
+  "underlying_physics_modified": false,
+  "before_sha256": "cadc3c5aafe2ce28eb60aec52c11ef60d10aa108321e3213fd69f7586ff7275f",
+  "after_sha256": "d8b473dae8592a5c6f9b299fd9544ef695e3853f9adf8ff795af6917add92124"
+}
