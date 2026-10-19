@@ -1,0 +1,25 @@
+name: Public runner availability check (2026-10-19)
+on:
+  push:
+    branches:
+      - diagnostics/actions-public-runner-20261019
+    paths:
+      - .github/workflows/diagnose_public_runner_20261019.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  runner_check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Confirm GitHub hosted runner is available
+        run: |
+          set -euo pipefail
+          echo "RUNNER_PROVISIONED_OK"
+          echo "Repository is public; no model data required"
+          echo "OS=$(uname -s)"
+          echo "UTC=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          python3 --version
