@@ -1,0 +1,90 @@
+name: 11 | Public synthetic fault-sign feasibility (no private geology)
+on:
+  push:
+    branches: [experiment/synthetic-fault-sign-test-20261019]
+    paths:
+      - scripts/synthetic_fault_extension_gate.py
+      - docs/synthetic_fault_sign_20261019.md
+      - .github/workflows/synthetic_fault_sign_20261019.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native_screen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      OMP_NUM_THREADS: '2'
+    steps:
+      - name: Checkout public laboratory
+        uses: actions/checkout@v4
+      - name: Checkout immutable official TISC source
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+      - name: Install native TISC compiler and QC modules
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y build-essential gfortran
+          python3 -m pip install -q numpy matplotlib
+      - name: Compile pinned TISC with whitespace-only source normalization
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = "d18b7d270f4d671b80223e10dede329ad35cafdd"
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c /tmp/SYNTHETIC_WHITESPACE.json
+          make -C upstream/tisc/src tisc > /tmp/SYNTHETIC_COMPILATION.log 2>&1
+          test -x upstream/bin/tisc
+          echo 'Initialized native TISC benchmark runner' > "$HOME/.tiscdefaults"
+      - name: Build three synthetic zero / positive / negative fault cases
+        run: |
+          set -euo pipefail
+          python3 scripts/synthetic_fault_extension_gate.py prepare
+          for case in control slip_positive slip_negative; do
+            (cd "work_synthetic_fault/$case" && sha256sum -c INPUTS.sha256)
+          done
+      - name: Run original native solver (three independent 2-Myr cases)
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          for case in control slip_positive slip_negative; do
+            echo "=== START $case ==="
+            (
+              cd "work_synthetic_fault/$case"
+              set +e
+              timeout -k 10s 300 tisc demo -V2 > RUN.log 2>&1
+              rc=$?
+              echo "$rc" > EXIT_CODE.txt
+              tail -15 RUN.log || true
+              exit "$rc"
+            )
+          done
+      - name: Read raw Blocks movements and compare native centerlines
+        run: |
+          set -euo pipefail
+          python3 scripts/synthetic_fault_extension_gate.py compare
+      - name: Upload only modest-sized reproducibility files and interpreted numeric QC
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: SYNTHETIC_FAULT_SIGN_2MYR_NATIVE_QC
+          path: |
+            work_synthetic_fault/EXPERIMENT_AUDIT.json
+            work_synthetic_fault/SUMMARY.json
+            work_synthetic_fault/SUMMARY.csv
+            work_synthetic_fault/SYNTHETIC_FAULT_SIGN_COMPARISON.png
+            work_synthetic_fault/*/demo.PRM
+            work_synthetic_fault/*/demo.PRFL
+            work_synthetic_fault/*/demo1.UNIT
+            work_synthetic_fault/*/INPUTS.sha256
+            work_synthetic_fault/*/RUN.log
+            work_synthetic_fault/*/EXIT_CODE.txt
+            work_synthetic_fault/*/CASE_QC.json
+            work_synthetic_fault/*/CENTERLINE_NATIVE.csv
+          retention-days: 7
+          if-no-files-found: warn
