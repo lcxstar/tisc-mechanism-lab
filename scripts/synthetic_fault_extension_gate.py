@@ -40,7 +40,8 @@ def prepare():
         ("ymax", "2.5e+05", "5.0e+04"),
         ("Timefinal", "15", "2"),
         ("dt_record", "5", "1"),
-        ("hydro_model", "1", "0"),
+        ("rain", "500", "0"),
+        ("Krain", "500", "0"),
         ("erosed_model", "6", "0"),
         ("water_load", "1", "0")
     ]
@@ -58,7 +59,8 @@ def prepare():
         "spacing_km_xy": [5, 10],
         "time_Myr": [0, 2],
         "initial_topography": "flat 100 m (official PRM parameter)",
-        "disabled_for_isolation": ["hydrology", "surface erosion/sediment transport", "water load"],
+        "disabled_for_isolation": ["surface erosion/sediment transport", "water load"],
+        "hydrology": "Routing code enabled ONLY to export native xyw; rain=0, Krain=0, evaporation=0",
         "fault": "One identical hypothetical west-dipping shallow-to-deep 0-to-4km surface",
         "motions_km_per_Myr": CASES,
         "time_stop_Myr": 1.5,
@@ -136,7 +138,7 @@ def read_case(case):
     # native demo.xyw column 6, per official tisc/doc/tisc.info.txt.
     xyw_path = directory / "demo.xyw"
     if not xyw_path.exists():
-        raise ValueError(f"{case}: native demo.xyw is missing")
+        raise ValueError(f"{case}: native demo.xyw missing even with zero-rain hydrology")
     surface = np.loadtxt(xyw_path, comments="#", usecols=(0, 1, 5))
     if surface.shape != (GRID[0] * GRID[1], 3) or not np.isfinite(surface).all():
         raise ValueError(f"{case}: invalid native xyw surface {surface.shape}")
