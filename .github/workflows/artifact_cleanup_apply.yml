@@ -1,0 +1,28 @@
+name: Storage | Public conservative Artifacts cleanup APPLY
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/artifact_cleanup_apply.yml
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: archive-artifact-retention-public
+  cancel-in-progress: false
+jobs:
+  cleanup:
+    name: Delete only failed/superseded Artifacts; retain milestone and last successful per name
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Apply validated retention policy, record exact removed IDs
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 scripts/cleanup_actions_artifacts.py --apply
