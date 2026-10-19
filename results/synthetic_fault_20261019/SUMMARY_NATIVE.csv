@@ -1,0 +1,4 @@
+case,exit_code,final_time_Myr,native_shift_x_km,surface_min_m,surface_max_m,surface_min_x_km,surface_max_x_km,downward_w_min_m,downward_w_max_m,delta_surface_min_m,delta_surface_max_m,interpretation
+control,0,2.0,0,100,100,-130,-130,0,0,0,0,flat no-fault control
+slip_positive,0,2.0,5,-32.9,614,-40.3,-34.8,15.8,145.1,-132.9,514,kinematic forced-slip topography not validated normal fault
+slip_negative,0,2.0,-5,-416.7,234.3,-39.8,-45.4,-145.7,-11.5,-516.7,134.3,local deep low plus upward flexure not calibrated extension
