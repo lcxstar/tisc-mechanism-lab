@@ -64,6 +64,14 @@ jobs:
               exit "$rc"
             )
           done
+      - name: Inspect original cross section schema before interpreting topography
+        run: |
+          set -euo pipefail
+          for case in control slip_positive slip_negative; do
+            echo "== Native profile $case =="
+            ls -lh "work_synthetic_fault/$case/demo.pfl" || true
+            head -16 "work_synthetic_fault/$case/demo.pfl" || true
+          done
       - name: Read raw Blocks movements and compare native centerlines
         run: |
           set -euo pipefail
@@ -86,5 +94,8 @@ jobs:
             work_synthetic_fault/*/EXIT_CODE.txt
             work_synthetic_fault/*/CASE_QC.json
             work_synthetic_fault/*/CENTERLINE_NATIVE.csv
+            work_synthetic_fault/*/demo.pfl
+            work_synthetic_fault/*/demo.xyzt
+            work_synthetic_fault/*/demo.xyw
           retention-days: 7
           if-no-files-found: warn
