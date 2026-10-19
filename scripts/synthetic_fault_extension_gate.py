@@ -131,41 +131,41 @@ def read_case(case):
     dat = np.loadtxt(datafile, comments="#")
     if dat.shape != (GRID[0]*GRID[1], 5) or not np.isfinite(dat).all():
         raise ValueError(f"{case}: unexpected/nonfinite xyzt {dat.shape}")
-    # IMPORTANT: xyzt is a FLEXURE file, and its fifth column is NOT
-    # the final land elevation. The true surface elevation comes from
-    # native demo.xyw column 6, per official tisc/doc/tisc.info.txt.
-    xyw_path = directory / "demo.xyw"
-    if not xyw_path.exists():
-        raise ValueError(f"{case}: native demo.xyw missing even with zero-rain hydrology")
-    surface = np.loadtxt(xyw_path, comments="#", usecols=(0, 1, 5))
-    if surface.shape != (GRID[0] * GRID[1], 3) or not np.isfinite(surface).all():
-        raise ValueError(f"{case}: invalid native xyw surface {surface.shape}")
-    center_y = dat[:, 1]
-    ys = np.unique(np.round(center_y, 5))
-    midy = ys[np.argmin(np.abs(ys))]
-    centerline = dat[np.isclose(center_y, midy)]
-    centerline = centerline[np.argsort(centerline[:, 0])]
-    topoline = surface[np.isclose(surface[:, 1], midy)]
-    topoline = topoline[np.argsort(topoline[:, 0])]
-    x = centerline[:, 0]
-    scale = 1.0 if max(abs(x.min()), abs(x.max())) < 1000 else 1000.0
-    xkm = x / scale
-    if not (np.isclose(xkm.min(), -150, atol=1) and np.isclose(xkm.max(), 150, atol=1)):
-        raise ValueError(f"{case}: unexpected cross section X range {x.min(), x.max()}")
-    if centerline.shape[0] != GRID[0] or topoline.shape[0] != GRID[0]:
-        raise ValueError(f"{case}: unexpected cross-section size")
-    if not np.allclose(topoline[:, 0], x, atol=0.05):
-        raise ValueError(f"{case}: native xyzt and xyw X coordinates disagree")
-    topo = topoline[:, 2]
+    # The documented native demo.pfl contains the final stratigraphic profile:
+    # x[km], y[km], length[km], successive horizons ... final SURFACE [m].
+    # Unlike xyzt, its last column is the actual land-surface topography.
+    profile = np.loadtxt(directory / "demo.pfl", comments="#")
+    if profile.ndim != 2 or profile.shape[1] < 4 or not np.isfinite(profile).all():
+        raise ValueError(f"{case}: invalid native profile shape {profile.shape}")
+    section_y = float(profile[0, 1])
+    if not np.allclose(profile[:, 1], section_y, atol=1e-3):
+        raise ValueError(f"{case}: expected straight E-W native PRFL")
+    valid = (profile[:, 0] >= -130.0) & (profile[:, 0] <= 150.0)
+    xkm = profile[valid, 0].copy()
+    topo = profile[valid, -1].copy()
+    if xkm.size < 50:
+        raise ValueError(f"{case}: insufficient true-surface profile samples")
+    # Compare elastic deflection along SAME y=-50km section.
+    xyzt_section = dat[np.isclose(dat[:, 1], section_y)]
+    xyzt_section = xyzt_section[np.argsort(xyzt_section[:, 0])]
+    if xyzt_section.shape[0] != GRID[0]:
+        raise ValueError(f"{case}: unexpected native deflection section")
+    xx = xyzt_section[:, 0]
+    if not np.isclose(xx.min(), -150, atol=1):
+        raise ValueError(f"{case}: xyzt coordinates not in km as expected")
+    ww = np.interp(xkm, xx, xyzt_section[:, 2])
     np.savetxt(directory / "CENTERLINE_NATIVE.csv",
-               np.column_stack((xkm, centerline[:, 2], topo)),
+               np.column_stack((xkm, ww, topo)),
                delimiter=",", comments="",
-               header="x_km,deflection_downward_m,true_surface_topography_m", fmt="%.6f")
+               header="x_km,downward_elastic_deflection_m,true_surface_topography_m", fmt="%.6f")
     result.update({
         "output_finite": True,
-        "surface_source": "native demo.xyw column 6; NOT demo.xyzt column 5",
-        "topo_min_m": float(surface[:, 2].min()),
-        "topo_max_m": float(surface[:, 2].max()),
+        "surface_source": "native demo.pfl LAST COLUMN = surface elevation",
+        "section_y_km": section_y,
+        "topo_min_m": float(topo.min()),
+        "topo_max_m": float(topo.max()),
+        "topo_min_x_km": float(xkm[np.argmin(topo)]),
+        "topo_max_x_km": float(xkm[np.argmax(topo)]),
         "w_min_m": float(dat[:, 2].min()),
         "w_max_m": float(dat[:, 2].max()),
         "topo_left_mean_m": float(topo[xkm < -30].mean()),
@@ -176,7 +176,7 @@ def read_case(case):
     if result["final_logged_time_Myr"] is None or abs(result["final_logged_time_Myr"] - 2) > 0.51:
         raise ValueError(f"{case}: wrong endpoint: {result['final_logged_time_Myr']}")
     (directory / "CASE_QC.json").write_text(json.dumps(result, indent=2))
-    return result, xkm, centerline[:, 2].copy(), topo.copy()
+    return result, xkm, ww.copy(), topo.copy()
 
 
 def compare():
@@ -205,7 +205,7 @@ def compare():
     axs[0].axvline(0, ls=":", color="0.5")
     axs[0].set_ylabel("Topography minus control (m)")
     axs[1].set_ylabel("Downward deflection minus control (m)")
-    axs[1].set_xlabel("Synthetic X (km), center line")
+    axs[1].set_xlabel("Synthetic E-W section at Y=-50 km (X in km)")
     for ax in axs:
         ax.grid(alpha=0.2)
         ax.legend()
