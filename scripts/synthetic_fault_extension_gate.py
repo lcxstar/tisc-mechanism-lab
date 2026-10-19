@@ -40,8 +40,7 @@ def prepare():
         ("ymax", "2.5e+05", "5.0e+04"),
         ("Timefinal", "15", "2"),
         ("dt_record", "5", "1"),
-        ("rain", "500", "0"),
-        ("Krain", "500", "0"),
+        ("hydro_model", "1", "0"),
         ("erosed_model", "6", "0"),
         ("water_load", "1", "0")
     ]
@@ -59,8 +58,7 @@ def prepare():
         "spacing_km_xy": [5, 10],
         "time_Myr": [0, 2],
         "initial_topography": "flat 100 m (official PRM parameter)",
-        "disabled_for_isolation": ["surface erosion/sediment transport", "water load"],
-        "hydrology": "Routing code enabled ONLY to export native xyw; rain=0, Krain=0, evaporation=0",
+        "disabled_for_isolation": ["hydrology", "surface erosion/sediment transport", "water load"],
         "fault": "One identical hypothetical west-dipping shallow-to-deep 0-to-4km surface",
         "motions_km_per_Myr": CASES,
         "time_stop_Myr": 1.5,
