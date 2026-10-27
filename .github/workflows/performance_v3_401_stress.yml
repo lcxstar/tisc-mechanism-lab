@@ -1,0 +1,100 @@
+name: Performance V3 | 401-grid official first-step stress
+on:
+  push:
+    branches: [experiment/performance-v3-independent-demos-20261027]
+    paths: ['.github/workflows/performance_v3_401_stress.yml']
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/performance_v3_401_stress.yml']
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  stress:
+    name: Original 401x401 official demo | V3 candidate only
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+          persist-credentials: false
+      - name: Install original compiler toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Compile pinned optimized candidate with no Junggar-specific source patches
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p stress_v3/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c stress_v3/source/NBSP_FIX.json
+          python3 scripts/performance/patch_tisc_stable_sort_v3.py upstream/tisc/src/tisclib.c
+          python3 scripts/performance/patch_tisc_lake_evap_v3.py upstream/tisc/src/surf_proc.c
+          python3 scripts/performance/patch_tisc_outlet_scan_v3.py upstream/tisc/src/surf_proc.c
+          python3 scripts/performance/patch_tisc_lake_membership_v3.py upstream/tisc/src/surf_proc.c
+          sha256sum upstream/tisc/src/tisclib.c upstream/tisc/src/surf_proc.c > stress_v3/source/OPTIMIZED_SOURCE_SHA256.txt
+          make -C upstream/tisc/src tisc > stress_v3/source/BUILD.log 2>&1 || { tail -100 stress_v3/source/BUILD.log; exit 1; }
+          sha256sum upstream/bin/tisc > stress_v3/source/EXECUTABLE_SHA256.txt
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare checksum-verified, 401x401 author input without physical changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/prepare_demo_pairs.py N401 first_step
+          git -C upstream rev-parse HEAD > stress_v3/source/PINNED_COMMIT.txt
+          git rev-parse HEAD > stress_v3/source/LAB_COMMIT.txt
+      - name: Run actual 401x401 native solver with explicit 420-second cap
+        shell: bash
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          (
+            cd validation_03g/N401/first_step/optimized
+            echo 'tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0' > ACTUAL_COMMAND.txt
+            set +e
+            /usr/bin/time -v -o RUNTIME_VERBOSE.txt timeout -k 10s 420 \
+              tisc demo -V1 -tf0.5 -qisost_model=0 -qplotting_mode=0 > RUN.log 2>&1
+            rc=$?
+            set -e
+            printf '%s\n' "$rc" > EXIT_CODE.txt
+            echo "TISC_V3_NATIVE_401_EXIT=$rc"
+            grep -aE 'T=|outp_seds:|Final total sediment volume' RUN.log | tail -n 15 || true
+          )
+      - name: Record strict native completion criterion independent of workflow status
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,json
+          p=Path("validation_03g/N401/first_step/optimized")
+          log=(p/"RUN.log").read_text(errors="replace")
+          rc=int((p/"EXIT_CODE.txt").read_text())
+          ts=[float(x) for x in re.findall(r"(?m)^\s*T=\s*([\d.]+)\s*My",log)]
+          fields={k:(p/("demo"+k)).stat().st_size if (p/("demo"+k)).exists() else 0 for k in [".st",".xyw",".hrz",".xyzt"]}
+          result={"source":"author demo/6_tectonics","n":401,"grid_nodes":160801,
+                  "reference_comparison_in_this_401_stress":False,
+                  "native_exit_code":rc,
+                  "native_timed_out":rc==124,"last_printed_model_Myr":ts[-1] if ts else None,
+                  "field_file_bytes":fields,
+                  "native_complete_first_step":rc==0 and bool(ts) and ts[-1]>=0.5 and all(fields.values()),
+                  "sediment_mass_conservation_validated":False}
+          (p/"N401_NATIVE_STATUS.json").write_text(json.dumps(result,indent=2))
+          print("N401_NATIVE_STATUS",json.dumps(result))
+          PY
+      - name: Preserve native logs, exact official inputs and status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC_V3_OFFICIAL_N401_STRESS
+          path: |
+            stress_v3/source/
+            validation_03g/N401/first_step/INPUT_AUDIT.json
+            validation_03g/N401/first_step/optimized/
+          retention-days: 30
+          if-no-files-found: warn
