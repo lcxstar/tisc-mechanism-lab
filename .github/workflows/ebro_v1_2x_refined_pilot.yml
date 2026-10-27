@@ -15,7 +15,7 @@ jobs:
     name: "Ebro V08+V3 ${{ matrix.case }} -60 to -59.5Ma"
     strategy:
       fail-fast: false
-      matrix: {case: [original, refined]}
+      matrix: {case: [original, time_only, space_only, refined]}
     steps:
       - uses: actions/checkout@v4
         with: {persist-credentials: false}
