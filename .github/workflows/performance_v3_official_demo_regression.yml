@@ -1,0 +1,113 @@
+name: Performance V3 | official TISC baseline vs speed candidate
+on:
+  push:
+    branches: [experiment/performance-v3-independent-demos-20261027]
+    paths:
+      - '.github/workflows/performance_v3_official_demo_regression.yml'
+      - 'scripts/performance/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  scientific-equivalence:
+    name: "Official demo ${{ matrix.n }} / ${{ matrix.mode }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    strategy:
+      fail-fast: false
+      matrix:
+        n: [N81, N121]
+        mode: [first_step, full_coupled]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout pinned official TISC
+        uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+          persist-credentials: false
+      - name: Install original compiler toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran time
+      - name: Build isolated original reference binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p validation_v3/bin validation_v3/source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c validation_v3/source/NBSP_FIX.json
+          sha256sum upstream/tisc/src/surf_proc.c upstream/tisc/src/tisclib.c > validation_v3/source/REFERENCE_SOURCES.sha256
+          make -C upstream/tisc/src tisc > validation_v3/source/REFERENCE_BUILD.log 2>&1 || { tail -100 validation_v3/source/REFERENCE_BUILD.log; exit 1; }
+          cp upstream/bin/tisc validation_v3/bin/tisc_reference
+          sha256sum validation_v3/bin/tisc_reference > validation_v3/source/REFERENCE_BINARY.sha256
+      - name: Build separate V3 optimized derivative; never modify original binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/patch_tisc_stable_sort_v3.py upstream/tisc/src/tisclib.c
+          python3 scripts/performance/patch_tisc_lake_evap_v3.py upstream/tisc/src/surf_proc.c
+          python3 scripts/performance/patch_tisc_outlet_scan_v3.py upstream/tisc/src/surf_proc.c
+          python3 scripts/performance/patch_tisc_lake_membership_v3.py upstream/tisc/src/surf_proc.c
+          sha256sum upstream/tisc/src/surf_proc.c upstream/tisc/src/tisclib.c > validation_v3/source/OPTIMIZED_SOURCES.sha256
+          find upstream -type f \( -name surf_proc.o -o -name tisclib.o \) -delete
+          make -C upstream/tisc/src tisc > validation_v3/source/OPTIMIZED_BUILD.log 2>&1 || { tail -100 validation_v3/source/OPTIMIZED_BUILD.log; exit 1; }
+          cp upstream/bin/tisc validation_v3/bin/tisc_optimized
+          sha256sum validation_v3/bin/tisc_optimized > validation_v3/source/OPTIMIZED_BINARY.sha256
+          if cmp -s validation_v3/bin/tisc_reference validation_v3/bin/tisc_optimized; then
+            echo "FAIL: optimized executable is byte identical to original"; exit 1
+          fi
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare identical official demo input pairs (author UNIT unchanged)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/prepare_demo_pairs.py "${{ matrix.n }}" "${{ matrix.mode }}"
+          git -C upstream rev-parse HEAD > validation_v3/source/UPSTREAM_COMMIT.txt
+          git rev-parse HEAD > validation_v3/source/LAB_COMMIT.txt
+      - name: Run independent native reference and candidate executables
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="$GITHUB_WORKSPACE/validation_03g/${{ matrix.n }}/${{ matrix.mode }}"
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          if [ "${{ matrix.mode }}" = first_step ]; then
+            flags="-tf0.5 -qisost_model=0 -qplotting_mode=0"
+            limit=180
+          else
+            flags="-qplotting_mode=0"
+            limit=900
+          fi
+          for version in reference optimized; do
+            (
+              cd "$ROOT/$version"
+              printf 'tisc demo -V1 %s\n' "$flags" > ACTUAL_COMMAND.txt
+              set +e
+              /usr/bin/time -f '%e' -o WALL_SEC.txt timeout -k 10s "$limit" \
+                "$GITHUB_WORKSPACE/validation_v3/bin/tisc_$version" demo -V1 $flags > RUN.log 2>&1
+              rc=$?
+              set -e
+              echo "$rc" > EXIT_CODE.txt
+              echo "Native TISC version=$version grid=${{ matrix.n }} mode=${{ matrix.mode }} exit=$rc"
+              grep -a -E 'T=|outp_seds:|Final total sediment' RUN.log | tail -n 10 || true
+            )
+          done
+      - name: Validate native exit zero and exact scientific output agreement
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/validate_demo_pairs.py validation_03g/${{ matrix.n }}/${{ matrix.mode }}
+      - name: Upload input hashes, original/optimized fields, logs and scientific QC
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TISC_V3_OFFICIAL_${{ matrix.n }}_${{ matrix.mode }}
+          path: |
+            validation_v3/source/
+            validation_03g/${{ matrix.n }}/${{ matrix.mode }}/
+          retention-days: 30
+          if-no-files-found: warn
