@@ -71,7 +71,29 @@ def main(root):
                    "river_types":{k:typ.count(k) for k in sorted(set(typ))},
                    "xyw_terrain_is_column_6":True,
                    "mass_conservation_validated":False})
+    # For scientific screening: report the native XY of all extreme peaks,
+    # not merely a basin-wide max that could hide a one-cell artifact.
+    order=np.argsort(values[2])[::-1]
+    status["max_terrain_at_local_xy"]={"x":float(values[0,order[0]]),
+                                       "y":float(values[1,order[0]]),
+                                       "z_m":float(values[2,order[0]])}
+    status["top_10_peaks_local_xy_m"]=[
+        [float(values[0,i]),float(values[1,i]),float(values[2,i])]
+        for i in order[:10]]
+    status["terrain_percentile_m"]={str(n):float(np.percentile(values[2],n))
+        for n in (50,90,95,99,99.9,99.99)}
+    status["nodes_above_3000_m"]=int(np.count_nonzero(values[2]>3000))
+    status["nodes_above_5000_m"]=int(np.count_nonzero(values[2]>5000))
+    p=order[0]
+    ir=int(np.searchsorted(y,values[1,p]))
+    ic=int(np.searchsorted(x,values[0,p]))
+    status["peak_local_3x3_terrain_m"]=h[max(0,ir-1):min(len(y),ir+2),
+                                            max(0,ic-1):min(len(x),ic+2)].tolist()
     (root/"NATIVE_QC.json").write_text(json.dumps(status,indent=2))
+    print("EBRO_PEAK_DIAGNOSTIC",json.dumps({k:status[k] for k in
+        ("case","max_terrain_at_local_xy","top_10_peaks_local_xy_m",
+         "terrain_percentile_m","nodes_above_3000_m","nodes_above_5000_m",
+         "peak_local_3x3_terrain_m")}),flush=True)
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
