@@ -1,0 +1,75 @@
+name: Ebro V1 | isolate baseline V08 vs V3 nonlinearity
+on:
+  push:
+    branches: [experiment/ebro-spacetime-refined-v1-20261027]
+    paths: ['.github/workflows/ebro_v1_v08_no_v3_fine_control.yml']
+  pull_request:
+    branches: [experiment/performance-v3-independent-demos-20261027]
+    paths: ['.github/workflows/ebro_v1_v08_no_v3_fine_control.yml']
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    name: "V08 ONLY no speed patch | Ebro ${{ matrix.case }}"
+    strategy:
+      fail-fast: false
+      matrix: {case: [space_only, refined]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+          persist-credentials: false
+      - name: Compiler, time and model visualization dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y build-essential gfortran time
+          python3 -m pip install --break-system-packages numpy matplotlib
+      - name: Source controlled V08-only (no V3 performance changes)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ebro_v08_source
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c ebro_v08_source/NBSP_FIX.json
+          python3 scripts/performance/patch_tisc_salt_model_v08.py upstream/tisc/src/surf_proc.c ebro_v08_source/salt_v08
+          sha256sum upstream/tisc/src/surf_proc.c upstream/tisc/src/tisclib.c > ebro_v08_source/SOURCE_SHA256.txt
+          make -C upstream/tisc/src tisc > ebro_v08_source/BUILD.log 2>&1 || { tail -100 ebro_v08_source/BUILD.log; exit 1; }
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare checksum-identical physical input decks
+        run: |
+          python3 scripts/performance/prepare_ebro_refinement.py "${{ matrix.case }}"
+      - name: Run original unoptimized drainage and fluvial algorithms (500s native limit)
+        shell: bash
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd "ebro_v1/${{ matrix.case }}"
+          echo 'tisc Ebro_evol -tf-59.5 -qplotting_mode=0 -V1' > ACTUAL_COMMAND.txt
+          set +e
+          /usr/bin/time -v -o RESOURCE_USAGE.txt timeout -k 10s 500 \
+            tisc Ebro_evol -tf-59.5 -qplotting_mode=0 -V1 > RUN.log 2>&1
+          code=$?
+          set -e
+          echo "$code" > EXIT_CODE.txt
+          echo "V08_NO_V3_NATIVE_EXIT_${{ matrix.case }}=$code"
+          grep -aE 'T=|topogr.  :|outp_seds:' RUN.log | tail -n 25 || true
+      - name: Original V08-only scientific field checks and peak locations
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/audit_plot_ebro_native.py "ebro_v1/${{ matrix.case }}"
+      - name: Upload all unoptimized V08 native QC and maps
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'EBRO_V08_BASELINE_${{ matrix.case }}'
+          path: |
+            ebro_v08_source/
+            ebro_v1/${{ matrix.case }}/
+          retention-days: 30
+          if-no-files-found: warn

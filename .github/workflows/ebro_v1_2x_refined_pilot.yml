@@ -1,0 +1,85 @@
+name: Ebro V1 | native 2x space/time 0.5Myr pilot
+on:
+  push:
+    branches: [experiment/ebro-spacetime-refined-v1-20261027]
+    paths: ['.github/workflows/ebro_v1_2x_refined_pilot.yml','scripts/performance/**']
+  pull_request:
+    branches: [experiment/performance-v3-independent-demos-20261027]
+    paths: ['.github/workflows/ebro_v1_2x_refined_pilot.yml','scripts/performance/**']
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  short-native-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: "Ebro V08+V3 ${{ matrix.case }} -60 to -59.5Ma"
+    strategy:
+      fail-fast: false
+      matrix: {case: [original, time_only, space_only, refined]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+          persist-credentials: false
+      - name: Setup compiler and plotting dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y build-essential gfortran time
+          python3 -m pip install --break-system-packages numpy matplotlib
+      - name: Compile audited solver with V08 salt physics bugfix and V3 speed candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p ebro_audit_source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c ebro_audit_source/NBSP_FIX.json
+          python3 scripts/performance/patch_tisc_salt_model_v08.py upstream/tisc/src/surf_proc.c ebro_audit_source/salt_v08
+          python3 scripts/performance/patch_tisc_stable_sort_v3.py upstream/tisc/src/tisclib.c
+          python3 scripts/performance/patch_tisc_lake_evap_v3.py upstream/tisc/src/surf_proc.c
+          python3 scripts/performance/patch_tisc_outlet_scan_v3.py upstream/tisc/src/surf_proc.c
+          python3 scripts/performance/patch_tisc_lake_membership_v3.py upstream/tisc/src/surf_proc.c
+          sha256sum upstream/tisc/src/surf_proc.c upstream/tisc/src/tisclib.c > ebro_audit_source/SOURCE_SHA256.txt
+          make -C upstream/tisc/src tisc > ebro_audit_source/BUILD.log 2>&1 || { tail -100 ebro_audit_source/BUILD.log; exit 1; }
+          sha256sum upstream/bin/tisc > ebro_audit_source/BINARY_SHA256.txt
+          git -C upstream rev-parse HEAD > ebro_audit_source/UPSTREAM_COMMIT.txt
+          git rev-parse HEAD > ebro_audit_source/LAB_COMMIT.txt
+          echo CI > "$HOME/.tiscdefaults"
+      - name: Prepare actual original author Ebro input and time/space refinement
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/prepare_ebro_refinement.py "${{ matrix.case }}"
+      - name: Execute 0.5Myr native process for paired resource/sensitivity study
+        shell: bash
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd "ebro_v1/${{ matrix.case }}"
+          echo 'tisc Ebro_evol -tf-59.5 -qplotting_mode=0 -V1' > ACTUAL_COMMAND.txt
+          set +e
+          /usr/bin/time -v -o RESOURCE_USAGE.txt timeout -k 10s 410 \
+            tisc Ebro_evol -tf-59.5 -qplotting_mode=0 -V1 > RUN.log 2>&1
+          code=$?
+          set -e
+          echo "$code" > EXIT_CODE.txt
+          echo "NATIVE_EBRO_EXIT=${{ matrix.case }}:$code"
+          grep -aE 'T=|topogr.  :|outp_seds:|Final total sediment' RUN.log | tail -n 30 || true
+      - name: Validate saved native outputs and draw original-resolution planview
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/audit_plot_ebro_native.py "ebro_v1/${{ matrix.case }}"
+      - name: Preserve native fields, input manifest and figure (even when failed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'EBRO_V1_${{ matrix.case }}_050MYR'
+          path: |
+            ebro_audit_source/
+            ebro_v1/${{ matrix.case }}/
+          retention-days: 30
+          if-no-files-found: warn
