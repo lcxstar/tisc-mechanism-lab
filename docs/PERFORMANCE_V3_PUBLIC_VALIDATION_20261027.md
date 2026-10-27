@@ -27,3 +27,17 @@ Run the four N81/N121 reference–candidate pairs under `.github/workflows/perfo
 **Not changed:** PRM coefficients, EET, ZINI, tectonic UNIT, erosion law, climate forcing, timestep, floating-point precision, boundary modes or upstream Git history.
 
 See historic independent [03g benchmark](https://github.com/lcxstar/tisc-mechanism-lab/tree/v03g-fast-lake-merge-validation) for the previously validated merge-stamp candidate; the V3 branch intentionally re-tests the newer combined implementation.
+## Verified public official-demo regression — 2026-10-27
+
+Actual GitHub Actions run [#40466722269](https://github.com/lcxstar/tisc-mechanism-lab/actions/runs/40466722269) completed **four of four paired reference-vs-optimized checks with native rc=0 and identical deterministic physical output files**. The preceding failed run #40466634407 was a CI harness path bug after moving the generic input preparation script into `scripts/performance/`; the source compiled successfully; the script root was corrected before run #40466722269.
+
+| Official demo pair | Reference wall time (s) | Candidate wall time (s) | Observed ratio | Exact public native fields |
+|---|---:|---:|---:|---|
+| N81 first 0.5 Myr (flexure isolated) | 2.01 | 0.60 | 3.350× | PASS (6 deterministic files) |
+| N121 first 0.5 Myr (flexure isolated) | 11.73 | 3.28 | 3.576× | PASS (6 deterministic files) |
+| N81 complete 0–15 Myr coupled | 9.23 | 5.72 | 1.614× | PASS (7 deterministic files) |
+| N121 complete 0–15 Myr coupled | 22.51 | 11.77 | 1.912× | PASS (7 deterministic files) |
+
+Each paired run checked original-vs-optimized model inputs (including author tectonic UNIT files), all available deterministic physical-field byte hashes, temporal records, native success code, and expected grid-size `.xyw` rows. Raw `.all` restart bytes differed due to upstream pointer/padding serialization; not treated as a valid physics comparison.
+
+**IMPORTANT:** The pre-existing `outp_seds: -nan` remains in BOTH original and optimized full-coupled 15-Myr histories. The public test proves parity of the printed physical outputs and observed speed improvements, NOT globally valid sediment budget. Speed ratios are single GitHub hosted-runner measurements, not platform-independent scaling laws. Additional 401-grid and independent multi-step conservation tests are the remaining gates.
