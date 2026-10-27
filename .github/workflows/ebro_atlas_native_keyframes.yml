@@ -1,0 +1,97 @@
+name: Ebro atlas | actual native age snapshots
+on:
+  push:
+    branches: [experiment/ebro-native-evolution-atlas-v1-20261027]
+    paths: [.github/workflows/ebro_atlas_native_keyframes.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  native-age:
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    name: 'Actual Ebro topo at ${{ matrix.age }} Ma'
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - {age: '-59.75', label: 'M059p75'}
+          - {age: '-45', label: 'M045'}
+          - {age: '-30', label: 'M030'}
+          - {age: '-20', label: 'M020'}
+          - {age: '-10', label: 'M010'}
+          - {age: '-5', label: 'M005'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/checkout@v4
+        with:
+          repository: danigeos/tisc
+          ref: d18b7d270f4d671b80223e10dede329ad35cafdd
+          path: upstream
+          persist-credentials: false
+      - name: Dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential gfortran time > /dev/null
+          python3 -m pip install --break-system-packages -q numpy
+      - name: Pinned, reproducible geology solver V08 bugfix plus V3 acceleration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = d18b7d270f4d671b80223e10dede329ad35cafdd
+          mkdir -p atlas_model_source
+          python3 scripts/normalize_upstream_nbsp.py upstream/tisc/src/surf_proc.c atlas_model_source/NBSP_FIX.json
+          python3 scripts/performance/patch_tisc_salt_model_v08.py upstream/tisc/src/surf_proc.c atlas_model_source/V08_salt
+          python3 scripts/performance/patch_tisc_stable_sort_v3.py upstream/tisc/src/tisclib.c
+          python3 scripts/performance/patch_tisc_lake_evap_v3.py upstream/tisc/src/surf_proc.c
+          python3 scripts/performance/patch_tisc_outlet_scan_v3.py upstream/tisc/src/surf_proc.c
+          python3 scripts/performance/patch_tisc_lake_membership_v3.py upstream/tisc/src/surf_proc.c
+          make -C upstream/tisc/src tisc > atlas_model_source/COMPILE.log 2>&1 || { tail -80 atlas_model_source/COMPILE.log; exit 1; }
+          sha256sum upstream/tisc/src/surf_proc.c upstream/tisc/src/tisclib.c upstream/bin/tisc > atlas_model_source/SOLVER_SHA256.txt
+          echo TISC > "$HOME/.tiscdefaults"
+      - name: Preserve actual author's regional geologic inputs; moderate grid
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/prepare_ebro_refinement.py moderate_both
+      - name: Native solver to actual requested age (not interpolation)
+        shell: bash
+        env:
+          SNAP_AGE: ${{ matrix.age }}
+        run: |
+          set -euo pipefail
+          export tisc_dir="$GITHUB_WORKSPACE/upstream/"
+          export PATH="$tisc_dir/bin:$PATH"
+          cd ebro_v1/moderate_both
+          echo "tisc Ebro_evol -tf${SNAP_AGE} -qplotting_mode=0 -V1" > ACTUAL_COMMAND.txt
+          set +e
+          /usr/bin/time -v -o TIME_MEMORY.txt timeout -k 15s 4500 \
+            tisc Ebro_evol -tf"${SNAP_AGE}" -qplotting_mode=0 -V1 > RUN.log 2>&1
+          rc=$?
+          set -e
+          echo "$rc" > EXIT_CODE.txt
+          echo "EBRO_REAL_NATIVE_AGE=${SNAP_AGE} EXIT=$rc"
+          grep -a '^T=' RUN.log | tail -n 3 || true
+      - name: Convert true native XYW column 6 to compact geologic keyframe and QC
+        shell: bash
+        env:
+          SNAP_AGE: ${{ matrix.age }}
+          SNAP_LABEL: ${{ matrix.label }}
+        run: |
+          set -euo pipefail
+          python3 scripts/performance/export_ebro_native_age_snapshot.py \
+            ebro_v1/moderate_both "FINAL_EBRO_KEYFRAMES/${SNAP_LABEL}" --age "${SNAP_AGE}"
+          cp ebro_v1/moderate_both/TIME_MEMORY.txt "FINAL_EBRO_KEYFRAMES/${SNAP_LABEL}/RESOURCE_USE.txt"
+          cp atlas_model_source/SOLVER_SHA256.txt "FINAL_EBRO_KEYFRAMES/${SNAP_LABEL}/SOLVER_SHA256.txt"
+          cp ebro_v1/moderate_both/ACTUAL_COMMAND.txt "FINAL_EBRO_KEYFRAMES/${SNAP_LABEL}/ACTUAL_COMMAND.txt"
+      - name: Export ONLY necessary native snapshot arrays, QC and source hashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'EBRO_ATLAS_${{ matrix.label }}'
+          path: 'FINAL_EBRO_KEYFRAMES/${{ matrix.label }}/'
+          if-no-files-found: warn
+          retention-days: 7

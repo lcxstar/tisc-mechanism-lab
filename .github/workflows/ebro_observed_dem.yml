@@ -1,0 +1,82 @@
+name: Ebro atlas | real observed DEM for comparison
+on:
+  push:
+    branches: [experiment/ebro-native-evolution-atlas-v1-20261027]
+    paths: [.github/workflows/ebro_observed_dem.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  observed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - name: Install real topography grids and Python plotting utilities
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gmt gmt-gshhg-low > /dev/null
+          python3 -m pip install --break-system-packages -q numpy matplotlib xarray netcdf4
+      - name: Download SRTM15+ derived GMT Earth Relief 01-minute grid (actual geography)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p actual_dem
+          gmt grdcut @earth_relief_01m -R-5.5/5.5/38.5/45.0 -Gactual_dem/IBERIA_OBSERVED_EARTH_RELIEF_01m.nc
+          gmt grdinfo actual_dem/IBERIA_OBSERVED_EARTH_RELIEF_01m.nc > actual_dem/DEM_NATIVE_METADATA.txt
+          test -s actual_dem/IBERIA_OBSERVED_EARTH_RELIEF_01m.nc
+      - name: Make an explicitly geographic observed DEM figure for independent visual context
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import numpy as np
+          import xarray as xr
+          import matplotlib
+          matplotlib.use("Agg")
+          import matplotlib.pyplot as plt
+          from pathlib import Path
+          d=Path("actual_dem")
+          ds=xr.open_dataset(d/"IBERIA_OBSERVED_EARTH_RELIEF_01m.nc")
+          v=[k for k in ds.data_vars if ds[k].ndim>=2]
+          assert v,f"No height field in {ds}"
+          h=ds[v[0]]
+          coords=h.dims
+          lon=np.asarray(h.coords[coords[-1]])
+          lat=np.asarray(h.coords[coords[-2]])
+          data=np.asarray(h,dtype=float)
+          assert data.ndim==2 and len(lon)>30 and len(lat)>30 and np.isfinite(data).any()
+          fig,ax=plt.subplots(figsize=(12,7.4))
+          im=ax.pcolormesh(lon,lat,np.ma.masked_invalid(data),cmap="terrain",
+                           shading="auto",vmin=-1500,vmax=3500,rasterized=True)
+          fig.colorbar(im,ax=ax,label="Observed elevation (m)",shrink=.8)
+          ax.set_xlabel("Longitude (degrees east)")
+          ax.set_ylabel("Latitude (degrees north)")
+          ax.set_title("Observed present topography - Ebro and neighboring ranges | GMT Earth Relief 01m")
+          ax.set_aspect("equal",adjustable="box")
+          fig.text(.5,.025,"Observed geographic DEM, NOT registered to author's local TISC XY grid",
+                    ha="center",fontsize=10)
+          fig.tight_layout(rect=[0,.05,1,1])
+          fig.savefig(d/"PRESENT_OBSERVED_DEM_GEOGRAPHIC.png",dpi=180)
+          fig.savefig(d/"PRESENT_OBSERVED_DEM_GEOGRAPHIC.pdf")
+          meta={"source":"GMT Earth Relief 01m, IGPP SRTM15+ derived",
+                "source_url":"https://www.generic-mapping-tools.org/remote-datasets/earth-relief.html",
+                "bounding_box_lonlat":[-5.5,38.5,5.5,45.0],
+                "horizontal_crs":"longitude latitude EPSG:4326",
+                "elevation_unit":"m",
+                "model_grid_georeferenced":False,
+                "valid_pixelwise_tisc_minus_dem":False,
+                "available_products":["PRESENT_OBSERVED_DEM_GEOGRAPHIC.png",
+                  "PRESENT_OBSERVED_DEM_GEOGRAPHIC.pdf",
+                  "IBERIA_OBSERVED_EARTH_RELIEF_01m.nc"],
+                "data_shape":list(data.shape)}
+          (d/"OBSERVED_DEM_SOURCE_AND_GEOREFERENCE_QC.json").write_text(json.dumps(meta,indent=2))
+          print("REAL_DEM_FETCH_AND_PLOT_PASS",json.dumps(meta))
+          PY
+      - name: Preserve one real DEM and one geography map for local delivery
+        uses: actions/upload-artifact@v4
+        with:
+          name: EBRO_REAL_OBSERVED_DEM
+          path: actual_dem/
+          retention-days: 7
