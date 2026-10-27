@@ -12,7 +12,7 @@ import re
 import shutil
 from pathlib import Path
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 SRC=ROOT/"upstream"/"tisc"/"demo"/"6_tectonics"
 FILES=("demo.PRM","demo1.UNIT","demo2.UNIT","demo.PRFL")
 CASES={"N81":81,"N121":121,"N401":401}
