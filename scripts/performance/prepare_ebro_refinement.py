@@ -18,6 +18,8 @@ VALID_SUFFIXES = {".PRM", ".ZINI", ".EET", ".RAIN", ".WINI", ".UNIT",
                   ".REC", ".SLV", ".NDEF", ".INS", ".INT", ".PRFL",
                   ".RIV", ".CMP", ".VISC", ".TSBC", ".LOAD"}
 PARAMS = {"original": (208, 110, "0.5", "0.05"),
+          "time_only": (208, 110, "0.25", "0.025"),
+          "space_only": (415, 219, "0.5", "0.05"),
           "refined": (415, 219, "0.25", "0.025")}
 PRESERVE_DOMAIN = {"xmin": "-48160", "xmax": "660573", "ymin": "0",
                    "ymax": "500000", "Timeini": "-60", "Timefinal": "-0"}
